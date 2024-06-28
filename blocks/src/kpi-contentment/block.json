@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo-blocks/kpi-contentment",
+	"version": "0.1.0",
+	"title": "KPI Contentment",
+	"category": "design",
+	"icon": "smiley",
+	"description": "Display satisfaction KPI",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "kpi-contentment",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

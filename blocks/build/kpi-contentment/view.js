@@ -1,0 +1,1 @@
+console.log("Hello World! (from eo-blocks-kpi-contentment block)");
