@@ -1,0 +1,109 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+$media__mobile: 599px;
+
+:root {
+	--eo-kpi-contentment-quarter-1: #FA5659;
+	--eo-kpi-contentment-quarter-2: #F7A34A;
+	--eo-kpi-contentment-quarter-3: #F8D042;
+	--eo-kpi-contentment-quarter-4: #62B64D;
+}
+
+.wp-block-eo-kpi-contentment {
+
+  * {
+	box-sizing: border-box;
+  }
+
+  display: block;
+  position: relative;
+
+  .eo-kpi-contentment__icon-frown, .eo-kpi-contentment__icon-smile {
+	position: absolute;
+	top: -5px;
+	width: 30px;
+  }
+  .eo-kpi-contentment__icon-frown {
+	left: 0;
+  }
+  .eo-kpi-contentment__icon-smile {
+	right: 0;
+  }
+
+  .eo-kpi-contentment__container {
+  	display: block;
+	width: 100%;
+  	padding-left: 50px;
+	padding-right: 50px;
+  }
+
+  .eo-kpi-contentment__bar-container {
+	position: relative;
+
+	.eo-kpi-contentment__icon-pin {
+	  position: absolute;
+	  bottom: 8px;
+	  transform: translate(-50%);
+	}
+  }
+  .eo-kpi-contentment__bar {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	gap: 0;
+	border-radius: 4px;
+	overflow: hidden;
+
+	.eo-kpi-contentment__bar-quarter {
+	  width: 25%;
+	  height: 20px;
+
+	  &.bar__1 {
+		background: var(--eo-kpi-contentment-quarter-1);
+	  }
+	  &.bar__2 {
+		background: var(--eo-kpi-contentment-quarter-2);
+	  }
+	  &.bar__3 {
+		background: var(--eo-kpi-contentment-quarter-3);
+	  }
+	  &.bar__4 {
+		background: var(--eo-kpi-contentment-quarter-4);
+	  }
+	}
+  }
+
+  .eo-kpi-contentment__content {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+
+	.eo-kpi-contentment__block-label {
+	  font-weight: 508;
+	}
+	.eo-kpi-contentment__block-contentment {
+	  color: #62B64D;
+	  font-weight: 700;
+
+	  &.bar__quarter-1 {
+		color: var(--eo-kpi-contentment-quarter-1);
+	  }
+	  &.bar__quarter-2 {
+		color: var(--eo-kpi-contentment-quarter-2);
+	  }
+	  &.bar__quarter-3 {
+		color: var(--eo-kpi-contentment-quarter-3);
+	  }
+	  &.bar__quarter-4 {
+		color: var(--eo-kpi-contentment-quarter-4);
+	  }
+	}
+  }
+}
+
