@@ -25,9 +25,9 @@ import './scss/editor.scss';
 /**
  * Import components
  */
-import iconFrown from './assets/icon-frown.svg';
-import iconSmile from './assets/icon-smile.svg';
-import iconPin from './assets/icon-pin.svg';
+import iconFrown from './../../../assets/images/icon-frown.svg';
+import iconSmile from './../../../assets/images/icon-smile.svg';
+import iconPin from './../../../assets/images/icon-pin.svg';
 
 
 /**
@@ -78,7 +78,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 				<div className='eo-kpi-contentment__container'>
 					<div className='eo-kpi-contentment__bar-container'>
-						<img className='eo-kpi-contentment__icon-pin' src={iconPin} style={{left: contentmentLabel + '%'}}/>
+						<img className='eo-kpi-contentment__icon-pin' src={ iconPin } style={{left: contentmentLabel + '%'}}/>
 						<div className='eo-kpi-contentment__bar'>
 							<span className='eo-kpi-contentment__bar-quarter bar__1'></span>
 							<span className='eo-kpi-contentment__bar-quarter bar__2'></span>

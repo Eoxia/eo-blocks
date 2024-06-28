@@ -3,10 +3,6 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-if ( ! defined( 'EO_KPI_CONTENTMENT_DIR' ) ) {
-	define( 'EO_KPI_CONTENTMENT_DIR', EO_BLOCKS_URL . 'blocks/src/kpi-contentment' );
-}
-
 $contentment_label_color_class = 'bar__quater-1';
 
 if ( ! empty( $attributes['contentmentLabel'] )  ) {
@@ -23,11 +19,11 @@ if ( ! empty( $attributes['contentmentLabel'] )  ) {
 
 ?>
 <div <?php echo get_block_wrapper_attributes(); ?>>
-	<img class="eo-kpi-contentment__icon-frown" src="<?php echo esc_url( EO_KPI_CONTENTMENT_DIR . '/assets/icon-frown.svg' ); ?>" />
-	<img class="eo-kpi-contentment__icon-smile" src="<?php echo esc_url( EO_KPI_CONTENTMENT_DIR . '/assets/icon-smile.svg' ); ?>" />
+	<img class="eo-kpi-contentment__icon-frown" src="<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-frown.svg' ); ?>" />
+	<img class="eo-kpi-contentment__icon-smile" src="<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-smile.svg' ); ?>" />
 	<div class="eo-kpi-contentment__container">
 		<div class="eo-kpi-contentment__bar-container">
-			<img class="eo-kpi-contentment__icon-pin" src=<?php echo esc_url( EO_KPI_CONTENTMENT_DIR . '/assets/icon-pin.svg' ); ?> style="left: <?php echo ! empty( $attributes['contentmentLabel'] ) ? esc_attr( $attributes['contentmentLabel'] ) : '0'; ?>%;" />
+			<img class="eo-kpi-contentment__icon-pin" src=<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-pin.svg' ); ?> style="left: <?php echo ! empty( $attributes['contentmentLabel'] ) ? esc_attr( $attributes['contentmentLabel'] ) : '0'; ?>%;" />
 			<div class='eo-kpi-contentment__bar'>
 				<span class='eo-kpi-contentment__bar-quarter bar__1'></span>
 				<span class='eo-kpi-contentment__bar-quarter bar__2'></span>
