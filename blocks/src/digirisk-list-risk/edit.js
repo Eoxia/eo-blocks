@@ -23,7 +23,6 @@ import { useEffect, useState } from 'react';
  */
 import './scss/editor.scss';
 
-
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -35,6 +34,10 @@ import './scss/editor.scss';
 export default function Edit() {
 	const [data, setData] = useState([]);
 	const blockProps = useBlockProps();
+
+	// @TODO Récupérer l'option passée depuis PHP
+	// const mpTextField = MonPluginSettings.eoblocks_dolibarr_url || 'Option non définie';
+	// console.log(mpTextField);
 
 	useEffect(() => {
 		const urlApi = 'http://127.0.0.1/dolibarr/htdocs/api/index.php/digiriskdolibarr/risk/getRisksByCotation?DOLAPIKEY=V9OCyHx4y5XA1ye511GbKymLz661tZCu&DOLENTITY=1';
