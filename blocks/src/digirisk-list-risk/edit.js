@@ -13,6 +13,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps } from '@wordpress/block-editor';
 import { useEffect, useState } from 'react';
+import { useSelect } from '@wordpress/data';
 
 
 /**
@@ -35,15 +36,27 @@ export default function Edit() {
 	const [data, setData] = useState([]);
 	const blockProps = useBlockProps();
 
-	// @TODO Récupérer l'option passée depuis PHP
-	// const mpTextField = MonPluginSettings.eoblocks_dolibarr_url || 'Option non définie';
-	// console.log(mpTextField);
+
+	// @TODO Trouver un moyen pour lancer la requête dés que l'on a construit l'url en entier
+	const routeApi = 'digiriskdolibarr/risk/getRisksByCotation';
+
+	const eoblocksSettings = useSelect( ( select ) => select( 'core' ).getSite()?.eoblocks_settings );
+	const dolibarrUrlApi = eoblocksSettings?.eoblocks_dolibarr_url;
+	const dolibarrApiKey = eoblocksSettings?.eoblocks_dolibarr_api_key;
+	let digiriskUrlApi = `${dolibarrUrlApi}/api/index.php/${routeApi}?DOLAPIKEY=${dolibarrApiKey}`;
+
+	// Clean double slash.
+	const [protocol, rest] = digiriskUrlApi.split('://');
+	if ( rest ) {
+		const cleanedRest = rest.replace(/\/{2,}/g, '/');
+		digiriskUrlApi = `${protocol}://${cleanedRest}`;
+	}
 
 	useEffect(() => {
-		const urlApi = 'http://127.0.0.1/dolibarr/htdocs/api/index.php/digiriskdolibarr/risk/getRisksByCotation?DOLAPIKEY=V9OCyHx4y5XA1ye511GbKymLz661tZCu&DOLENTITY=1';
-		fetch(urlApi)
+		fetch('http://127.0.0.1/dolibarr/htdocs/api/index.php/?DOLAPIKEY=UE6wI9n7gShKM2Onyso84bJ049WsUh8P')
 			.then((resp) => resp.json())
 			.then((data) => {
+				console.log(data);
 				setData(data);
 			})
 			.catch((error) => {

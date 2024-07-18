@@ -17,11 +17,27 @@ class Eoblocks_Settings {
 
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+//		add_action( 'rest_api_init', array( $this, 'api_test' ) );
 	}
+
 
 	public function register_settings() {
 		register_setting('eoblocks_settings_group', 'eoblocks_settings', array(
-			'show_in_rest' => true,
+			'type'         => 'object',
+			'show_in_rest' => array(
+				'schema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'eoblocks_dolibarr_url' => array(
+							'type' => 'string',
+						),
+						'eoblocks_dolibarr_api_key' => array(
+							'type' => 'string',
+						),
+					),
+					'additionalProperties' => false,
+				),
+			),
 		));
 
 		add_settings_section(
@@ -53,6 +69,7 @@ class Eoblocks_Settings {
 		?>
 		<input type="text" name="eoblocks_settings[eoblocks_dolibarr_url]" value="<?php echo isset($options['eoblocks_dolibarr_url']) ? esc_attr($options['eoblocks_dolibarr_url']) : ''; ?>" />
 		<?php
+
 	}
 
 	public function dolibarr_api_key_cb() {
