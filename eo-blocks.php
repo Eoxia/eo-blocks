@@ -6,10 +6,10 @@
  * Requires PHP:      7.0
  * Version:           1.0.0
  * Author:            Eoxia
+ * Author URI:        https://www.eoxia.com
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       eo-blocks
- * Update URI:        https://www.eoxia.com
  *
  * @package EoBlocks
  */
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'EO_BLOCKS_BASEFILE', __FILE__ );
 define( 'EO_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
 define( 'EO_BLOCKS_PATH', dirname( __FILE__ ) );
-define( 'EO_BLOCKS_VERSION', '0.1.0' );
+define( 'EO_BLOCKS_VERSION', '1.0.0' );
 
 /**
  * Autoload the php files.
@@ -51,21 +51,6 @@ function eo_blocks_block_init() {
 		$block_dir = $block_build_dir . '/' . $url;
 		if ( ! empty( $url ) && file_exists( $block_dir . '/block.json' ) ) {
 			register_block_type( $block_dir );
-
-			// @TODO Récupérer les options dans le JS
-//			wp_enqueue_script(
-//				'mon-plugin-block',
-//				plugins_url($block_dir . '/edit.js', __FILE__),
-//				array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor'),
-//				filemtime(plugin_dir_path(__FILE__) . 'block/edit.js'),
-//				true // Charger dans le footer
-//			);
-//			$options = get_option('eoblocks_settings');
-//			wp_localize_script('mon-plugin-block', 'MonPluginSettings', array(
-//				'eoblocks_dolibarr_url' => isset($options['eoblocks_dolibarr_url']) ? $options['eoblocks_dolibarr_url'] : '',
-//				'eoblocks_dolibarr_api_key' => isset($options['eoblocks_dolibarr_api_key']) ? $options['eoblocks_dolibarr_api_key'] : '',
-//			));
-
 		}
 	}
 

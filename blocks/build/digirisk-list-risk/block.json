@@ -1,13 +1,35 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "create-block/digirisk-list-risk",
-  "version": "0.1.0",
+  "name": "eo/digirisk-list-risk",
+  "version": "1.0.0",
   "title": "Digirisk List Risk",
-  "category": "widgets",
+  "category": "design",
   "icon": "smiley",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "Displays a summary of the different risks of your Dolibarr",
   "example": {},
+  "attributes": {
+    "displayRisk1": {
+      "type": "boolean",
+      "default": true
+    },
+    "displayRisk2": {
+      "type": "boolean",
+      "default": true
+    },
+    "displayRisk3": {
+      "type": "boolean",
+      "default": true
+    },
+    "displayRisk4": {
+      "type": "boolean",
+      "default": true
+    },
+    "blockGrid": {
+      "type": "number",
+      "default": 2
+    }
+  },
   "supports": {
     "html": false
   },

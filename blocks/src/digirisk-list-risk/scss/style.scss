@@ -4,3 +4,172 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+
+$media__mobile: 599px;
+
+:root {
+  --eo-digirisk-list-risk-1: #ECECEC;
+  --eo-digirisk-list-risk-2: #E9AD4F;
+  --eo-digirisk-list-risk-3: #E05353;
+  --eo-digirisk-list-risk-4: #313131;
+}
+
+.wp-block-eo-digirisk-list-risk {
+  	* {
+	  box-sizing: border-box;
+	}
+
+	.eo-digirisk-list-risk__list {
+	  //display: flex;
+	  //flex-wrap: wrap;
+	  //gap: 2em;
+	  width: 100%;
+
+	  .eo-digirisk-list-risk__element {
+		width: 100%;
+		//min-width: 50%;
+		padding: 1em;
+		border-radius: 16px;
+
+		&.--risk-1 {
+		  background: var(--eo-digirisk-list-risk-1);
+
+		  .eo-digirisk-list-risk__icon-risk {
+			  fill: #C3C3C3;
+		  }
+		}
+		&.--risk-2 {
+		  background: var(--eo-digirisk-list-risk-2);
+
+		  .eo-digirisk-list-risk__icon-risk {
+			fill: #E57128;
+		  }
+		}
+		&.--risk-3 {
+		  background: var(--eo-digirisk-list-risk-3);
+		  color: #fff;
+
+		  .eo-digirisk-list-risk__icon-risk {
+			fill: #C31D1D;
+		  }
+		}
+		&.--risk-4 {
+		  background: var(--eo-digirisk-list-risk-4);
+		  color: #fff;
+
+		  .eo-digirisk-list-risk__icon-risk {
+			fill: #767676;
+		  }
+		}
+
+		.eo-digirisk-list-risk__content {
+		  display: flex;
+		  flex-wrap: wrap;
+		  gap: 1em;
+		  align-items: flex-end;
+
+		  .eo-digirisk-list-risk__content-label-group {
+			min-width: 50%;
+			max-width: 50%;
+		  }
+		}
+		.eo-digirisk-list-risk__icon-risk {
+		  fill: #fff;
+		  max-width: 20px;
+		}
+		.eo-digirisk-list-risk__content-label {
+		  text-transform: uppercase;
+		  font-size: 0.9em;
+		}
+		.eo-digirisk-list-risk__content-risk {
+		  font-size: 2.2em;
+		  font-weight: 900;
+		  text-align: right;
+		  flex-grow: 1;
+		  line-height: 1;
+		}
+		.eo-digirisk-list-risk__label {
+		  font-size: 1.2em;
+		  font-weight: 600;
+		}
+	  }
+	}
+}
+
+// @TODO A deplacer dans un framework interne au plugin
+.eo-grid {
+  display: grid;
+  grid-gap: 1em 1em;
+  grid-template-columns: repeat( 4, 1fr );
+
+  // Définition des tailles.
+  @for $i from 1 through 6 {
+	&.eo-grid__col-#{$i} {
+	  grid-template-columns: repeat( $i, 1fr );
+	}
+
+	// Chaque enfant peut modifier sa propre taille.
+	@for $y from 1 through 6 {
+	  @if ( $y <= $i ) {
+		&.eo-grid__col-#{$i} > .eo-grid__width-#{$y} {
+		  grid-column: auto / span $y;
+
+		  @if ( $y > 1 ) {
+			@media ( max-width: 920px ) {
+			  grid-column: auto / span 2;
+			}
+		  }
+		}
+	  }
+	}
+  }
+
+  // Définition des hauteurs des enfants.
+  @for $i from 1 through 6 {
+	> .eo-grid__height-#{$i} {
+	  grid-row: auto / span $i;
+
+	  @media ( max-width: 920px ) {
+		grid-row: auto / span 1 !important;
+	  }
+	}
+  }
+
+  // Marges.
+  @for $i from 0 through 6 {
+	&.eo-grid__margin-#{$i} {
+	  margin: #{$i}em  0;
+	}
+  }
+
+  // Gouttières.
+  @for $i from 0 through 6 {
+	&.eo-grid__gap-#{$i} {
+	  grid-gap: #{$i}em  #{$i}em;
+	}
+  }
+
+  // Responsive.
+  @for $i from 1 through 6 {
+	@if ( $i > 2 ) {
+	  @media ( max-width: 920px ) {
+		&.eo-grid__col-#{$i} {
+		  grid-template-columns: repeat( 2, 1fr ) !important;
+		}
+	  }
+	}
+	@if ( $i > 1 ) {
+	  @media ( max-width: $media__mobile ) {
+		&.eo-grid__col-#{$i} {
+		  grid-template-columns: repeat( 1, 1fr ) !important;
+		}
+	  }
+	}
+
+  }
+  > * {
+	@media ( max-width: $media__mobile ) {
+	  grid-column: auto / span 1 !important;
+	}
+  }
+}

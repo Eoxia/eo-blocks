@@ -18,7 +18,7 @@ if ( ! empty( $attributes['contentmentLabel'] )  ) {
 }
 
 ?>
-<div <?php echo get_block_wrapper_attributes(); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
 	<img class="eo-kpi-contentment__icon-frown" src="<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-frown.svg' ); ?>" />
 	<img class="eo-kpi-contentment__icon-smile" src="<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-smile.svg' ); ?>" />
 	<div class="eo-kpi-contentment__container">
