@@ -1,12 +1,10 @@
 === EO Blocks ===
 Contributors:      Eoxia
 Tags:              block
-Tested up to:      6.5.5
+Tested up to:      6.6.0
 Stable tag:        1.0.0
 License:           GPL-3.0
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
-
-== Description ==
 
 A collection of Gutenberg blocks for WordPress made by Eoxia
 

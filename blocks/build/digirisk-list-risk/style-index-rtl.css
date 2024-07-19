@@ -1,0 +1,384 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/digirisk-list-risk/scss/style.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+:root {
+  --eo-digirisk-list-risk-1: #ECECEC;
+  --eo-digirisk-list-risk-2: #E9AD4F;
+  --eo-digirisk-list-risk-3: #E05353;
+  --eo-digirisk-list-risk-4: #313131;
+}
+
+.wp-block-eo-digirisk-list-risk * {
+  box-sizing: border-box;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list {
+  width: 100%;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element {
+  width: 100%;
+  padding: 1em;
+  border-radius: 16px;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-1 {
+  background: var(--eo-digirisk-list-risk-1);
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-1 .eo-digirisk-list-risk__icon-risk {
+  fill: #C3C3C3;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-2 {
+  background: var(--eo-digirisk-list-risk-2);
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-2 .eo-digirisk-list-risk__icon-risk {
+  fill: #E57128;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-3 {
+  background: var(--eo-digirisk-list-risk-3);
+  color: #fff;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-3 .eo-digirisk-list-risk__icon-risk {
+  fill: #C31D1D;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-4 {
+  background: var(--eo-digirisk-list-risk-4);
+  color: #fff;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element.--risk-4 .eo-digirisk-list-risk__icon-risk {
+  fill: #767676;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element .eo-digirisk-list-risk__content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  align-items: flex-end;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element .eo-digirisk-list-risk__content .eo-digirisk-list-risk__content-label-group {
+  min-width: 50%;
+  max-width: 50%;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element .eo-digirisk-list-risk__icon-risk {
+  fill: #fff;
+  max-width: 20px;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element .eo-digirisk-list-risk__content-label {
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element .eo-digirisk-list-risk__content-risk {
+  font-size: 2.2em;
+  font-weight: 900;
+  text-align: left;
+  flex-grow: 1;
+  line-height: 1;
+}
+.wp-block-eo-digirisk-list-risk .eo-digirisk-list-risk__list .eo-digirisk-list-risk__element .eo-digirisk-list-risk__label {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.eo-grid {
+  display: grid;
+  grid-gap: 1em 1em;
+  grid-template-columns: repeat(4, 1fr);
+}
+.eo-grid.eo-grid__col-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+.eo-grid.eo-grid__col-1 > .eo-grid__width-1 {
+  grid-column: auto/span 1;
+}
+.eo-grid.eo-grid__col-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.eo-grid.eo-grid__col-2 > .eo-grid__width-1 {
+  grid-column: auto/span 1;
+}
+.eo-grid.eo-grid__col-2 > .eo-grid__width-2 {
+  grid-column: auto/span 2;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-2 > .eo-grid__width-2 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.eo-grid.eo-grid__col-3 > .eo-grid__width-1 {
+  grid-column: auto/span 1;
+}
+.eo-grid.eo-grid__col-3 > .eo-grid__width-2 {
+  grid-column: auto/span 2;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-3 > .eo-grid__width-2 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-3 > .eo-grid__width-3 {
+  grid-column: auto/span 3;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-3 > .eo-grid__width-3 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.eo-grid.eo-grid__col-4 > .eo-grid__width-1 {
+  grid-column: auto/span 1;
+}
+.eo-grid.eo-grid__col-4 > .eo-grid__width-2 {
+  grid-column: auto/span 2;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-4 > .eo-grid__width-2 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-4 > .eo-grid__width-3 {
+  grid-column: auto/span 3;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-4 > .eo-grid__width-3 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-4 > .eo-grid__width-4 {
+  grid-column: auto/span 4;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-4 > .eo-grid__width-4 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+.eo-grid.eo-grid__col-5 > .eo-grid__width-1 {
+  grid-column: auto/span 1;
+}
+.eo-grid.eo-grid__col-5 > .eo-grid__width-2 {
+  grid-column: auto/span 2;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-5 > .eo-grid__width-2 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-5 > .eo-grid__width-3 {
+  grid-column: auto/span 3;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-5 > .eo-grid__width-3 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-5 > .eo-grid__width-4 {
+  grid-column: auto/span 4;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-5 > .eo-grid__width-4 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-5 > .eo-grid__width-5 {
+  grid-column: auto/span 5;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-5 > .eo-grid__width-5 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+.eo-grid.eo-grid__col-6 > .eo-grid__width-1 {
+  grid-column: auto/span 1;
+}
+.eo-grid.eo-grid__col-6 > .eo-grid__width-2 {
+  grid-column: auto/span 2;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-6 > .eo-grid__width-2 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-6 > .eo-grid__width-3 {
+  grid-column: auto/span 3;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-6 > .eo-grid__width-3 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-6 > .eo-grid__width-4 {
+  grid-column: auto/span 4;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-6 > .eo-grid__width-4 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-6 > .eo-grid__width-5 {
+  grid-column: auto/span 5;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-6 > .eo-grid__width-5 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid.eo-grid__col-6 > .eo-grid__width-6 {
+  grid-column: auto/span 6;
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-6 > .eo-grid__width-6 {
+    grid-column: auto/span 2;
+  }
+}
+.eo-grid > .eo-grid__height-1 {
+  grid-row: auto/span 1;
+}
+@media (max-width: 920px) {
+  .eo-grid > .eo-grid__height-1 {
+    grid-row: auto/span 1 !important;
+  }
+}
+.eo-grid > .eo-grid__height-2 {
+  grid-row: auto/span 2;
+}
+@media (max-width: 920px) {
+  .eo-grid > .eo-grid__height-2 {
+    grid-row: auto/span 1 !important;
+  }
+}
+.eo-grid > .eo-grid__height-3 {
+  grid-row: auto/span 3;
+}
+@media (max-width: 920px) {
+  .eo-grid > .eo-grid__height-3 {
+    grid-row: auto/span 1 !important;
+  }
+}
+.eo-grid > .eo-grid__height-4 {
+  grid-row: auto/span 4;
+}
+@media (max-width: 920px) {
+  .eo-grid > .eo-grid__height-4 {
+    grid-row: auto/span 1 !important;
+  }
+}
+.eo-grid > .eo-grid__height-5 {
+  grid-row: auto/span 5;
+}
+@media (max-width: 920px) {
+  .eo-grid > .eo-grid__height-5 {
+    grid-row: auto/span 1 !important;
+  }
+}
+.eo-grid > .eo-grid__height-6 {
+  grid-row: auto/span 6;
+}
+@media (max-width: 920px) {
+  .eo-grid > .eo-grid__height-6 {
+    grid-row: auto/span 1 !important;
+  }
+}
+.eo-grid.eo-grid__margin-0 {
+  margin: 0em 0;
+}
+.eo-grid.eo-grid__margin-1 {
+  margin: 1em 0;
+}
+.eo-grid.eo-grid__margin-2 {
+  margin: 2em 0;
+}
+.eo-grid.eo-grid__margin-3 {
+  margin: 3em 0;
+}
+.eo-grid.eo-grid__margin-4 {
+  margin: 4em 0;
+}
+.eo-grid.eo-grid__margin-5 {
+  margin: 5em 0;
+}
+.eo-grid.eo-grid__margin-6 {
+  margin: 6em 0;
+}
+.eo-grid.eo-grid__gap-0 {
+  grid-gap: 0em 0em;
+}
+.eo-grid.eo-grid__gap-1 {
+  grid-gap: 1em 1em;
+}
+.eo-grid.eo-grid__gap-2 {
+  grid-gap: 2em 2em;
+}
+.eo-grid.eo-grid__gap-3 {
+  grid-gap: 3em 3em;
+}
+.eo-grid.eo-grid__gap-4 {
+  grid-gap: 4em 4em;
+}
+.eo-grid.eo-grid__gap-5 {
+  grid-gap: 5em 5em;
+}
+.eo-grid.eo-grid__gap-6 {
+  grid-gap: 6em 6em;
+}
+@media (max-width: 599px) {
+  .eo-grid.eo-grid__col-2 {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 599px) {
+  .eo-grid.eo-grid__col-3 {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 599px) {
+  .eo-grid.eo-grid__col-4 {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-5 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 599px) {
+  .eo-grid.eo-grid__col-5 {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+@media (max-width: 920px) {
+  .eo-grid.eo-grid__col-6 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 599px) {
+  .eo-grid.eo-grid__col-6 {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+@media (max-width: 599px) {
+  .eo-grid > * {
+    grid-column: auto/span 1 !important;
+  }
+}

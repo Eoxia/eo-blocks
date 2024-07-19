@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "eo/digirisk-list-risk",
+  "version": "1.0.0",
+  "title": "Digirisk List Risk",
+  "category": "design",
+  "icon": "smiley",
+  "description": "Displays a summary of the different risks of your Dolibarr",
+  "example": {},
+  "attributes": {
+    "displayRisk1": {
+      "type": "boolean",
+      "default": true
+    },
+    "displayRisk2": {
+      "type": "boolean",
+      "default": true
+    },
+    "displayRisk3": {
+      "type": "boolean",
+      "default": true
+    },
+    "displayRisk4": {
+      "type": "boolean",
+      "default": true
+    },
+    "blockGrid": {
+      "type": "number",
+      "default": 2
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "digirisk-list-risk",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

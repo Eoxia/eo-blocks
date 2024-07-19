@@ -6,10 +6,10 @@
  * Requires PHP:      7.0
  * Version:           1.0.0
  * Author:            Eoxia
+ * Author URI:        https://www.eoxia.com
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       eo-blocks
- * Update URI:        https://www.eoxia.com
  *
  * @package EoBlocks
  */
@@ -21,7 +21,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'EO_BLOCKS_BASEFILE', __FILE__ );
 define( 'EO_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
 define( 'EO_BLOCKS_PATH', dirname( __FILE__ ) );
-define( 'EO_BLOCKS_VERSION', '0.1.0' );
+define( 'EO_BLOCKS_VERSION', '1.0.0' );
+
+/**
+ * Autoload the php files.
+ */
+require_once EO_BLOCKS_PATH . '/includes/autoload.php';
+
+use EoBlocks\Includes\Admin\Eoblocks_Menu;
+use EoBlocks\Includes\Eoblocks_Settings;
+use EoBlocks\Includes\Eoblocks_Helper;
+
+$eoblocks_menu = new Eoblocks_Menu();
+$eoblocks_settings = new Eoblocks_Settings();
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
