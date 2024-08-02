@@ -2,6 +2,98 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./assets/js/utils.js":
+/*!****************************!*\
+  !*** ./assets/js/utils.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   digiriskApiGet: () => (/* binding */ digiriskApiGet)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Utils JS functions
+ *
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Clean URL
+ *
+ * @param url
+ * @returns {*}
+ */
+const cleanUrl = url => {
+  let cleanedUrl = url.replace(/:\//g, '://');
+  cleanedUrl = cleanedUrl.replace(/([^:]\/)\/+/g, '$1');
+  cleanedUrl = cleanedUrl.replace(/^\/+|\/+$/g, '');
+  return cleanedUrl;
+};
+
+/**
+ * Get datas from DigiRisk module on Dolibarr
+ *
+ * @param route
+ * @param params
+ * @returns {{data: unknown, error: unknown}}
+ */
+const digiriskApiGet = (route, params) => {
+  const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const fetchData = async () => {
+      if (!params) {
+        return;
+      }
+      const {
+        eoblocks_dolibarr_url: baseUrlApi,
+        eoblocks_dolibarr_api_key: apiKey
+      } = params;
+      if (!baseUrlApi || !apiKey || !route) {
+        setError('Missing API key or base URL or route');
+        return;
+      }
+      let digiriskUrlApi = `${baseUrlApi}/api/index.php/${route}?DOLAPIKEY=${apiKey}`;
+      digiriskUrlApi = cleanUrl(digiriskUrlApi);
+      try {
+        const response = await fetch(digiriskUrlApi);
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError('Unauthorized: Wrong API Key or Unauthorized');
+          } else if (response.status === 404) {
+            setError('Not Found: Wrong Dolibarr URL');
+          } else {
+            setError(`Error: ${response.status}`);
+          }
+          return;
+        }
+        const data = await response.json();
+        if (data.error) {
+          setError('Error in API response');
+          return;
+        }
+        setData(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    fetchData();
+  }, [route, params]);
+  return {
+    data,
+    error
+  };
+};
+
+/***/ }),
+
 /***/ "./blocks/src/digirisk-list-risk/edit.js":
 /*!***********************************************!*\
   !*** ./blocks/src/digirisk-list-risk/edit.js ***!
@@ -22,7 +114,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/digirisk-list-risk/scss/editor.scss");
+/* harmony import */ var _assets_js_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../assets/js/utils */ "./assets/js/utils.js");
+/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/digirisk-list-risk/scss/editor.scss");
 
 /**
  * Retrieves the translation of text.
@@ -69,60 +162,14 @@ function Edit({
     displayRisk3,
     displayRisk4
   } = attributes;
-  const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)();
   const customTooltipContent = value => `${value}`;
   const routeApi = 'digiriskdolibarr/risk/getRisksByCotation';
   const eoblocksSettings = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => select('core').getSite()?.eoblocks_settings);
-
-  // @TODO: Isoler la fonction API dans un helper.
-  // Clean URL.
-  const cleanUrl = url => {
-    let cleanedUrl = url.replace(/:\//g, '://');
-    cleanedUrl = cleanedUrl.replace(/([^:]\/)\/+/g, '$1');
-    cleanedUrl = cleanedUrl.replace(/^\/+|\/+$/g, '');
-    return cleanedUrl;
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const fetchData = async () => {
-      if (!eoblocksSettings) {
-        return;
-      }
-      const {
-        eoblocks_dolibarr_url: baseUrlApi,
-        eoblocks_dolibarr_api_key: apiKey
-      } = eoblocksSettings;
-      if (!baseUrlApi || !apiKey || !routeApi) {
-        setError('Missing API key or base URL or route');
-        return;
-      }
-      let digiriskUrlApi = `${baseUrlApi}/api/index.php/${routeApi}?DOLAPIKEY=${apiKey}`;
-      digiriskUrlApi = cleanUrl(digiriskUrlApi);
-      try {
-        const response = await fetch(digiriskUrlApi);
-        if (!response.ok) {
-          if (response.status === 401) {
-            setError('Unauthorized: Wrong API Key or Unauthorized');
-          } else if (response.status === 404) {
-            setError('Not Found: Wrong Dolibarr URL');
-          } else {
-            setError(`Error: ${response.status}`);
-          }
-          return;
-        }
-        const data = await response.json();
-        if (data.error) {
-          setError('Error in API response');
-          return;
-        }
-        setData(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    fetchData();
-  }, [eoblocksSettings, routeApi]);
+  const {
+    data,
+    error
+  } = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_5__.digiriskApiGet)(routeApi, eoblocksSettings);
   if (error) {
     console.log('Error:' + error);
   }

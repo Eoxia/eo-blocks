@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, ToggleControl  } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
-import { useEffect, useState } from 'react';
+import { digiriskApiGet } from './../../../assets/js/utils';
 
 
 /**
@@ -35,65 +35,12 @@ import './scss/editor.scss';
  */
 export default function Edit( { attributes, setAttributes } ) {
 	const { blockGrid, displayRisk1, displayRisk2, displayRisk3, displayRisk4 } = attributes;
-	const [data, setData] = useState([]);
-	const [error, setError] = useState([]);
 	const blockProps = useBlockProps();
 	const customTooltipContent = value => `${value}`;
 
 	const routeApi = 'digiriskdolibarr/risk/getRisksByCotation';
 	const eoblocksSettings = useSelect( ( select ) => select( 'core' ).getSite()?.eoblocks_settings );
-
-	// @TODO: Isoler la fonction API dans un helper.
-	// Clean URL.
-	const cleanUrl = (url) => {
-		let cleanedUrl = url.replace(/:\//g, '://');
-		cleanedUrl = cleanedUrl.replace(/([^:]\/)\/+/g, '$1');
-		cleanedUrl = cleanedUrl.replace(/^\/+|\/+$/g, '');
-		return cleanedUrl;
-	};
-
-	useEffect(() => {
-		const fetchData = async () => {
-			if (!eoblocksSettings) {
-				return;
-			}
-			const { eoblocks_dolibarr_url: baseUrlApi, eoblocks_dolibarr_api_key: apiKey } = eoblocksSettings;
-			if (!baseUrlApi || !apiKey || !routeApi) {
-				setError('Missing API key or base URL or route');
-				return;
-			}
-
-			let digiriskUrlApi = `${baseUrlApi}/api/index.php/${routeApi}?DOLAPIKEY=${apiKey}`;
-			digiriskUrlApi = cleanUrl(digiriskUrlApi);
-
-			try {
-				const response = await fetch(digiriskUrlApi);
-
-				if (!response.ok) {
-					if (response.status === 401) {
-						setError('Unauthorized: Wrong API Key or Unauthorized');
-					} else if (response.status === 404) {
-						setError('Not Found: Wrong Dolibarr URL');
-					} else {
-						setError(`Error: ${response.status}`);
-					}
-					return;
-				}
-
-				const data = await response.json();
-
-				if (data.error) {
-					setError('Error in API response');
-					return;
-				}
-
-				setData(data);
-			} catch (err) {
-				setError(err.message);
-			}
-		};
-		fetchData();
-	}, [eoblocksSettings, routeApi]);
+	const { data, error } = digiriskApiGet(routeApi, eoblocksSettings);
 
 	if (error) {
 		console.log('Error:' + error);
