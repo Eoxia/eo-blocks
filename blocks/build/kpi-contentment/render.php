@@ -3,6 +3,10 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 $contentment_label_color_class = 'bar__quater-1';
 
 if ( ! empty( $attributes['contentmentLabel'] )  ) {
@@ -18,7 +22,7 @@ if ( ! empty( $attributes['contentmentLabel'] )  ) {
 }
 
 ?>
-<div <?php echo get_block_wrapper_attributes(); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
 	<img class="eo-kpi-contentment__icon-frown" src="<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-frown.svg' ); ?>" />
 	<img class="eo-kpi-contentment__icon-smile" src="<?php echo esc_url( EO_BLOCKS_URL . '/assets/images/icon-smile.svg' ); ?>" />
 	<div class="eo-kpi-contentment__container">
