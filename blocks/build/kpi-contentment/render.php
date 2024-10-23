@@ -3,6 +3,10 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 $contentment_label_color_class = 'bar__quater-1';
 
 if ( ! empty( $attributes['contentmentLabel'] )  ) {
