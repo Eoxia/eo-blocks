@@ -110,7 +110,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							onChange={(title) => setAttributes({title})}
 							placeholder={ __( 'Title', 'eo-blocks' ) }
 						/>
-						<span className="eo-accordion__header-toggle dashicons dashicons-plus-alt2"></span>
+						<span className="eo-accordion__header-toggle dashicons dashicons-arrow-right-alt2"></span>
 					</div>
 
 					<RichText

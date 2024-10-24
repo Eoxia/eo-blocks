@@ -379,7 +379,7 @@ function Edit({
     }),
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'eo-blocks')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "eo-accordion__header-toggle dashicons dashicons-plus-alt2"
+    className: "eo-accordion__header-toggle dashicons dashicons-arrow-right-alt2"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
     tagName: "span",
     className: "eo-accordion__subtitle",

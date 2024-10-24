@@ -42,11 +42,11 @@
   font-weight: 700;
 }
 .wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__header-toggle {
-  transition: transform 0.2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+  transition: transform 0.2s ease-out;
 }
 .wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__header-toggle::before {
   opacity: 0.4;
-  transition: all 0.2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+  transition: all 0.2s ease-out;
   transform-origin: center;
 }
 .wp-block-eo-accordion .eo-accordion__inner {
@@ -60,7 +60,7 @@
   margin-bottom: 0;
 }
 .wp-block-eo-accordion .eo-accordion__main-container.eo-accordion__active .eo-accordion__header-toggle {
-  transform: rotate(45deg);
+  transform: rotate(90deg);
 }
 .wp-block-eo-accordion .eo-accordion__main-container:not(.eo-accordion__active) .eo-accordion__inner {
   opacity: 0;

@@ -25,7 +25,7 @@ $is_active = ! empty( $attributes['isOpened'] ) ? 'eo-accordion__active' : '';
 					$title,
 					esc_attr( $titleTag )
 				); ?>
-				<span class="eo-accordion__header-toggle dashicons dashicons-plus-alt2"></span>
+				<span class="eo-accordion__header-toggle dashicons dashicons-arrow-right-alt2"></span>
 			</div>
 			<?php if ( ! empty( $subtitle ) ) : ?>
 				<div class="eo-accordion__subtitle"><?php echo esc_html( $subtitle ); ?></div>

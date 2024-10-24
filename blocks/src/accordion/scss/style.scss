@@ -46,13 +46,13 @@ $media__mobile: 599px;
 				font-weight: 700;
 			}
 			.eo-accordion__header-toggle {
-				transition: transform 0.2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+				transition: transform 0.2s ease-out;
 			}
 			.eo-accordion__header-toggle::before {
 				//width: 15px;
 				//fill: rgba(0,0,0,1);
 				opacity: 0.4;
-				transition: all 0.2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+				transition: all 0.2s ease-out;
 				transform-origin: center;
 			}
 		}
@@ -72,7 +72,7 @@ $media__mobile: 599px;
 
 	.eo-accordion__main-container.eo-accordion__active {
 		.eo-accordion__header-toggle {
-			transform: rotate(45deg);
+			transform: rotate(90deg);
 		}
 	}
 	.eo-accordion__main-container:not(.eo-accordion__active) {
