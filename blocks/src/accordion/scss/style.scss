@@ -1,0 +1,83 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+$media__mobile: 599px;
+
+.wp-block-eo-accordion {
+	border-bottom: 1px solid rgba(0,0,0,0.4);
+
+	&.has-background {
+		padding: 0 1em;
+
+		.eo-accordion__main-container {
+			border-bottom: 0;
+		}
+	}
+
+	.eo-accordion__header {
+		padding: 0.8em 0;
+
+		&:hover {
+			cursor: pointer;
+
+			.eo-accordion__title {
+				opacity: 0.7;
+			}
+			.eo-accordion__header-toggle::before {
+				opacity: 1 !important;
+			}
+		}
+
+		.eo-accordion__header-container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.eo-accordion__title {
+				margin: 0;
+				transition: opacity 0.2s ease-out;
+			}
+			span.eo-accordion__title {
+				font-size: 18px;
+				font-weight: 700;
+			}
+			.eo-accordion__header-toggle {
+				transition: transform 0.2s ease-out;
+			}
+			.eo-accordion__header-toggle::before {
+				//width: 15px;
+				//fill: rgba(0,0,0,1);
+				opacity: 0.4;
+				transition: all 0.2s ease-out;
+				transform-origin: center;
+			}
+		}
+	}
+
+	.eo-accordion__inner {
+		padding: 0 0 1em 0;
+		transition: opacity 0.2s ease-out;
+
+		> *:first-child {
+			margin-top: 0;
+		}
+		> *:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.eo-accordion__main-container.eo-accordion__active {
+		.eo-accordion__header-toggle {
+			transform: rotate(90deg);
+		}
+	}
+	.eo-accordion__main-container:not(.eo-accordion__active) {
+		.eo-accordion__inner {
+			opacity: 0;
+		}
+	}
+}

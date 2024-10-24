@@ -1,0 +1,69 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/accordion/scss/style.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-eo-accordion {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+.wp-block-eo-accordion.has-background {
+  padding: 0 1em;
+}
+.wp-block-eo-accordion.has-background .eo-accordion__main-container {
+  border-bottom: 0;
+}
+.wp-block-eo-accordion .eo-accordion__header {
+  padding: 0.8em 0;
+}
+.wp-block-eo-accordion .eo-accordion__header:hover {
+  cursor: pointer;
+}
+.wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__title {
+  opacity: 0.7;
+}
+.wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__header-toggle::before {
+  opacity: 1 !important;
+}
+.wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__title {
+  margin: 0;
+  transition: opacity 0.2s ease-out;
+}
+.wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container span.eo-accordion__title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__header-toggle {
+  transition: transform 0.2s ease-out;
+}
+.wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__header-toggle::before {
+  opacity: 0.4;
+  transition: all 0.2s ease-out;
+  transform-origin: center;
+}
+.wp-block-eo-accordion .eo-accordion__inner {
+  padding: 0 0 1em 0;
+  transition: opacity 0.2s ease-out;
+}
+.wp-block-eo-accordion .eo-accordion__inner > *:first-child {
+  margin-top: 0;
+}
+.wp-block-eo-accordion .eo-accordion__inner > *:last-child {
+  margin-bottom: 0;
+}
+.wp-block-eo-accordion .eo-accordion__main-container.eo-accordion__active .eo-accordion__header-toggle {
+  transform: rotate(90deg);
+}
+.wp-block-eo-accordion .eo-accordion__main-container:not(.eo-accordion__active) .eo-accordion__inner {
+  opacity: 0;
+}
+
+/*# sourceMappingURL=style-index.css.map*/
