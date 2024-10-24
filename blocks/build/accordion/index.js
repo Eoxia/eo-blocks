@@ -307,7 +307,15 @@ function Edit({
   attributes,
   setAttributes
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Toolbar, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Settings', 'eo-blocks')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Is opened by default', 'eo-blocks'),
+    checked: attributes.isOpened,
+    onChange: value => setAttributes({
+      isOpened: value
+    })
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Toolbar, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Change heading tag', 'eo-blocks')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToolbarDropdownMenu, {
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
@@ -365,17 +373,14 @@ function Edit({
     tagName: attributes.titleTag,
     className: "eo-accordion__title",
     value: attributes.title,
-    allowedFormats: ['core/bold', 'core/italic'],
+    allowedFormats: ['core/bold', 'core/italic', 'core/text-color', 'core/image'],
     onChange: title => setAttributes({
       title
-    })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 448 512",
-    className: "eo-accordion__header-toggle"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-    d: "M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
+    }),
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'eo-blocks')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "eo-accordion__header-toggle dashicons dashicons-plus-alt2"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
     tagName: "span",
     className: "eo-accordion__subtitle",
     value: attributes.subtitle,
@@ -383,9 +388,9 @@ function Edit({
     onChange: subtitle => setAttributes({
       subtitle
     }),
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Write subtitle here', 'eo-blocks')
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Write subtitle...', 'eo-blocks')
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "eo-accordion__content"
+    className: "eo-accordion__inner"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks, null))));
 }
 
@@ -1904,7 +1909,7 @@ module.exports = window["wp"]["primitives"];
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/accordion","version":"1.0.0","title":"Accordion","category":"design","icon":"smiley","description":"Display accordion block","example":{},"attributes":{"titleTag":{"type":"string","default":"h2"},"title":{"type":"string","default":"Accordion title"},"subtitle":{"type":"string"}},"supports":{"color":{"background":"true","color":"true"},"html":false},"textdomain":"accordion","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/accordion","version":"1.0.0","title":"Accordion","category":"design","icon":"smiley","description":"Display accordion block","example":{},"attributes":{"titleTag":{"type":"string","default":"h2"},"title":{"type":"string"},"subtitle":{"type":"string"},"isOpened":{"type":"boolean","default":false}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":true,"padding":false,"blockGap":false},"shadow":true,"html":false,"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}}},"textdomain":"accordion","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["file:./style-index.css","dashicons"],"render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

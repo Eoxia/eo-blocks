@@ -6,3 +6,12 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.wp-block-eo-accordion .eo-accordion__header:hover {
+  cursor: auto;
+}
+.wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__title {
+  opacity: 1;
+}
+.wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__header-toggle::before {
+  opacity: 0.4 !important;
+}

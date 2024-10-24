@@ -13,27 +13,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 $titleTag = ! empty( $attributes['titleTag'] ) ? $attributes['titleTag'] : 'h2';
 $title    = ! empty( $attributes['title'] ) ? $attributes['title'] : '';
 $subtitle = ! empty( $attributes['subtitle'] ) ? $attributes['subtitle'] : '';
+$is_active = ! empty( $attributes['isOpened'] ) ? 'eo-accordion__active' : '';
 ?>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-	<div class="eo-accordion__header">
-		<div class="eo-accordion__header-container">
-			<?php echo sprintf("<%s class='eo-accordion__title'>%s</%s>",
-				esc_attr( $titleTag ),
-				esc_html( $title ),
-				esc_attr( $titleTag )
-			); ?>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="eo-accordion__header-toggle">
-				<path
-					d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
-			</svg>
+	<div class="eo-accordion__main-container <?php echo esc_attr( $is_active ); ?>">
+		<div class="eo-accordion__header">
+			<div class="eo-accordion__header-container">
+				<?php echo sprintf("<%s class='eo-accordion__title'>%s</%s>",
+					esc_attr( $titleTag ),
+					$title,
+					esc_attr( $titleTag )
+				); ?>
+				<span class="eo-accordion__header-toggle dashicons dashicons-plus-alt2"></span>
+			</div>
+			<?php if ( ! empty( $subtitle ) ) : ?>
+				<div class="eo-accordion__subtitle"><?php echo esc_html( $subtitle ); ?></div>
+			<?php endif; ?>
 		</div>
-		<?php if ( ! empty( $subtitle ) ) : ?>
-			<div class="eo-accordion__subtitle"><?php echo esc_html( $subtitle ); ?></div>
-		<?php endif; ?>
-	</div>
 
-	<div class="eo-accordion__content">
-		<?php echo $content; ?>
+		<div class="eo-accordion__inner">
+			<?php echo wp_kses_post( $content ); ?>
+		</div>
 	</div>
 </div>

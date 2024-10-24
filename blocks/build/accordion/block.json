@@ -14,11 +14,14 @@
       "default": "h2"
     },
     "title": {
-      "type": "string",
-      "default": "Accordion title"
+      "type": "string"
     },
     "subtitle": {
       "type": "string"
+    },
+    "isOpened": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {
@@ -26,12 +29,33 @@
       "background": "true",
       "color": "true"
     },
-    "html": false
+    "spacing": {
+      "margin": true,
+      "padding": false,
+      "blockGap": false
+    },
+    "shadow": true,
+    "html": false,
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "radius": true,
+        "style": true,
+        "width": true
+      }
+    }
   },
   "textdomain": "accordion",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css",
+  "style": [
+    "file:./style-index.css",
+    "dashicons"
+  ],
   "render": "file:./render.php",
   "viewScript": "file:./view.js"
 }

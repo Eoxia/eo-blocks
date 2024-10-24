@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { BlockControls, RichText, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { Toolbar, ToolbarDropdownMenu } from '@wordpress/components';
+import { InspectorControls, BlockControls, RichText, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { Toolbar, ToolbarDropdownMenu, ToggleControl, PanelBody } from '@wordpress/components';
 import {
 	heading,
 	headingLevel1,
@@ -43,6 +43,16 @@ import './scss/editor.scss';
 export default function Edit( { attributes, setAttributes } ) {
 	return (
 		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Settings', 'eo-blocks' ) }>
+					<ToggleControl
+						label={ __( 'Is opened by default', 'eo-blocks' ) }
+						checked={ attributes.isOpened }
+						onChange={ ( value ) => setAttributes( { isOpened: value } ) }
+					/>
+				</PanelBody>
+			</InspectorControls>
+
 			<BlockControls>
 				<Toolbar label={ __('Change heading tag', 'eo-blocks') }>
 					<ToolbarDropdownMenu
@@ -89,20 +99,18 @@ export default function Edit( { attributes, setAttributes } ) {
 				</Toolbar>
 			</BlockControls>
 
-			<div {...useBlockProps()}>
+			<div { ...useBlockProps() }>
 				<div className="eo-accordion__header">
 					<div className="eo-accordion__header-container">
 						<RichText
-							tagName={ attributes.titleTag }
+							tagName={attributes.titleTag}
 							className="eo-accordion__title"
 							value={attributes.title}
-							allowedFormats={['core/bold', 'core/italic']}
+							allowedFormats={['core/bold', 'core/italic', 'core/text-color', 'core/image']}
 							onChange={(title) => setAttributes({title})}
+							placeholder={ __( 'Title', 'eo-blocks' ) }
 						/>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="eo-accordion__header-toggle">
-							<path
-								d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
-						</svg>
+						<span className="eo-accordion__header-toggle dashicons dashicons-plus-alt2"></span>
 					</div>
 
 					<RichText
@@ -111,12 +119,12 @@ export default function Edit( { attributes, setAttributes } ) {
 						value={attributes.subtitle}
 						allowedFormats={['core/bold', 'core/italic']}
 						onChange={(subtitle) => setAttributes({subtitle})}
-						placeholder={__('Write subtitle here', 'eo-blocks')}
+						placeholder={ __('Write subtitle...', 'eo-blocks') }
 					/>
 				</div>
 
-				<div className="eo-accordion__content">
-					<InnerBlocks />
+				<div className="eo-accordion__inner">
+					<InnerBlocks/>
 				</div>
 			</div>
 		</>
