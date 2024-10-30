@@ -26,11 +26,14 @@ spl_autoload_register(function ($class) {
 	$file_name = str_replace('_', '-', $class_name);
 	$file_name = 'class-' . strtolower( $file_name ) . '.php';
 	$file_path = strtolower( substr($relative_class, 0, $last_slash_pos) );
+	$file_path = str_replace('\\', '/', $file_path);
+
+
 
 	// Replace the namespace prefix with the base directory, replace namespace
 	// separators with directory separators in the relative class name, append
 	// with .php
-	$file = EO_BLOCKS_PATH . '\\' . $file_path . '\\' . $file_name;
+	$file = EO_BLOCKS_PATH . $file_path . DIRECTORY_SEPARATOR . $file_name;
 
 	// If the file exists, require it
 	if (file_exists($file)) {

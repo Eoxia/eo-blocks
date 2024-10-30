@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'EO_BLOCKS_BASEFILE', __FILE__ );
-define( 'EO_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
-define( 'EO_BLOCKS_PATH', dirname( __FILE__ ) );
+define( 'EO_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
+define( 'EO_BLOCKS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'EO_BLOCKS_VERSION', '1.0.0' );
 
 /**
@@ -33,7 +33,7 @@ use EoBlocks\Includes\Eoblocks_Settings;
 use EoBlocks\Includes\Eoblocks_Helper;
 
 $eoblocks_menu = new Eoblocks_Menu();
-$eoblocks_settings = new Eoblocks_Settings();
+//$eoblocks_settings = new Eoblocks_Settings();
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
