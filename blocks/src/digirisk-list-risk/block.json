@@ -4,7 +4,7 @@
 	"name": "eo/digirisk-list-risk",
 	"version": "1.0.0",
 	"title": "Digirisk List Risk",
-	"category": "design",
+	"category": "eo-blocks",
 	"icon": "smiley",
 	"description": "Displays a summary of the different risks of your Dolibarr",
 	"example": {},
