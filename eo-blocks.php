@@ -28,12 +28,9 @@ define( 'EO_BLOCKS_VERSION', '1.0.0' );
  */
 require_once EO_BLOCKS_PATH . '/includes/autoload.php';
 
-use EoBlocks\Includes\Admin\Eoblocks_Menu;
-use EoBlocks\Includes\Eoblocks_Settings;
-use EoBlocks\Includes\Eoblocks_Helper;
+use EoBlocks\Includes\Eoblocks;
 
-$eoblocks_menu = new Eoblocks_Menu();
-//$eoblocks_settings = new Eoblocks_Settings();
+$eoblocks = new Eoblocks();
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.

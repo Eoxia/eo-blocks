@@ -4,7 +4,7 @@
   "name": "eo/accordion",
   "version": "1.0.0",
   "title": "Accordion",
-  "category": "design",
+  "category": "eo-blocks",
   "icon": "smiley",
   "description": "Display accordion block",
   "example": {},

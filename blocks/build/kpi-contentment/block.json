@@ -4,7 +4,7 @@
   "name": "eo/kpi-contentment",
   "version": "1.0.0",
   "title": "KPI Contentment",
-  "category": "design",
+  "category": "eo-blocks",
   "icon": "smiley",
   "description": "Display satisfaction KPI",
   "example": {},
