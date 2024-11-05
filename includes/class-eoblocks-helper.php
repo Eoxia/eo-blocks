@@ -16,6 +16,10 @@ if (!defined('ABSPATH')) {
 class Eoblocks_Helper {
 	public static function digirisk_api_get( $route, $params ) {
 		$eoblocks_settings = get_option('eoblocks_settings');
+		if ( ! is_array( $eoblocks_settings ) ) {
+			return [];
+		}
+
 		$base_url_api = $eoblocks_settings['eoblocks_dolibarr_url'];
 		$api_key = $eoblocks_settings['eoblocks_dolibarr_api_key'];
 
