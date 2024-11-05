@@ -3,7 +3,7 @@
   "apiVersion": 3,
   "name": "eo/digirisk-list-risk",
   "version": "1.0.0",
-  "title": "Digirisk List Risk",
+  "title": "Digirisk - List Risk",
   "category": "eo-blocks",
   "icon": "smiley",
   "description": "Displays a summary of the different risks of your Dolibarr",

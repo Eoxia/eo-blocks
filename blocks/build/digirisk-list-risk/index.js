@@ -2,6 +2,42 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./assets/images/digirisk-favicon.svg":
+/*!********************************************!*\
+  !*** ./assets/images/digirisk-favicon.svg ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ReactComponent: () => (/* binding */ SvgDigiriskFavicon),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+var _path, _path2, _path3;
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+
+var SvgDigiriskFavicon = function SvgDigiriskFavicon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", _extends({
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 96.74 84.43"
+  }, props), _path || (_path = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    fill: "#2a9d8f",
+    d: "M96.4 80.68 85.57 61.92l-24.2-41.91-13.01 22.5 11.21 19.41 13 22.51h21.66c1.92 0 3.13-2.08 2.17-3.75"
+  })), _path2 || (_path2 = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    fill: "#f7931e",
+    d: "M59.57 61.92H11.16L.34 80.65c-.96 1.67.24 3.75 2.16 3.75h21.63c16.14.02 32.29.02 48.43.02l-13-22.51Z"
+  })), _path3 || (_path3 = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    fill: "#0067a6",
+    d: "M50.54 1.25c-.96-1.67-3.37-1.67-4.33 0L35.37 20 11.16 61.92h25.99l11.22-19.41 13.01-22.5z"
+  })));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5Ni43NCA4NC40MyI+Cgk8cGF0aCBmaWxsPSIjMmE5ZDhmIiBkPSJtOTYuNCw4MC42OGwtMTAuODMtMTguNzYtMjQuMi00MS45MS0xMy4wMSwyMi41LDExLjIxLDE5LjQxLDEzLDIyLjUxaDIxLjY2YzEuOTIsMCwzLjEzLTIuMDgsMi4xNy0zLjc1WiIvPgoJPHBhdGggZmlsbD0iI2Y3OTMxZSIgZD0ibTU5LjU3LDYxLjkySDExLjE2TC4zNCw4MC42NWMtLjk2LDEuNjcuMjQsMy43NSwyLjE2LDMuNzVoMjEuNjNjMTYuMTQuMDIsMzIuMjkuMDIsNDguNDMuMDJsLTEzLTIyLjUxWiIvPgoJPHBhdGggZmlsbD0iIzAwNjdhNiIgZD0ibTUwLjU0LDEuMjVjLS45Ni0xLjY3LTMuMzctMS42Ny00LjMzLDBsLTEwLjg0LDE4Ljc1TDExLjE2LDYxLjkyaDI1Ljk5bDExLjIyLTE5LjQxLDEzLjAxLTIyLjVMNTAuNTQsMS4yNVoiLz4KPC9zdmc+Cg==");
+
+/***/ }),
+
 /***/ "./assets/js/utils.js":
 /*!****************************!*\
   !*** ./assets/js/utils.js ***!
@@ -259,14 +295,12 @@ function Edit({
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/style.scss */ "./blocks/src/digirisk-list-risk/scss/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./blocks/src/digirisk-list-risk/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./blocks/src/digirisk-list-risk/block.json");
-
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/style.scss */ "./blocks/src/digirisk-list-risk/scss/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./blocks/src/digirisk-list-risk/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./blocks/src/digirisk-list-risk/block.json");
+/* harmony import */ var _assets_images_digirisk_favicon_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../../assets/images/digirisk-favicon.svg */ "./assets/images/digirisk-favicon.svg");
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
  *
@@ -288,31 +322,19 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-  width: "47",
-  height: "50",
-  viewBox: "0 0 47 50",
-  fill: "none",
-  xmlns: "http://www.w3.org/2000/svg"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-  d: "M43.6927 12.2532C44.3914 14.0606 45.2534 15.7834 45.7286 17.6077C48.6545 28.8614 44.8722 41.3758 32.7381 46.9688C28.9445 48.7179 24.9104 49.2966 20.7693 49.3022C19.4622 49.3022 18.1532 49.3022 16.786 49.3022V34.8866C18.2189 34.8866 19.6744 35.0632 21.0698 34.8433C23.0286 34.5371 25.0513 34.1895 26.8486 33.4061C30.0976 31.9914 31.4479 29.115 31.6826 25.7183C31.7709 24.4539 31.6864 23.1368 31.4347 21.895C30.6215 17.8989 27.7951 15.8623 24.054 15.2592C20.959 14.7614 17.7776 14.8102 14.4891 14.6073C14.4891 15.2874 14.4891 15.7139 14.4891 16.1404C14.4854 26.7929 14.4703 37.4454 14.4966 48.0998C14.4985 49.0242 14.2976 49.3342 13.3135 49.3191C9.11792 49.259 4.92236 49.2909 0.726804 49.2891C0.510829 49.2891 0.296731 49.2646 0 49.2477V0.871768C1.12307 0.871768 2.15412 0.871768 3.18517 0.871768C8.53948 0.873647 13.8938 0.847344 19.2481 0.888677C24.4221 0.928131 29.4703 1.67775 34.2781 3.9285C34.2781 3.9285 40.0456 5.90306 43.6927 12.2551V12.2532Z",
-  fill: "#263C5C"
-}), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-  d: "M40.5452 12.9145C44.1101 12.9145 47 10.0235 47 6.45727C47 2.89102 44.1101 0 40.5452 0C36.9803 0 34.0903 2.89102 34.0903 6.45727C34.0903 10.0235 36.9803 12.9145 40.5452 12.9145Z",
-  fill: "#61BCC0"
-}));
+
 
 /**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_4__.name, {
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_3__.name, {
   /**
    * @see ./edit.js
    */
-  edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
-  icon: blockIcon
+  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
+  icon: _assets_images_digirisk_favicon_svg__WEBPACK_IMPORTED_MODULE_4__.ReactComponent
 });
 
 /***/ }),
@@ -407,7 +429,7 @@ module.exports = window["wp"]["i18n"];
   \**************************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/digirisk-list-risk","version":"1.0.0","title":"Digirisk List Risk","category":"eo-blocks","icon":"smiley","description":"Displays a summary of the different risks of your Dolibarr","example":{},"attributes":{"displayRisk1":{"type":"boolean","default":true},"displayRisk2":{"type":"boolean","default":true},"displayRisk3":{"type":"boolean","default":true},"displayRisk4":{"type":"boolean","default":true},"blockGrid":{"type":"number","default":2}},"supports":{"html":false},"textdomain":"digirisk-list-risk","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/digirisk-list-risk","version":"1.0.0","title":"Digirisk - List Risk","category":"eo-blocks","icon":"smiley","description":"Displays a summary of the different risks of your Dolibarr","example":{},"attributes":{"displayRisk1":{"type":"boolean","default":true},"displayRisk2":{"type":"boolean","default":true},"displayRisk3":{"type":"boolean","default":true},"displayRisk4":{"type":"boolean","default":true},"blockGrid":{"type":"number","default":2}},"supports":{"html":false},"textdomain":"digirisk-list-risk","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 
