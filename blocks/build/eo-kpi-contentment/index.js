@@ -98,10 +98,10 @@ var SvgIconSmile = function SvgIconSmile(props) {
 
 /***/ }),
 
-/***/ "./blocks/src/kpi-contentment/edit.js":
-/*!********************************************!*\
-  !*** ./blocks/src/kpi-contentment/edit.js ***!
-  \********************************************/
+/***/ "./blocks/src/eo-kpi-contentment/edit.js":
+/*!***********************************************!*\
+  !*** ./blocks/src/eo-kpi-contentment/edit.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/kpi-contentment/scss/editor.scss");
+/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-kpi-contentment/scss/editor.scss");
 /* harmony import */ var _assets_images_icon_frown_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../assets/images/icon-frown.svg */ "./assets/images/icon-frown.svg");
 /* harmony import */ var _assets_images_icon_smile_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../../../assets/images/icon-smile.svg */ "./assets/images/icon-smile.svg");
 /* harmony import */ var _assets_images_icon_pin_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../../../assets/images/icon-pin.svg */ "./assets/images/icon-pin.svg");
@@ -235,10 +235,10 @@ function Edit({
 
 /***/ }),
 
-/***/ "./blocks/src/kpi-contentment/index.js":
-/*!*********************************************!*\
-  !*** ./blocks/src/kpi-contentment/index.js ***!
-  \*********************************************/
+/***/ "./blocks/src/eo-kpi-contentment/index.js":
+/*!************************************************!*\
+  !*** ./blocks/src/eo-kpi-contentment/index.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -246,9 +246,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/style.scss */ "./blocks/src/kpi-contentment/scss/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./blocks/src/kpi-contentment/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./blocks/src/kpi-contentment/block.json");
+/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/style.scss */ "./blocks/src/eo-kpi-contentment/scss/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./blocks/src/eo-kpi-contentment/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./blocks/src/eo-kpi-contentment/block.json");
 
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
@@ -297,10 +297,10 @@ const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
 
 /***/ }),
 
-/***/ "./blocks/src/kpi-contentment/scss/editor.scss":
-/*!*****************************************************!*\
-  !*** ./blocks/src/kpi-contentment/scss/editor.scss ***!
-  \*****************************************************/
+/***/ "./blocks/src/eo-kpi-contentment/scss/editor.scss":
+/*!********************************************************!*\
+  !*** ./blocks/src/eo-kpi-contentment/scss/editor.scss ***!
+  \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -309,10 +309,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./blocks/src/kpi-contentment/scss/style.scss":
-/*!****************************************************!*\
-  !*** ./blocks/src/kpi-contentment/scss/style.scss ***!
-  \****************************************************/
+/***/ "./blocks/src/eo-kpi-contentment/scss/style.scss":
+/*!*******************************************************!*\
+  !*** ./blocks/src/eo-kpi-contentment/scss/style.scss ***!
+  \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -371,10 +371,10 @@ module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
-/***/ "./blocks/src/kpi-contentment/block.json":
-/*!***********************************************!*\
-  !*** ./blocks/src/kpi-contentment/block.json ***!
-  \***********************************************/
+/***/ "./blocks/src/eo-kpi-contentment/block.json":
+/*!**************************************************!*\
+  !*** ./blocks/src/eo-kpi-contentment/block.json ***!
+  \**************************************************/
 /***/ ((module) => {
 
 module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/kpi-contentment","version":"1.0.0","title":"KPI Contentment","category":"eo-blocks","icon":"smiley","description":"Display satisfaction KPI","example":{},"attributes":{"blockLabel":{"type":"string","default":"Contentment rate"},"contentmentLabel":{"type":"number","default":50}},"supports":{"html":false},"textdomain":"kpi-contentment","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
@@ -491,8 +491,8 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"kpi-contentment/index": 0,
-/******/ 			"kpi-contentment/style-index": 0
+/******/ 			"eo-kpi-contentment/index": 0,
+/******/ 			"eo-kpi-contentment/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -542,7 +542,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["kpi-contentment/style-index"], () => (__webpack_require__("./blocks/src/kpi-contentment/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["eo-kpi-contentment/style-index"], () => (__webpack_require__("./blocks/src/eo-kpi-contentment/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
