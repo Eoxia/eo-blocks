@@ -9,12 +9,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
+
+$contentPosition = ! empty( $attributes['contentPosition'] ) ? $attributes['contentPosition'] : 'top right';
+$contentPosition = 'is-position-' . str_replace( ' ', '-', $attributes['contentPosition'] );
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-	<div class="eo-sticky__main-container">
-		<div class="eo-sticky__inner">
-			<?php echo wp_kses_post( $content ); ?>
-		</div>
-	</div>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => esc_attr( $contentPosition ) ) ) ); ?>>
+	<?php echo wp_kses_post( $content ); ?>
 </div>

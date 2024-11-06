@@ -12,7 +12,16 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { InspectorControls, BlockControls, RichText, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { AlignmentMatrixControl, DropdownMenu, Toolbar, ToolbarDropdownMenu, ToggleControl, PanelBody } from '@wordpress/components';
+import { Flex, FlexBlock, FlexItem, DropdownMenu, Toolbar, ToolbarDropdownMenu, ToggleControl, PanelBody } from '@wordpress/components';
+// import { AlignmentMatrixControl } from '@wordpress/components';
+
+/**
+ * Experimental components
+ */
+import {
+	__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl
+} from '@wordpress/block-editor';
+
 import {
 	heading,
 	headingLevel1,
@@ -45,25 +54,42 @@ import './scss/editor.scss';
 export default function Edit( { attributes, setAttributes } ) {
 	return (
 		<>
+			<BlockControls>
+				<BlockAlignmentMatrixControl
+					label={ __( 'Change sticky position', 'eo-blocks' ) }
+					value={ attributes.contentPosition }
+					onChange={ ( nextPosition ) =>
+						setAttributes( {
+							contentPosition: nextPosition,
+						} )
+					}
+				/>
+			</BlockControls>
+
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'eo-blocks' ) }>
-					<AlignmentMatrixControl
-						value={ attributes.contentPosition }
-						onChange={ ( value ) => setAttributes( { contentPosition: value } ) }
-					/>
-					<DropdownMenu
-						icon={ heading }
-                        label={ __( 'Content position', 'eo-blocks' ) }
-						controls={
-							<AlignmentMatrixControl
+					<Flex>
+						<FlexItem>
+							<span>{ __( 'Sticky position', 'eo-blocks' ) }</span>
+						</FlexItem>
+						<FlexItem>
+							<BlockAlignmentMatrixControl
+								label={ __( 'Change sticky position', 'eo-blocks' ) }
 								value={ attributes.contentPosition }
-								onChange={ ( value ) => setAttributes( { contentPosition: value } ) }
+								onChange={ ( nextPosition ) =>
+									setAttributes( {
+										contentPosition: nextPosition,
+									} )
+								}
 							/>
-						}
-                    />
+						</FlexItem>
+					</Flex>
 				</PanelBody>
 			</InspectorControls>
 
+			<div {...useBlockProps()}>
+				<InnerBlocks/>
+			</div>
 		</>
 	);
 }

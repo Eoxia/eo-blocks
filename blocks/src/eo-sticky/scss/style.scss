@@ -8,4 +8,49 @@
 $media__mobile: 599px;
 
 .wp-block-eo-sticky {
+	position: fixed;
+	z-index: 100000;
+	margin-top: 0 !important;
+
+	&.is-position-top-left {
+		top: 10%;
+		left: 0;
+	}
+	&.is-position-top-center {
+		top: 10%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	&.is-position-top-right {
+		top: 10%;
+		right: 0;
+	}
+	&.is-position-center-left {
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+	}
+	&.is-position-center-center, .is-position-center {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	&.is-position-center-right {
+		top: 50%;
+		right: 0;
+		transform: translateY(-50%);
+	}
+	&.is-position-bottom-left {
+		bottom: 10%;
+		left: 0;
+	}
+	&.is-position-bottom-center {
+		bottom: 10%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	&.is-position-bottom-right {
+		bottom: 10%;
+		right: 0;
+	}
 }
