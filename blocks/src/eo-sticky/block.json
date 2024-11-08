@@ -12,6 +12,14 @@
 		"contentPosition": {
 			"type": "string",
 			"default": "top right"
+		},
+		"horizontalGapPercent": {
+			"type": "number",
+			"default": 0
+		},
+		"verticalGapPercent": {
+			"type": "number",
+			"default": 0
 		}
   	},
 	"supports": {

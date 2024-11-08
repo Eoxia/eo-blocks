@@ -13,16 +13,16 @@ $media__mobile: 599px;
 	margin-top: 0 !important;
 
 	&.is-position-top-left {
-		top: 10%;
+		top: 0;
 		left: 0;
 	}
 	&.is-position-top-center {
-		top: 10%;
+		top: 0;
 		left: 50%;
 		transform: translateX(-50%);
 	}
 	&.is-position-top-right {
-		top: 10%;
+		top: 0;
 		right: 0;
 	}
 	&.is-position-center-left {

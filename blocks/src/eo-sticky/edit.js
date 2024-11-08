@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { InspectorControls, BlockControls, RichText, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { Flex, FlexBlock, FlexItem, DropdownMenu, Toolbar, ToolbarDropdownMenu, ToggleControl, PanelBody } from '@wordpress/components';
+import { Flex, FlexBlock, FlexItem, RangeControl, DropdownMenu, Toolbar, ToolbarDropdownMenu, ToggleControl, PanelBody, Spacer } from '@wordpress/components';
 // import { AlignmentMatrixControl } from '@wordpress/components';
 
 /**
@@ -23,14 +23,8 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-	heading,
-	headingLevel1,
-	headingLevel2,
-	headingLevel3,
-	headingLevel4,
-	headingLevel5,
-	headingLevel6,
-	paragraph
+	sidesHorizontal,
+	sidesVertical,
 } from '@wordpress/icons';
 
 import { useState } from '@wordpress/element';
@@ -52,6 +46,24 @@ import './scss/editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
+	const gapPercentTooltip = value => `${value}%`;
+	const titleStyle = {
+		fontSize: '11px',
+		fontWeight: '500',
+		lineHeight: '1.4',
+		textTransform: 'uppercase'
+	};
+	const stickyPositionTranslate = {
+		'top left': __( 'At the top left of screen', 'eo-blocks' ),
+		'top center': __( 'At the top middle of screen', 'eo-blocks' ),
+		'top right': __( 'At the top right of screen', 'eo-blocks' ),
+		'center left': __( 'At the middle left of screen', 'eo-blocks' ),
+		'center center': __( 'At the middle of screen', 'eo-blocks' ),
+		'center right': __( 'At the middle right of screen', 'eo-blocks' ),
+		'bottom left': __( 'At the bottom left of screen', 'eo-blocks' ),
+		'bottom center': __( 'At the bottom middle of screen', 'eo-blocks' ),
+		'bottom right': __( 'At the bottom right of screen', 'eo-blocks' ),
+	}
 	return (
 		<>
 			<BlockControls>
@@ -68,10 +80,8 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'eo-blocks' ) }>
+					<span style={titleStyle}>{ __( 'Sticky position', 'eo-blocks' ) }</span>
 					<Flex>
-						<FlexItem>
-							<span>{ __( 'Sticky position', 'eo-blocks' ) }</span>
-						</FlexItem>
 						<FlexItem>
 							<BlockAlignmentMatrixControl
 								label={ __( 'Change sticky position', 'eo-blocks' ) }
@@ -83,7 +93,40 @@ export default function Edit( { attributes, setAttributes } ) {
 								}
 							/>
 						</FlexItem>
+						<FlexBlock>
+							{ stickyPositionTranslate[attributes.contentPosition] }
+						</FlexBlock>
 					</Flex>
+
+
+				</PanelBody>
+				<PanelBody title={ __( 'Gap Offset', 'eo-blocks' ) }>
+					<RangeControl
+						label={ __( 'Horizontal Gap offset (%)', 'eo-blocks' ) }
+						help={ __( 'Offset of the sticky from the edge of the screen', 'eo-blocks' ) }
+						beforeIcon={ sidesHorizontal }
+						step={10}
+						value={attributes.horizontalGapPercent || 0}
+						onChange={(value) => setAttributes({horizontalGapPercent: value})}
+						min={0}
+						max={100}
+						renderTooltipContent={gapPercentTooltip}
+					/>
+					<RangeControl
+						label={ __( 'Vertical Gap offset (%)', 'eo-blocks' ) }
+						help={ __( 'Offset of the sticky from the edge of the screen', 'eo-blocks' ) }
+						beforeIcon={ sidesVertical }
+						step={10}
+						value={attributes.verticalGapPercent || 0}
+						onChange={(value) => setAttributes({verticalGapPercent: value})}
+						min={0}
+						max={100}
+						renderTooltipContent={gapPercentTooltip}
+					/>
+				</PanelBody>
+
+				<PanelBody title={ __( 'Mobile settings', 'eo-blocks' ) }>
+
 				</PanelBody>
 			</InspectorControls>
 

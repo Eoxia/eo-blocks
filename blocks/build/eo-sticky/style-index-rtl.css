@@ -13,16 +13,16 @@
   margin-top: 0 !important;
 }
 .wp-block-eo-sticky.is-position-top-left {
-  top: 10%;
+  top: 0;
   right: 0;
 }
 .wp-block-eo-sticky.is-position-top-center {
-  top: 10%;
+  top: 0;
   right: 50%;
   transform: translateX(50%);
 }
 .wp-block-eo-sticky.is-position-top-right {
-  top: 10%;
+  top: 0;
   left: 0;
 }
 .wp-block-eo-sticky.is-position-center-left {
