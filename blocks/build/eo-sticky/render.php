@@ -11,9 +11,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $contentPosition = ! empty( $attributes['contentPosition'] ) ? $attributes['contentPosition'] : 'top right';
-$contentPosition = 'is-position-' . str_replace( ' ', '-', $attributes['contentPosition'] );
+$contentPosition = 'is-position-' . str_replace( ' ', '-', $contentPosition );
+
+$horizontalGapPercent = ! empty( $attributes['horizontalGapPercent'] ) ? $attributes['horizontalGapPercent'] : 0;
+$horizontalGapPercent = 'is-gap-horizontal-' . str_replace( ' ', '-', $horizontalGapPercent );
+$verticalGapPercent   = ! empty( $attributes['verticalGapPercent'] ) ? $attributes['verticalGapPercent'] : 0;
+$verticalGapPercent   = 'is-gap-vertical-' . str_replace( ' ', '-', $verticalGapPercent );
+
+$blockClass = $contentPosition . ' ' . $horizontalGapPercent . ' ' . $verticalGapPercent;
+
+//$blockStyle           = sprintf(
+//    'transform: translateX(%s%%); transform: translateY(%s%%);',
+//    esc_attr( $horizontalGapPercent ),
+//    esc_attr( $verticalGapPercent )
+//);
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => esc_attr( $contentPosition ) ) ) ); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( array(
+    'class' => esc_attr( $blockClass),
+//    'style' => $blockStyle
+) ) ); ?>>
 	<?php echo wp_kses_post( $content ); ?>
 </div>

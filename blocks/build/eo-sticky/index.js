@@ -144,7 +144,7 @@ function Edit({
   attributes,
   setAttributes
 }) {
-  const gapPercentTooltip = value => `${value}%`;
+  const gapPercentTooltip = value => `${value}em`;
   const titleStyle = {
     fontSize: '11px',
     fontWeight: '500',
@@ -181,28 +181,28 @@ function Edit({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexBlock, null, stickyPositionTranslate[attributes.contentPosition]))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Gap Offset', 'eo-blocks')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Horizontal Gap offset (%)', 'eo-blocks'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Horizontal Gap offset (em)', 'eo-blocks'),
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Offset of the sticky from the edge of the screen', 'eo-blocks'),
     beforeIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
-    step: 10,
+    step: 1,
     value: attributes.horizontalGapPercent || 0,
     onChange: value => setAttributes({
       horizontalGapPercent: value
     }),
     min: 0,
-    max: 100,
+    max: 6,
     renderTooltipContent: gapPercentTooltip
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Vertical Gap offset (%)', 'eo-blocks'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Vertical Gap offset (em)', 'eo-blocks'),
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Offset of the sticky from the edge of the screen', 'eo-blocks'),
     beforeIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
-    step: 10,
+    step: 1,
     value: attributes.verticalGapPercent || 0,
     onChange: value => setAttributes({
       verticalGapPercent: value
     }),
     min: 0,
-    max: 100,
+    max: 6,
     renderTooltipContent: gapPercentTooltip
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile settings', 'eo-blocks')

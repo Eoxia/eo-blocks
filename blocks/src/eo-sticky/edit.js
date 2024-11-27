@@ -46,7 +46,7 @@ import './scss/editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const gapPercentTooltip = value => `${value}%`;
+	const gapPercentTooltip = value => `${value}em`;
 	const titleStyle = {
 		fontSize: '11px',
 		fontWeight: '500',
@@ -102,25 +102,25 @@ export default function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 				<PanelBody title={ __( 'Gap Offset', 'eo-blocks' ) }>
 					<RangeControl
-						label={ __( 'Horizontal Gap offset (%)', 'eo-blocks' ) }
+						label={ __( 'Horizontal Gap offset (em)', 'eo-blocks' ) }
 						help={ __( 'Offset of the sticky from the edge of the screen', 'eo-blocks' ) }
 						beforeIcon={ sidesHorizontal }
-						step={10}
+						step={1}
 						value={attributes.horizontalGapPercent || 0}
 						onChange={(value) => setAttributes({horizontalGapPercent: value})}
 						min={0}
-						max={100}
+						max={6}
 						renderTooltipContent={gapPercentTooltip}
 					/>
 					<RangeControl
-						label={ __( 'Vertical Gap offset (%)', 'eo-blocks' ) }
+						label={ __( 'Vertical Gap offset (em)', 'eo-blocks' ) }
 						help={ __( 'Offset of the sticky from the edge of the screen', 'eo-blocks' ) }
 						beforeIcon={ sidesVertical }
-						step={10}
+						step={1}
 						value={attributes.verticalGapPercent || 0}
 						onChange={(value) => setAttributes({verticalGapPercent: value})}
 						min={0}
-						max={100}
+						max={6}
 						renderTooltipContent={gapPercentTooltip}
 					/>
 				</PanelBody>
