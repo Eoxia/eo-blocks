@@ -94,11 +94,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/sides-horizontal.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/sides-vertical.js");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-sticky/scss/editor.scss");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/sides-horizontal.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/sides-vertical.js");
+/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-sticky/scss/editor.scss");
 
 /**
  * Retrieves the translation of text.
@@ -120,7 +118,6 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Experimental components
  */
-
 
 
 
@@ -184,7 +181,7 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Horizontal Gap offset (em)', 'eo-blocks'),
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Offset of the sticky from the edge of the screen', 'eo-blocks'),
-    beforeIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+    beforeIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
     step: 1,
     value: attributes.horizontalGapPercent || 0,
     onChange: value => setAttributes({
@@ -196,7 +193,7 @@ function Edit({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Vertical Gap offset (em)', 'eo-blocks'),
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Offset of the sticky from the edge of the screen', 'eo-blocks'),
-    beforeIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
+    beforeIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
     step: 1,
     value: attributes.verticalGapPercent || 0,
     onChange: value => setAttributes({
@@ -276,9 +273,9 @@ __webpack_require__.r(__webpack_exports__);
 
 const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 576 512"
+  viewBox: "0 0 448 512"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-  d: "M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l448 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l448 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zm96 64a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm104 0c0-13.3 10.7-24 24-24l224 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-224 0c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24l224 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-224 0c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24l224 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-224 0c-13.3 0-24-10.7-24-24zm-72-64a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM96 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z",
+  d: "M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l224 0 0-80c0-17.7 14.3-32 32-32l80 0 0-224c0-8.8-7.2-16-16-16L64 80zM288 480L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 224 0 5.5c0 17-6.7 33.3-18.7 45.3l-90.5 90.5c-12 12-28.3 18.7-45.3 18.7l-5.5 0z",
   fill: "#0066FF"
 }));
 
@@ -1719,16 +1716,6 @@ module.exports = window["wp"]["blocks"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["components"];
-
-/***/ }),
-
-/***/ "@wordpress/element":
-/*!*********************************!*\
-  !*** external ["wp","element"] ***!
-  \*********************************/
-/***/ ((module) => {
-
-module.exports = window["wp"]["element"];
 
 /***/ }),
 
