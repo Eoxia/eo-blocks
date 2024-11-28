@@ -124,6 +124,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -206,7 +207,28 @@ function Edit({
     renderTooltipContent: gapPercentTooltip
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile settings', 'eo-blocks')
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show in mobile', 'eo-blocks'),
+    checked: attributes.displayMobile,
+    onChange: value => setAttributes({
+      displayMobile: value
+    })
+  }), attributes.displayMobile && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalToggleGroupControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Style in mobile', 'eo-blocks'),
+    isBlock: true,
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true,
+    value: attributes.styleMobile,
+    onChange: value => setAttributes({
+      styleMobile: value
+    })
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalToggleGroupControlOption, {
+    value: "standard",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Standard', 'eo-blocks')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalToggleGroupControlOption, {
+    value: "menu",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Menu', 'eo-blocks')
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks, null)));
 }
@@ -1736,7 +1758,7 @@ module.exports = window["wp"]["primitives"];
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/sticky","version":"1.0.0","title":"Sticky","category":"eo-blocks","icon":"smiley","description":"Display sticky block","example":{},"attributes":{"contentPosition":{"type":"string","default":"top right"},"horizontalGapPercent":{"type":"number","default":0},"verticalGapPercent":{"type":"number","default":0}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true,"blockGap":true}},"textdomain":"accordion","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/sticky","version":"1.0.0","title":"Sticky","category":"eo-blocks","icon":"smiley","description":"Display sticky block","example":{},"attributes":{"contentPosition":{"type":"string","default":"top right"},"horizontalGapPercent":{"type":"number","default":0},"verticalGapPercent":{"type":"number","default":0},"displayMobile":{"type":"boolean","default":true},"styleMobile":{"type":"string","default":"standard"}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true,"blockGap":true}},"textdomain":"accordion","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

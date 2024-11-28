@@ -11,6 +11,12 @@
 	 * @return  void
 	 */
 	var initializeBlock = function( $block ) {
+		$($block).find('.eo-sticky__menu').on( 'click', function() {
+			$($block).toggleClass('is-active-mobile-menu');
+		})
+		$($block).find('.eo-sticky__menu-close').on('click', function() {
+			$($block).removeClass('is-active-mobile-menu');
+		});
 	}
 
 	$(document).ready(function(){

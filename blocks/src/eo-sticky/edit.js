@@ -21,6 +21,10 @@ import { Flex, FlexBlock, FlexItem, RangeControl, DropdownMenu, Toolbar, Toolbar
 import {
 	__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl
 } from '@wordpress/block-editor';
+import {
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+} from '@wordpress/components'
 
 import {
 	sidesHorizontal,
@@ -126,7 +130,24 @@ export default function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 
 				<PanelBody title={ __( 'Mobile settings', 'eo-blocks' ) }>
-
+					<ToggleControl
+						label={ __( 'Show in mobile', 'eo-blocks' ) }
+						checked={ attributes.displayMobile }
+						onChange={ ( value ) => setAttributes( { displayMobile: value } ) }
+					/>
+					{ attributes.displayMobile &&
+						<ToggleGroupControl
+							label={ __( 'Style in mobile', 'eo-blocks' ) }
+							isBlock
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							value={ attributes.styleMobile }
+							onChange={ ( value ) => setAttributes( { styleMobile: value } ) }
+						>
+							<ToggleGroupControlOption value="standard" label={ __( 'Standard', 'eo-blocks' ) } />
+							<ToggleGroupControlOption value="menu" label={ __( 'Menu', 'eo-blocks' ) } />
+						</ToggleGroupControl>
+					}
 				</PanelBody>
 			</InspectorControls>
 
