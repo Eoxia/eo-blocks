@@ -171,7 +171,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 const allowedBlocks = ['core/heading'];
 function eoSummaryAddAttributes(settings, name) {
   if (!allowedBlocks.includes(name)) {
@@ -180,7 +179,7 @@ function eoSummaryAddAttributes(settings, name) {
   settings.attributes = Object.assign(settings.attributes, {
     displaySummary: {
       type: 'boolean',
-      default: 'true'
+      default: 'false'
     },
     summaryLabel: {
       type: 'string',
@@ -219,7 +218,7 @@ const eoSummaryAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MOD
       className: "box-subtitle"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Parameter for Summary block', 'eo-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.ToggleControl, {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Use as summary title', 'eo-blocks'),
-      checked: displaySummary,
+      checked: !!displaySummary,
       onChange: value => setAttributes({
         displaySummary: value
       }),
@@ -241,26 +240,29 @@ function eoSummaryApplyExtraClass(extraProps, blockType, attributes) {
   }
   const {
     displaySummary,
-    summaryLabel
+    summaryLabel,
+    content
   } = attributes;
   if (typeof displaySummary !== 'undefined' && displaySummary) {
-    console.log(displaySummary);
-    extraProps.className += ' eo-summary';
-    if (typeof summaryLabel !== 'undefined') {
-      if (!summaryLabel || summaryLabel == '') {
-        var label = attributes.content;
-      } else {
-        var label = summaryLabel;
+    const className = extraProps.className ? `${extraProps.className} eo-summary__control` : 'eo-summary__control';
+    let label = '';
+    if (typeof summaryLabel !== 'undefined' && summaryLabel) {
+      label = summaryLabel;
+    } else if (content) {
+      const contentCopy = JSON.parse(JSON.stringify(content));
+      if (typeof contentCopy === 'object') {
+        label = contentCopy?.originalHTML || contentCopy?.[0]?.originalHTML || '';
+      } else if (typeof contentCopy === 'string') {
+        label = contentCopy;
       }
-      Object.assign(extraProps, {
-        'summary-label': label
-      });
-      var summaryAnchor = removeDiacritics(label);
-      var summaryAnchor = summaryAnchor.cleanup();
-      Object.assign(extraProps, {
-        'id': summaryAnchor
-      });
     }
+    const cleanedValue = label ? removeDiacritics(label).cleanup() : '';
+    return {
+      ...extraProps,
+      className,
+      'summary-label': label,
+      id: cleanedValue
+    };
   }
   return extraProps;
 }
@@ -523,11 +525,20 @@ var defaultDiacriticsRemovalMap = [{
 }];
 var changes;
 function removeDiacritics(str) {
+  if (typeof str !== 'string') {
+    console.error('removeDiacritics: Argument is not a string', str);
+    return ''; // Retourne une chaîne vide si l'entrée n'est pas valide
+  }
   if (!changes) {
     changes = defaultDiacriticsRemovalMap;
   }
   for (var i = 0; i < changes.length; i++) {
-    str = str.replace(changes[i].letters, changes[i].base);
+    if (str.replace) {
+      str = str.replace(changes[i].letters, changes[i].base);
+    } else {
+      console.error('removeDiacritics: str.replace is not a function', str);
+      return '';
+    }
   }
   return str;
 }

@@ -9,8 +9,12 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
-?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+$orientation = ! empty( $attributes['orientation'] ) ? 'is-orientation-' . $attributes['orientation'] : 'is-orientation-horizontal';
+$justification = ! empty( $attributes['justification'] ) ? 'is-justification-' . $attributes['justification'] : 'is-justification-left';
+
+$blockClass = $orientation . ' ' . $justification;
+?>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => esc_attr( $blockClass) ) ) ); ?>>
 
 </div>

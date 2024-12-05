@@ -7,5 +7,31 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.wp-block-eo-summary {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+.wp-block-eo-summary.is-orientation-horizontal {
+  flex-direction: row;
+}
+.wp-block-eo-summary.is-orientation-vertical {
+  flex-direction: column;
+}
+.wp-block-eo-summary.is-justification-left {
+  justify-content: flex-start;
+}
+.wp-block-eo-summary.is-justification-center {
+  justify-content: center;
+}
+.wp-block-eo-summary.is-justification-right {
+  justify-content: flex-end;
+}
+.wp-block-eo-summary.is-justification-space-between {
+  justify-content: space-between;
+}
+.wp-block-eo-summary .eo-summary__item.active {
+  color: red;
+}
 
 /*# sourceMappingURL=style-index.css.map*/

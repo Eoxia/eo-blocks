@@ -6,15 +6,9 @@
 import { __ } from '@wordpress/i18n';
 import { addFilter } from "@wordpress/hooks";
 import { Fragment } from "@wordpress/element";
-import { InspectorAdvancedControls, InspectorControls } from "@wordpress/block-editor";
+import { InspectorControls } from "@wordpress/block-editor";
 import { createHigherOrderComponent } from "@wordpress/compose";
 import { ToggleControl, TextControl, PanelBody, SelectControl } from "@wordpress/components";
-
-import {
-    __experimentalToolsPanel as ToolsPanel,
-    __experimentalToolsPanelItem as ToolsPanelItem,
-    __experimentalUnitControl as UnitControl
-} from '@wordpress/components';
 
 const allowedBlocks = [ 'core/heading' ];
 
@@ -27,7 +21,7 @@ function eoSummaryAddAttributes( settings, name ) {
     settings.attributes = Object.assign( settings.attributes, {
         displaySummary: {
             type: 'boolean',
-            default: 'true',
+            default: 'false',
         },
         summaryLabel: {
             type: 'string',
@@ -69,7 +63,7 @@ const eoSummaryAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
 
                             <ToggleControl
                                 label={ __( 'Use as summary title', 'eo-blocks' ) }
-                                checked={ displaySummary }
+                                checked={ !!displaySummary }
                                 onChange={ ( value ) => setAttributes({ displaySummary: value }) }
                                 className="full-width-control-wrapper"
                             />
@@ -97,29 +91,39 @@ addFilter(
 );
 
 function eoSummaryApplyExtraClass( extraProps, blockType, attributes ) {
-    if( ! allowedBlocks.includes( blockType.name ) ) {
+    if (!allowedBlocks.includes(blockType.name)) {
         return extraProps;
     }
 
-    const { displaySummary, summaryLabel } = attributes;
+    const { displaySummary, summaryLabel, content } = attributes;
 
     if (typeof displaySummary !== 'undefined' && displaySummary) {
-        console.log(displaySummary);
-        extraProps.className += ' eo-summary';
 
-        if (typeof summaryLabel !== 'undefined') {
-            if ( ! summaryLabel || summaryLabel == '' ) {
-                var label = attributes.content;
-            }
-            else {
-                var label = summaryLabel;
-            }
-            Object.assign(extraProps, { 'summary-label': label });
+        const className = extraProps.className ? `${extraProps.className} eo-summary__control` : 'eo-summary__control';
+        let label = '';
 
-            var summaryAnchor = removeDiacritics( label );
-            var summaryAnchor = summaryAnchor.cleanup();
-            Object.assign(extraProps, { 'id': summaryAnchor });
+        if (typeof summaryLabel !== 'undefined' && summaryLabel) {
+
+            label = summaryLabel;
+        } else if (content) {
+            const contentCopy = JSON.parse(JSON.stringify(content));
+            if (typeof contentCopy === 'object') {
+                label = contentCopy?.originalHTML || contentCopy?.[0]?.originalHTML || '';
+            } else if (typeof contentCopy === 'string') {
+                label = contentCopy;
+            }
         }
+
+        const cleanedValue = label
+            ? removeDiacritics(label).cleanup()
+            : '';
+
+        return {
+            ...extraProps,
+            className,
+            'summary-label': label,
+            id: cleanedValue,
+        };
     }
 
     return extraProps;
@@ -130,6 +134,7 @@ addFilter(
     'eo/summary-applyExtraClass',
     eoSummaryApplyExtraClass
 );
+
 
 
 String.prototype.cleanup = function() {
@@ -224,11 +229,22 @@ var defaultDiacriticsRemovalMap = [
 ];
 var changes;
 function removeDiacritics (str) {
+    if (typeof str !== 'string') {
+        console.error('removeDiacritics: Argument is not a string', str);
+        return ''; // Retourne une chaîne vide si l'entrée n'est pas valide
+    }
+
     if(!changes) {
         changes = defaultDiacriticsRemovalMap;
     }
     for(var i=0; i<changes.length; i++) {
-        str = str.replace(changes[i].letters, changes[i].base);
+        if (str.replace) {
+            str = str.replace(changes[i].letters, changes[i].base);
+        } else {
+            console.error('removeDiacritics: str.replace is not a function', str);
+            return '';
+        }
+
     }
     return str;
 }

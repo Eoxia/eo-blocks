@@ -8,7 +8,16 @@
   "icon": "smiley",
   "description": "Display Summary block",
   "example": {},
-  "attributes": {},
+  "attributes": {
+    "orientation": {
+      "type": "string",
+      "default": "horizontal"
+    },
+    "justification": {
+      "type": "string",
+      "default": "left"
+    }
+  },
   "supports": {
     "color": {
       "background": "true",
@@ -16,8 +25,7 @@
     },
     "spacing": {
       "margin": false,
-      "padding": true,
-      "blockGap": true
+      "padding": true
     }
   },
   "textdomain": "summary",
