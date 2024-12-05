@@ -179,7 +179,7 @@ function eoSummaryAddAttributes(settings, name) {
   settings.attributes = Object.assign(settings.attributes, {
     displaySummary: {
       type: 'boolean',
-      default: 'false'
+      default: false
     },
     summaryLabel: {
       type: 'string',
@@ -218,7 +218,7 @@ const eoSummaryAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MOD
       className: "box-subtitle"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Parameter for Summary block', 'eo-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.ToggleControl, {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Use as summary title', 'eo-blocks'),
-      checked: !!displaySummary,
+      checked: displaySummary === true,
       onChange: value => setAttributes({
         displaySummary: value
       }),
@@ -243,7 +243,7 @@ function eoSummaryApplyExtraClass(extraProps, blockType, attributes) {
     summaryLabel,
     content
   } = attributes;
-  if (typeof displaySummary !== 'undefined' && displaySummary) {
+  if (typeof displaySummary !== 'undefined' && displaySummary === true) {
     const className = extraProps.className ? `${extraProps.className} eo-summary__control` : 'eo-summary__control';
     let label = '';
     if (typeof summaryLabel !== 'undefined' && summaryLabel) {

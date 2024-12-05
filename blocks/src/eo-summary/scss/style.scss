@@ -11,6 +11,7 @@ $media__mobile: 599px;
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
+  color: #000;
 
   &.is-orientation-horizontal {
     flex-direction: row;
@@ -32,7 +33,22 @@ $media__mobile: 599px;
     justify-content: space-between
   }
 
-  .eo-summary__item.active {
-    color: red;
+  &:not(.has-text-color) {
+    .eo-summary__item {
+      color: #000;
+
+      &.active {
+        text-shadow: 0.4px 0.4px 0 #000;
+      }
+    }
   }
+  .eo-summary__item {
+    opacity: 0.6;
+    transition: all 0.2s ease-out;
+
+    &.active, &:hover {
+      opacity: 1;
+    }
+  }
+
 }

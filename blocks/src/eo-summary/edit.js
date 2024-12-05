@@ -11,6 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
+import { useSelect  } from '@wordpress/data';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { Flex, FlexBlock, FlexItem, PanelBody } from '@wordpress/components';
 import {
@@ -46,6 +47,33 @@ import './scss/editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
+	const headers = useSelect((select) => {
+		const { getBlocks } = select('core/block-editor');
+		const allBlocks = getBlocks();
+
+		// Utilise la fonction récursive pour récupérer les `Headings`
+		return getHeadingsWithDisplaySummary(allBlocks);
+	}, []);
+
+	if ( headers.length == 0 ) {
+		headers.push({
+			content: __( 'Please activate "Summary title" on heading blocks to display the summary nav', 'eo-blocks' )
+		});
+	}
+
+	const { justification, orientation } = attributes;
+
+	const className = [
+		justification ? `is-justification-${justification}` : '',
+		orientation ? `is-orientation-${orientation}` : ''
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const blockProps = useBlockProps({
+		className: className,
+	});
+
 	return (
 		<>
 			<InspectorControls>
@@ -106,9 +134,46 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			</InspectorControls>
 
-			<div {...useBlockProps()}>
-				Coucou
+			<div {...blockProps}>
+				{headers.map((header, index) => {
+					return (
+						<div className="eo-summary__item" key={index}>
+							{typeof header.content === 'string' ? header.content : JSON.stringify(header.content)}
+						</div>
+					);
+				})}
 			</div>
 		</>
 	);
+}
+
+function getHeadingsWithDisplaySummary(blocks) {
+	let headings = [];
+
+	blocks.forEach((block) => {
+		if (block.name === 'core/heading' && block.attributes.displaySummary === true) {
+
+			var label = '';
+			if (typeof block.attributes.summaryLabel !== 'undefined' && block.attributes.summaryLabel) {
+				label = block.attributes.summaryLabel;
+			} else if (block.attributes.content) {
+				const contentCopy = JSON.parse(JSON.stringify(block.attributes.content));
+				if (typeof contentCopy === 'object') {
+					label = contentCopy?.originalHTML || contentCopy?.[0]?.originalHTML || '';
+				} else if (typeof contentCopy === 'string') {
+					label = contentCopy;
+				}
+			}
+
+			headings.push({
+				content: label || '',
+			});
+		}
+
+		if (block.innerBlocks && block.innerBlocks.length > 0) {
+			headings = headings.concat(getHeadingsWithDisplaySummary(block.innerBlocks));
+		}
+	});
+
+	return headings;
 }

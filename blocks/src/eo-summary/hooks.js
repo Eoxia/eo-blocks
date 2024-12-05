@@ -21,7 +21,7 @@ function eoSummaryAddAttributes( settings, name ) {
     settings.attributes = Object.assign( settings.attributes, {
         displaySummary: {
             type: 'boolean',
-            default: 'false',
+            default: false,
         },
         summaryLabel: {
             type: 'string',
@@ -63,7 +63,7 @@ const eoSummaryAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
 
                             <ToggleControl
                                 label={ __( 'Use as summary title', 'eo-blocks' ) }
-                                checked={ !!displaySummary }
+                                checked={ displaySummary === true }
                                 onChange={ ( value ) => setAttributes({ displaySummary: value }) }
                                 className="full-width-control-wrapper"
                             />
@@ -97,13 +97,12 @@ function eoSummaryApplyExtraClass( extraProps, blockType, attributes ) {
 
     const { displaySummary, summaryLabel, content } = attributes;
 
-    if (typeof displaySummary !== 'undefined' && displaySummary) {
+    if (typeof displaySummary !== 'undefined' && displaySummary === true) {
 
         const className = extraProps.className ? `${extraProps.className} eo-summary__control` : 'eo-summary__control';
         let label = '';
 
         if (typeof summaryLabel !== 'undefined' && summaryLabel) {
-
             label = summaryLabel;
         } else if (content) {
             const contentCopy = JSON.parse(JSON.stringify(content));

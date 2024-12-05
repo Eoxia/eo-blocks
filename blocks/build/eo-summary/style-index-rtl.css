@@ -11,6 +11,7 @@
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
+  color: #000;
 }
 .wp-block-eo-summary.is-orientation-horizontal {
   flex-direction: row;
@@ -30,6 +31,16 @@
 .wp-block-eo-summary.is-justification-space-between {
   justify-content: space-between;
 }
-.wp-block-eo-summary .eo-summary__item.active {
-  color: red;
+.wp-block-eo-summary:not(.has-text-color) .eo-summary__item {
+  color: #000;
+}
+.wp-block-eo-summary:not(.has-text-color) .eo-summary__item.active {
+  text-shadow: -0.4px 0.4px 0 #000;
+}
+.wp-block-eo-summary .eo-summary__item {
+  opacity: 0.6;
+  transition: all 0.2s ease-out;
+}
+.wp-block-eo-summary .eo-summary__item.active, .wp-block-eo-summary .eo-summary__item:hover {
+  opacity: 1;
 }
