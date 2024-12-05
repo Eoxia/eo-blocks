@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InspectorControls, BlockControls, RichText, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { Flex, FlexBlock, FlexItem, RangeControl, DropdownMenu, Toolbar, ToolbarDropdownMenu, ToggleControl, PanelBody, Spacer } from '@wordpress/components';
+import { InspectorControls, BlockControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { Flex, FlexBlock, FlexItem, RangeControl, ToggleControl, PanelBody } from '@wordpress/components';
 // import { AlignmentMatrixControl } from '@wordpress/components';
 
 /**
@@ -30,8 +30,6 @@ import {
 	sidesHorizontal,
 	sidesVertical,
 } from '@wordpress/icons';
-
-import { useState } from '@wordpress/element';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.

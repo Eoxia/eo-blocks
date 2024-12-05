@@ -1,0 +1,39 @@
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/eo-summary/scss/editor.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-eo-summary {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+.wp-block-eo-summary.is-orientation-horizontal {
+  flex-direction: row;
+}
+.wp-block-eo-summary.is-orientation-vertical {
+  flex-direction: column;
+}
+.wp-block-eo-summary.is-justification-left {
+  justify-content: flex-start;
+}
+.wp-block-eo-summary.is-justification-center {
+  justify-content: center;
+}
+.wp-block-eo-summary.is-justification-right {
+  justify-content: flex-end;
+}
+.wp-block-eo-summary.is-justification-space-between {
+  justify-content: space-between;
+}
+
+.full-width-control-wrapper {
+  grid-column: 1/-1;
+}
+
+.box-subtitle {
+  color: rgba(0, 0, 0, 0.4);
+}
