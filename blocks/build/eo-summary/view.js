@@ -22,10 +22,10 @@ var __webpack_exports__ = {};
     // Smooth Scroll.
     $('.eo-summary__item').on('click', function () {
       var offset = 20;
-      if ($('#wpadminbar')) {
+      if ($('#wpadminbar').length > 0) {
         offset += 32;
       }
-      if ($('.site-header .header-sticky')) {
+      if ($('.site-header .header-sticky').length > 0) {
         offset += $('.site-header .header-sticky').outerHeight();
       } // Beflex theme fix.
 

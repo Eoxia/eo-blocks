@@ -18,8 +18,8 @@
 		// Smooth Scroll.
 		$('.eo-summary__item').on('click', function() {
 			var offset = 20;
-			if ( $('#wpadminbar') ) { offset += 32; }
-			if ( $('.site-header .header-sticky') ) { offset += $('.site-header .header-sticky').outerHeight(); } // Beflex theme fix.
+			if ( $('#wpadminbar').length > 0 ) { offset += 32; }
+			if ( $('.site-header .header-sticky').length > 0 ) { offset += $('.site-header .header-sticky').outerHeight(); } // Beflex theme fix.
 
 			if (this.hash !== "") {
 				event.preventDefault();
