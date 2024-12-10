@@ -1,23 +1,23 @@
-(function($) {
+import Swiper from 'swiper';
+// import { Navigation, Pagination } from 'swiper/modules';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
 
-	/**
-	 * initializeBlock
-	 *
-	 * Adds custom JavaScript to the block Accordion.
-	 *
-	 * @since   1.0.0
-	 *
-	 * @param   object $block The block jQuery element.
-	 * @return  void
-	 */
-	var initializeBlock = function( $block ) {
-
-	}
-
-	$(document).ready(function(){
-		$('.wp-block-eo-accordion').each(function(){
-			initializeBlock( $(this) );
+document.addEventListener('DOMContentLoaded', () => {
+	const carousels = document.querySelectorAll('.wp-block-eo-carousel');
+	carousels.forEach(carousel => {
+		const swiper = new Swiper(carousel, {
+			pagination: {
+				el: '.swiper-pagination',
+			},
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+			scrollbar: {
+				el: '.swiper-scrollbar',
+			},
 		});
 	});
-
-})(jQuery);
+});

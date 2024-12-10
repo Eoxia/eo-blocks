@@ -11,14 +11,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-    <div class="eo-carousel__wrapper">
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?>>
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
         <?php echo wp_kses_post( $content ); ?>
     </div>
-    <div class="eo-carousel__pagination"></div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
 
-    <div class="eo-carousel__control-prev"></div>
-    <div class="eo-carousel__control-next"></div>
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
 
-    <div class="eo-carousel__scrollbar"></div>
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
 </div>
