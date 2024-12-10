@@ -12,13 +12,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-    <div class="eo-carousel__wrapper">
-        <?php echo wp_kses_post( $content ); ?>
-    </div>
-    <div class="eo-carousel__pagination"></div>
-
-    <div class="eo-carousel__control-prev"></div>
-    <div class="eo-carousel__control-next"></div>
-
-    <div class="eo-carousel__scrollbar"></div>
+    <?php echo wp_kses_post( $content ); ?>
 </div>
