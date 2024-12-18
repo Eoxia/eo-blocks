@@ -7,5 +7,9 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.wp-block-eo-carousel {
+  width: 600px;
+  height: 300px;
+}
 
 /*# sourceMappingURL=style-index.css.map*/
