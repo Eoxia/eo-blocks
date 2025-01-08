@@ -9,9 +9,22 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
+
+$carousel_attr = array(
+    'slidesPerView' => esc_attr( $attributes['slidesPerView'] ),
+    'loop' => esc_attr( $attributes['loop'] )
+);
+
+if ( $attributes['autoplay'] ) {
+    $carousel_attr['autoplay'] = array( 'delay' => $attributes['autoplayDelay'] * 10 );
+} else {
+    $carousel_attr['autoplay'] = false;
+}
+
+
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?> data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper">
         <?php echo wp_kses_post( $content ); ?>

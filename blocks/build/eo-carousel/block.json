@@ -11,7 +11,28 @@
     "eo/slide"
   ],
   "example": {},
-  "attributes": {},
+  "attributes": {
+    "slidesPerView": {
+      "type": "number",
+      "default": 1
+    },
+    "loop": {
+      "type": "boolean",
+      "default": true
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": false
+    },
+    "autoplayDelay": {
+      "type": "number",
+      "default": 300
+    },
+    "speed": {
+      "type": "number",
+      "default": 300
+    }
+  },
   "supports": {},
   "textdomain": "carousel",
   "editorScript": "file:./index.js",

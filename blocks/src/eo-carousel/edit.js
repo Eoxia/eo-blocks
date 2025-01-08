@@ -12,7 +12,9 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { InspectorControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { PanelBody } from '@wordpress/components';
+import { PanelBody, Button, RangeControl, ToggleControl } from '@wordpress/components';
+import {Icon, plus} from '@wordpress/icons';
+
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,17 +32,68 @@ import './scss/editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
+	const innerBlocksCount = wp.data.select('core/block-editor').getBlockOrder(clientId).length;
+	const CustomAppender = () => (
+		<div style={{ textAlign: 'center', margin: '10px 0' }}>
+			<Button
+				variant="secondary"
+				onClick={() => wp.data.dispatch('core/block-editor').insertBlock(
+					wp.blocks.createBlock('eo/slide'),
+					innerBlocksCount,
+					clientId
+				)}
+			>
+				<Icon icon={plus} />
+				{ __( 'Add a new slide', 'eo-blocks' ) }
+			</Button>
+		</div>
+	);
+
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody title={ __( 'Carousel settings', 'eo-blocks' ) }>
+					<RangeControl
+						label={ __( 'Slides to show', 'eo-blocks' ) }
+						step={1}
+						value={attributes.slidesPerView || 1}
+						onChange={(value) => setAttributes({slidesPerView: value})}
+						min={1}
+						max={6}
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Loop sliding', 'eo-blocks' ) }
+						checked={ attributes.loop }
+						onChange={ ( value ) => setAttributes( { loop: value } ) }
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Autoplay', 'eo-blocks' ) }
+						checked={ attributes.autoplay }
+						onChange={ ( value ) => setAttributes( { autoplay: value } ) }
+					/>
+					{attributes.autoplay && (
+						<RangeControl
+							label={ __( 'Delay per slide (MS)', 'eo-blocks' ) }
+							step={50}
+							value={attributes.autoplayDelay}
+							onChange={(value) => setAttributes({autoplayDelay: value})}
+							min={0}
+							max={1000}
+						/>
+					)}
+
 				</PanelBody>
 			</InspectorControls>
 
 			<div { ...useBlockProps() }>
 				<div className="eo-carousel__inner">
-					<InnerBlocks/>
+					<InnerBlocks
+						template={[]}
+						renderAppender={() => <CustomAppender />}
+					/>
 				</div>
 			</div>
 		</>

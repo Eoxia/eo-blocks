@@ -5,4 +5,14 @@
  */
 
 .wp-block-eo-carousel{
+  .block-list-appender {
+    position: static;
+  }
+  .block-editor-block-list__layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1em;
+  }
 }

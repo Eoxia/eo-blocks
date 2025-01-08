@@ -7,7 +7,7 @@
 	"category": "eo-blocks",
 	"icon": "smiley",
 	"description": "Display Slide of carousel block",
-	"Ancestor": [ "eo/carousel" ],
+	"ancestor": [ "eo/carousel" ],
 	"example": {},
   	"attributes": {
 

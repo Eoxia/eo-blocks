@@ -7,7 +7,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const carousels = document.querySelectorAll('.wp-block-eo-carousel');
 	carousels.forEach(carousel => {
-		const swiper = new Swiper(carousel, {
+		const swiperCustomAttributes = jQuery(carousel).data('carousel');
+		const swiperDefaultAttributes = {
+			slidesPerView: 1,
+			loop: true,
+			autoplay: false,
 			pagination: {
 				el: '.swiper-pagination',
 			},
@@ -18,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			scrollbar: {
 				el: '.swiper-scrollbar',
 			},
-		});
+		}
+
+		console.log(jQuery.extend( swiperDefaultAttributes, swiperCustomAttributes ));
+		const swiperInit = new Swiper(carousel, jQuery.extend( swiperDefaultAttributes, swiperCustomAttributes ) );
 	});
 });

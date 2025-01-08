@@ -13,6 +13,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { InspectorControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,7 +31,15 @@ import './scss/editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
+
+	const isEmpty = useSelect(
+		(select) => {
+			const innerBlocks = select('core/block-editor').getBlocks(clientId);
+			return innerBlocks.length === 0;
+		},
+		[clientId]
+	);
 	return (
 		<>
 			<InspectorControls>
@@ -40,7 +49,11 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			<div { ...useBlockProps() }>
 				<div className="eo-slide__inner">
-					<InnerBlocks/>
+					<InnerBlocks
+						renderAppender={() =>
+							isEmpty ? <InnerBlocks.ButtonBlockAppender /> : null
+						}
+					/>
 				</div>
 			</div>
 		</>
