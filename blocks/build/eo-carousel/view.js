@@ -16,16 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const swiperDefaultAttributes = {
       slidesPerView: 1,
       loop: true,
+      speed: 300,
       autoplay: false,
       pagination: {
-        el: '.swiper-pagination'
+        el: '.swiper-pagination',
+        dynamicBullets: true
       },
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev'
-      },
-      scrollbar: {
-        el: '.swiper-scrollbar'
       }
     };
     console.log(jQuery.extend(swiperDefaultAttributes, swiperCustomAttributes));

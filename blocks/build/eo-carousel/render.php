@@ -12,7 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $carousel_attr = array(
     'slidesPerView' => esc_attr( $attributes['slidesPerView'] ),
-    'loop' => esc_attr( $attributes['loop'] )
+    'loop' => esc_attr( $attributes['loop'] ),
+    'speed' => esc_attr( $attributes['speed'] )
 );
 
 if ( $attributes['autoplay'] ) {
@@ -20,8 +21,12 @@ if ( $attributes['autoplay'] ) {
 } else {
     $carousel_attr['autoplay'] = false;
 }
-
-
+if ( ! $attributes['pagination'] ) {
+    $carousel_attr['pagination'] = false;
+}
+if ( ! $attributes['navigation'] ) {
+    $carousel_attr['navigation'] = false;
+}
 ?>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?> data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>
@@ -29,13 +34,13 @@ if ( $attributes['autoplay'] ) {
     <div class="swiper-wrapper">
         <?php echo wp_kses_post( $content ); ?>
     </div>
-    <!-- If we need pagination -->
-    <div class="swiper-pagination"></div>
 
-    <!-- If we need navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <?php if ( $attributes['pagination'] ) : ?>
+        <div class="swiper-pagination"></div>
+    <?php endif; ?>
 
-    <!-- If we need scrollbar -->
-    <div class="swiper-scrollbar"></div>
+    <?php if ( $attributes['navigation'] ) : ?>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    <?php endif; ?>
 </div>

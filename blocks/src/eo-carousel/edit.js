@@ -62,6 +62,26 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						min={1}
 						max={6}
 					/>
+					<RangeControl
+						label={ __( 'Slide animation speed (MS)', 'eo-blocks' ) }
+						step={50}
+						value={attributes.speed}
+						onChange={(value) => setAttributes({speed: value})}
+						min={0}
+						max={2000}
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Prev/Next navigation', 'eo-blocks' ) }
+						checked={ attributes.navigation }
+						onChange={ ( value ) => setAttributes( { navigation: value } ) }
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Dots navigation', 'eo-blocks' ) }
+						checked={ attributes.pagination }
+						onChange={ ( value ) => setAttributes( { pagination: value } ) }
+					/>
 					<ToggleControl
 						__nextHasNoMarginBottom
 						label={ __( 'Loop sliding', 'eo-blocks' ) }

@@ -31,6 +31,14 @@
     "speed": {
       "type": "number",
       "default": 300
+    },
+    "pagination": {
+      "type": "boolean",
+      "default": true
+    },
+    "navigation": {
+      "type": "boolean",
+      "default": true
     }
   },
   "supports": {},

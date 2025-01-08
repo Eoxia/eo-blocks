@@ -197,6 +197,29 @@ function Edit({
     }),
     min: 1,
     max: 6
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Slide animation speed (MS)', 'eo-blocks'),
+    step: 50,
+    value: attributes.speed,
+    onChange: value => setAttributes({
+      speed: value
+    }),
+    min: 0,
+    max: 2000
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Prev/Next navigation', 'eo-blocks'),
+    checked: attributes.navigation,
+    onChange: value => setAttributes({
+      navigation: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dots navigation', 'eo-blocks'),
+    checked: attributes.pagination,
+    onChange: value => setAttributes({
+      pagination: value
+    })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
     __nextHasNoMarginBottom: true,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Loop sliding', 'eo-blocks'),
@@ -1772,7 +1795,7 @@ module.exports = window["wp"]["primitives"];
   \*******************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/carousel","version":"1.0.0","title":"Carousel","category":"eo-blocks","icon":"smiley","description":"Display carousel block","allowedBlocks":["eo/slide"],"example":{},"attributes":{"slidesPerView":{"type":"number","default":1},"loop":{"type":"boolean","default":true},"autoplay":{"type":"boolean","default":false},"autoplayDelay":{"type":"number","default":300},"speed":{"type":"number","default":300}},"supports":{},"textdomain":"carousel","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["eo-blocks-swiper-css","file:./style-index.css"],"render":"file:./render.php","viewScript":["eo-blocks-swiper-js","file:./view.js"]}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/carousel","version":"1.0.0","title":"Carousel","category":"eo-blocks","icon":"smiley","description":"Display carousel block","allowedBlocks":["eo/slide"],"example":{},"attributes":{"slidesPerView":{"type":"number","default":1},"loop":{"type":"boolean","default":true},"autoplay":{"type":"boolean","default":false},"autoplayDelay":{"type":"number","default":300},"speed":{"type":"number","default":300},"pagination":{"type":"boolean","default":true},"navigation":{"type":"boolean","default":true}},"supports":{},"textdomain":"carousel","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["eo-blocks-swiper-css","file:./style-index.css"],"render":"file:./render.php","viewScript":["eo-blocks-swiper-js","file:./view.js"]}');
 
 /***/ })
 
