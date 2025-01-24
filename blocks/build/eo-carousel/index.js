@@ -153,6 +153,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -206,6 +207,45 @@ function Edit({
     }),
     min: 0,
     max: 2000
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      fontSize: '11px',
+      fontWeight: '500',
+      lineHeight: '1.4',
+      textTransform: 'uppercase',
+      marginBottom: 8
+    }
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Main color', 'eo-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dropdown, {
+    style: {
+      marginBottom: 16
+    },
+    popoverProps: {
+      placement: 'bottom-start'
+    },
+    position: "middle left",
+    renderToggle: ({
+      isOpen,
+      onToggle
+    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+      variant: "secondary",
+      onClick: onToggle,
+      "aria-expanded": isOpen
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalHStack, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        background: attributes.mainColor,
+        width: 20,
+        height: 20,
+        borderRadius: '50%'
+      }
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalText, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Main color', 'eo-blocks')))),
+    renderContent: () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPicker, {
+      color: attributes.mainColor,
+      onChange: value => setAttributes({
+        mainColor: value
+      }),
+      enableAlpha: true,
+      defaultValue: "#000"
+    })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
     __nextHasNoMarginBottom: true,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Prev/Next navigation', 'eo-blocks'),
@@ -243,6 +283,60 @@ function Edit({
     }),
     min: 0,
     max: 1000
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    __next40pxDefaultSize: true,
+    __nextHasNoMarginBottom: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Transition effect', 'eo-blocks'),
+    value: attributes.effect,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default', 'eo-blocks'),
+      value: 'default'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Fade', 'eo-blocks'),
+      value: 'fade'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Coverflow', 'eo-blocks'),
+      value: 'coverflow'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Flip', 'eo-blocks'),
+      value: 'flip'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cube', 'eo-blocks'),
+      value: 'cube'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cards', 'eo-blocks'),
+      value: 'cards'
+    }],
+    onChange: value => setAttributes({
+      effect: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Space between slides (px)', 'eo-blocks'),
+    step: 1,
+    value: attributes.spaceBetween,
+    onChange: value => setAttributes({
+      spaceBetween: value
+    }),
+    min: 0,
+    max: 100
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile settings', 'eo-blocks')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalNumberControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile Breakpoint', 'eo-blocks'),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Screen width (px)', 'eo-blocks'),
+    value: attributes.mobileBreakpoint,
+    onChange: value => setAttributes({
+      mobileBreakpoint: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Slides to show', 'eo-blocks'),
+    step: 1,
+    value: attributes.mobileSlidesPerView || 1,
+    onChange: value => setAttributes({
+      mobileSlidesPerView: value
+    }),
+    min: 1,
+    max: 6
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1795,7 +1889,7 @@ module.exports = window["wp"]["primitives"];
   \*******************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/carousel","version":"1.0.0","title":"Carousel","category":"eo-blocks","icon":"smiley","description":"Display carousel block","allowedBlocks":["eo/slide"],"example":{},"attributes":{"slidesPerView":{"type":"number","default":1},"loop":{"type":"boolean","default":true},"autoplay":{"type":"boolean","default":false},"autoplayDelay":{"type":"number","default":300},"speed":{"type":"number","default":300},"pagination":{"type":"boolean","default":true},"navigation":{"type":"boolean","default":true}},"supports":{},"textdomain":"carousel","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["eo-blocks-swiper-css","file:./style-index.css"],"render":"file:./render.php","viewScript":["eo-blocks-swiper-js","file:./view.js"]}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/carousel","version":"1.0.0","title":"Carousel","category":"eo-blocks","icon":"smiley","description":"Display carousel block","allowedBlocks":["eo/slide"],"example":{},"attributes":{"slidesPerView":{"type":"number","default":1},"loop":{"type":"boolean","default":true},"autoplay":{"type":"boolean","default":false},"autoplayDelay":{"type":"number","default":300},"speed":{"type":"number","default":300},"pagination":{"type":"boolean","default":true},"navigation":{"type":"boolean","default":true},"effect":{"type":"string","default":"default"},"spaceBetween":{"type":"number","default":0},"mobileBreakpoint":{"type":"number","default":599},"mobileSlidesPerView":{"type":"number","default":1},"mainColor":{"type":"string","default":"#007aff"}},"supports":{},"textdomain":"carousel","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["eo-blocks-swiper-css","file:./style-index.css"],"render":"file:./render.php","viewScript":["eo-blocks-swiper-js","file:./view.js"]}');
 
 /***/ })
 

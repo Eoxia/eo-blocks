@@ -11,9 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $carousel_attr = array(
-    'slidesPerView' => esc_attr( $attributes['slidesPerView'] ),
-    'loop' => esc_attr( $attributes['loop'] ),
-    'speed' => esc_attr( $attributes['speed'] )
+    'loop'          => esc_attr( $attributes['loop'] ),
+    'speed'         => esc_attr( $attributes['speed'] ),
+    'effect'        => esc_attr( $attributes['effect'] ),
+    'spaceBetween'  => esc_attr( $attributes['spaceBetween'] ),
+    'slidesPerView' => esc_attr( $attributes['mobileSlidesPerView'] ),
+    'breakpoints'   => array(
+        esc_attr( $attributes['mobileBreakpoint'] ) => array(
+            'slidesPerView' => esc_attr( $attributes['slidesPerView'] )
+        ),
+    )
 );
 
 if ( $attributes['autoplay'] ) {
@@ -28,6 +35,11 @@ if ( ! $attributes['navigation'] ) {
     $carousel_attr['navigation'] = false;
 }
 ?>
+<style>
+    :root {
+        --swiper-theme-color: <?php echo esc_attr( $attributes['mainColor'] ); ?>;
+    }
+</style>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?> data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>
     <!-- Additional required wrapper -->

@@ -9,10 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	carousels.forEach(carousel => {
 		const swiperCustomAttributes = jQuery(carousel).data('carousel');
 		const swiperDefaultAttributes = {
-			slidesPerView: 1,
 			loop: true,
 			speed: 300,
 			autoplay: false,
+			effect: 'default',
+			spaceBetween: 0,
+			slidesPerView: 1, // Mobile
+			breakpoints: {
+				599: {
+					slidesPerView: 1 // Desktop
+				}
+			},
 			pagination: {
 				el: '.swiper-pagination',
 				dynamicBullets: true,

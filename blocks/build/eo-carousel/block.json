@@ -39,6 +39,26 @@
     "navigation": {
       "type": "boolean",
       "default": true
+    },
+    "effect": {
+      "type": "string",
+      "default": "default"
+    },
+    "spaceBetween": {
+      "type": "number",
+      "default": 0
+    },
+    "mobileBreakpoint": {
+      "type": "number",
+      "default": 599
+    },
+    "mobileSlidesPerView": {
+      "type": "number",
+      "default": 1
+    },
+    "mainColor": {
+      "type": "string",
+      "default": "#007aff"
     }
   },
   "supports": {},
