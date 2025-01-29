@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo/carousel",
+	"version": "1.0.0",
+	"title": "Carousel",
+	"category": "eo-blocks",
+	"icon": "smiley",
+	"description": "Display carousel block",
+	"allowedBlocks": [ "eo/slide" ],
+	"example": {},
+  	"attributes": {
+		"slidesPerView": {
+			"type": "number",
+			"default": 1
+		},
+		"loop": {
+			"type": "boolean",
+			"default": true
+		},
+		"autoplay": {
+			"type": "boolean",
+			"default": false
+		},
+		"autoplayDelay": {
+			"type": "number",
+			"default": 300
+		},
+		"speed": {
+			"type": "number",
+			"default": 300
+		},
+		"pagination": {
+			"type": "boolean",
+			"default": true
+		},
+		"navigation": {
+			"type": "boolean",
+			"default": true
+		},
+		"effect": {
+			"type": "string",
+			"default": "default"
+		},
+		"spaceBetween": {
+			"type": "number",
+			"default": 0
+		},
+		"mobileBreakpoint": {
+			"type": "number",
+			"default": 599
+		},
+		"mobileSlidesPerView": {
+			"type": "number",
+			"default": 1
+		},
+		"mainColor": {
+			"type": "string",
+			"default": "#007aff"
+		},
+		"marquee": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"supports": {
+		"align": [ "wide", "full" ]
+	},
+	"textdomain": "carousel",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": [ "eo-blocks-swiper-css", "file:./style-index.css" ],
+  	"render": "file:./render.php",
+	"viewScript": [ "eo-blocks-swiper-js", "file:./view.js" ]
+}
