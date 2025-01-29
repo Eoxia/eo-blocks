@@ -40,6 +40,10 @@ $media__mobile: 599px;
 			.eo-accordion__title {
 				margin: 0;
 				transition: opacity 0.2s ease-out;
+
+				mark {
+					background: none;
+				}
 			}
 			span.eo-accordion__title {
 				font-size: 18px;

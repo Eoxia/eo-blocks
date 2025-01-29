@@ -42,14 +42,14 @@ class Eoblocks_Settings {
 
 		add_settings_section(
 			'eoblocks_settings_section',
-			__('General Settings', 'eoblocks'),
+			__('General Settings', 'eo-blocks'),
 			null,
 			'eoblocks'
 		);
 
 		add_settings_field(
 			'eoblocks_dolibarr_url',
-			__('Dolibarr URL', 'eoblocks'),
+			__('Dolibarr URL', 'eo-blocks'),
 			array( $this, 'dolibarr_url_cb' ),
 			'eoblocks',
 			'eoblocks_settings_section'
@@ -57,7 +57,7 @@ class Eoblocks_Settings {
 
 		add_settings_field(
 				'eoblocks_dolibarr_api_key',
-				__('Dolibarr API Key', 'eoblocks'),
+				__('Dolibarr API Key', 'eo-blocks'),
 				array( $this, 'dolibarr_api_key_cb' ),
 				'eoblocks',
 				'eoblocks_settings_section'

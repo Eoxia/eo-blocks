@@ -22,7 +22,7 @@ $is_active = ! empty( $attributes['isOpened'] ) ? 'eo-accordion__active' : '';
 			<div class="eo-accordion__header-container">
 				<?php echo sprintf("<%s class='eo-accordion__title'>%s</%s>",
 					esc_attr( $titleTag ),
-					$title,
+                    wp_kses_post( $title ),
 					esc_attr( $titleTag )
 				); ?>
 				<span class="eo-accordion__header-toggle dashicons dashicons-arrow-right-alt2"></span>
