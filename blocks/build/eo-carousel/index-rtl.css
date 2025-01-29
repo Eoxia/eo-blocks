@@ -12,7 +12,8 @@
 .wp-block-eo-carousel .block-editor-block-list__layout {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
   gap: 1em;
+}
+.wp-block-eo-carousel .block-editor-block-list__layout .block-list-appender {
+  align-self: flex-start;
 }

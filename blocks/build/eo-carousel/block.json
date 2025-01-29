@@ -59,6 +59,10 @@
     "mainColor": {
       "type": "string",
       "default": "#007aff"
+    },
+    "marquee": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {

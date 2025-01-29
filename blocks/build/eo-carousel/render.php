@@ -20,25 +20,33 @@ $carousel_attr = array(
         esc_attr( $attributes['mobileBreakpoint'] ) => array(
             'slidesPerView' => esc_attr( $attributes['slidesPerView'] )
         ),
-    )
+    ),
 );
 
-if ( $attributes['autoplay'] ) {
+if ( $attributes['autoplay'] ) :
     $carousel_attr['autoplay'] = array( 'delay' => $attributes['autoplayDelay'] * 10 );
-} else {
+else :
     $carousel_attr['autoplay'] = false;
-}
-if ( ! $attributes['pagination'] ) {
+endif;
+if ( ! $attributes['pagination'] ) :
     $carousel_attr['pagination'] = false;
-}
-if ( ! $attributes['navigation'] ) {
+endif;
+if ( ! $attributes['navigation'] ) :
     $carousel_attr['navigation'] = false;
-}
+endif;
+if ( $attributes['marquee'] ) :
+    $carousel_attr['allowTouchMove'] = false;
+endif;
 ?>
 <style>
     :root {
         --swiper-theme-color: <?php echo esc_attr( $attributes['mainColor'] ); ?>;
     }
+    <?php if ( $attributes['marquee'] ) : ?>
+        :root {
+            --swiper-wrapper-transition-timing-function: linear !important;
+        }
+    <?php endif; ?>
 </style>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?> data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>

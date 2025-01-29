@@ -72,7 +72,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						value={attributes.speed}
 						onChange={(value) => setAttributes({speed: value})}
 						min={0}
-						max={2000}
+						max={3000}
 					/>
 					<div style={{
 						fontSize: '11px',
@@ -125,7 +125,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					<ToggleControl
 						__nextHasNoMarginBottom
-						label={__('Loop sliding', 'eo-blocks')}
+						label={__('Loop', 'eo-blocks')}
 						checked={attributes.loop}
 						onChange={(value) => setAttributes({loop: value})}
 					/>
@@ -143,6 +143,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							onChange={(value) => setAttributes({autoplayDelay: value})}
 							min={0}
 							max={1000}
+						/>
+					)}
+					{attributes.autoplay && (
+						<ToggleControl
+							__nextHasNoMarginBottom
+							label={__('Marquee mode', 'eo-blocks')}
+							help={__( 'Scrolling without stop', 'eo-blocks' )}
+							checked={attributes.marquee}
+							onChange={(value) => setAttributes({marquee: value})}
 						/>
 					)}
 					<SelectControl
