@@ -34,7 +34,7 @@ endif;
 if ( ! $attributes['navigation'] ) :
     $carousel_attr['navigation'] = false;
 endif;
-if ( $attributes['marquee'] ) :
+if ( $attributes['autoplay'] && $attributes['marquee'] ) :
     $carousel_attr['allowTouchMove'] = false;
 endif;
 ?>
@@ -42,7 +42,7 @@ endif;
     :root {
         --swiper-theme-color: <?php echo esc_attr( $attributes['mainColor'] ); ?>;
     }
-    <?php if ( $attributes['marquee'] ) : ?>
+    <?php if ( $attributes['autoplay'] && $attributes['marquee'] ) : ?>
         :root {
             --swiper-wrapper-transition-timing-function: linear !important;
         }
