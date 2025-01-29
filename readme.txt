@@ -32,5 +32,24 @@ All development for this plugin is open source and handled via [GitHub](https://
 
 == Changelog ==
 
+= 1.1.0 =
+* New block Carousel.
+* New block Summary.
+* New block Sticky.
+* New block FAQ.
+* New block Accordion.
+* New block Digirisk - List risk.
+* Add new block category named "EO Blocks" containing all blocks.
+* Fix bug notice in settings page.
+* Fix fatal error with autoloading file.
+
 = 1.0.0 =
 * Release
+
+== Upgrade Notice ==
+
+= 1.1.0 =
+A lot of new blocks added.
+
+= 1.0.0 =
+Release of the plugin.
