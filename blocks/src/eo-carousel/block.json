@@ -59,7 +59,9 @@
 			"default": "#007aff"
 		}
 	},
-	"supports": {},
+	"supports": {
+		"align": [ "wide", "full" ]
+	},
 	"textdomain": "carousel",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

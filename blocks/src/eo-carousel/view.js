@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			effect: 'default',
 			spaceBetween: 0,
 			slidesPerView: 1, // Mobile
+			autoHeight: true,
 			breakpoints: {
 				599: {
 					slidesPerView: 1 // Desktop
