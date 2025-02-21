@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 
 ?>
 <div class="wrap">
-	<h1><?php esc_html_e('EO Blocks Settings', 'mon-plugin'); ?></h1>
+	<h1><?php esc_html_e('EO Blocks Settings', 'eo-blocks'); ?></h1>
 	<form method="post" action="options.php">
 		<?php
 		settings_fields('eoblocks_settings_group');
