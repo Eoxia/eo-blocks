@@ -1,0 +1,195 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/eo-sticky/scss/style.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-eo-sticky {
+  position: fixed;
+  z-index: 100000;
+  margin-top: 0 !important;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu) {
+  /** Vertical & Horizontal Gap */
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left {
+  top: 0;
+  right: 0;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-center {
+  top: 0;
+  right: 50%;
+  transform: translateX(50%);
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right {
+  top: 0;
+  left: 0;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-center, .wp-block-eo-sticky:not(.is-active-mobile-menu) .is-position-center {
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left {
+  bottom: 0;
+  right: 0;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-center {
+  bottom: 0;
+  right: 50%;
+  transform: translateX(50%);
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right {
+  bottom: 0;
+  left: 0;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-top].is-gap-vertical-1 {
+  top: 1em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-top].is-gap-vertical-2 {
+  top: 2em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-top].is-gap-vertical-3 {
+  top: 3em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-top].is-gap-vertical-4 {
+  top: 4em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-top].is-gap-vertical-5 {
+  top: 5em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-top].is-gap-vertical-6 {
+  top: 6em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-bottom].is-gap-vertical-1 {
+  bottom: 1em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-bottom].is-gap-vertical-2 {
+  bottom: 2em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-bottom].is-gap-vertical-3 {
+  bottom: 3em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-bottom].is-gap-vertical-4 {
+  bottom: 4em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-bottom].is-gap-vertical-5 {
+  bottom: 5em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu)[class^=is-position-bottom].is-gap-vertical-6 {
+  bottom: 6em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left.is-gap-horizontal-1, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left.is-gap-horizontal-1, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left.is-gap-horizontal-1 {
+  right: 1em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left.is-gap-horizontal-2, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left.is-gap-horizontal-2, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left.is-gap-horizontal-2 {
+  right: 2em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left.is-gap-horizontal-3, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left.is-gap-horizontal-3, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left.is-gap-horizontal-3 {
+  right: 3em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left.is-gap-horizontal-4, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left.is-gap-horizontal-4, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left.is-gap-horizontal-4 {
+  right: 4em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left.is-gap-horizontal-5, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left.is-gap-horizontal-5, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left.is-gap-horizontal-5 {
+  right: 5em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-left.is-gap-horizontal-6, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-left.is-gap-horizontal-6, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-left.is-gap-horizontal-6 {
+  right: 6em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right.is-gap-horizontal-1, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right.is-gap-horizontal-1, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right.is-gap-horizontal-1 {
+  left: 1em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right.is-gap-horizontal-2, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right.is-gap-horizontal-2, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right.is-gap-horizontal-2 {
+  left: 2em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right.is-gap-horizontal-3, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right.is-gap-horizontal-3, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right.is-gap-horizontal-3 {
+  left: 3em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right.is-gap-horizontal-4, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right.is-gap-horizontal-4, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right.is-gap-horizontal-4 {
+  left: 4em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right.is-gap-horizontal-5, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right.is-gap-horizontal-5, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right.is-gap-horizontal-5 {
+  left: 5em;
+}
+.wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-top-right.is-gap-horizontal-6, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-center-right.is-gap-horizontal-6, .wp-block-eo-sticky:not(.is-active-mobile-menu).is-position-bottom-right.is-gap-horizontal-6 {
+  left: 6em;
+}
+
+/**
+ * Sticky version mobile
+ */
+.wp-block-eo-sticky .eo-sticky__menu {
+  display: none;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  transition: opacity 0.2s ease-out;
+}
+.wp-block-eo-sticky .eo-sticky__menu:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.wp-block-eo-sticky .eo-sticky__menu .eo-sticky__menu-icon {
+  width: 100%;
+  max-width: 20px;
+  margin: auto;
+}
+.wp-block-eo-sticky .eo-sticky__menu-close {
+  display: none;
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  width: 100%;
+  max-width: 20px;
+  transition: opacity 0.2s ease-out;
+}
+.wp-block-eo-sticky .eo-sticky__menu-close:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+@media (max-width: 599px) {
+  .wp-block-eo-sticky:not(.is-display-mobile) {
+    display: none;
+  }
+}
+@media (max-width: 599px) {
+  .wp-block-eo-sticky.is-display-mobile.is-style-mobile-menu .eo-sticky__menu {
+    display: flex;
+  }
+  .wp-block-eo-sticky.is-display-mobile.is-style-mobile-menu .eo-sticky__container {
+    display: none;
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 100001;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    padding: 4em;
+  }
+  .wp-block-eo-sticky.is-display-mobile.is-style-mobile-menu.is-active-mobile-menu .eo-sticky__container {
+    display: flex;
+  }
+  .wp-block-eo-sticky.is-display-mobile.is-style-mobile-menu.is-active-mobile-menu .eo-sticky__menu-close {
+    display: block;
+  }
+}

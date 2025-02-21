@@ -1,0 +1,39 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-eo-summary {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+
+  &.is-orientation-horizontal {
+    flex-direction: row;
+  }
+  &.is-orientation-vertical {
+    flex-direction: column;
+  }
+
+  &.is-justification-left {
+    justify-content: flex-start;
+  }
+  &.is-justification-center {
+    justify-content: center;
+  }
+  &.is-justification-right {
+    justify-content: flex-end;
+  }
+  &.is-justification-space-between {
+    justify-content: space-between
+  }
+
+}
+
+.full-width-control-wrapper {
+  grid-column: 1 / -1;
+}
+.box-subtitle {
+  color: rgba(0,0,0,0.4);
+}

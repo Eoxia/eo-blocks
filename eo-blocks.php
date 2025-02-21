@@ -4,8 +4,9 @@
  * Description:       A collection of Gutenberg blocks for WordPress made by Eoxia
  * Requires at least: 6.6.2
  * Requires PHP:      7.0
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Eoxia
+ * Author URI:        https://www.eoxia.com
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       eo-blocks
@@ -18,9 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'EO_BLOCKS_BASEFILE', __FILE__ );
-define( 'EO_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
-define( 'EO_BLOCKS_PATH', dirname( __FILE__ ) );
-define( 'EO_BLOCKS_VERSION', '0.1.0' );
+define( 'EO_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
+define( 'EO_BLOCKS_PATH', plugin_dir_path( __FILE__ ) );
+define( 'EO_BLOCKS_VERSION', '1.0.0' );
+
+/**
+ * Autoload the php files.
+ */
+require_once EO_BLOCKS_PATH . '/includes/autoload.php';
+
+use EoBlocks\Includes\Eoblocks;
+
+$eoblocks = new Eoblocks();
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.

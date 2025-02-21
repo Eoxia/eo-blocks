@@ -1,0 +1,80 @@
+/**
+ * Sticky version mobile
+ */
+
+.wp-block-eo-sticky {
+  .eo-sticky__menu {
+    display: none;
+
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.15);
+    border-radius: 8px;
+    transition: opacity 0.2s ease-out;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .eo-sticky__menu-icon {
+      width: 100%;
+      max-width: 20px;
+      margin: auto;
+    }
+  }
+  .eo-sticky__menu-close {
+    display: none;
+
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    width: 100%;
+    max-width: 20px;
+    transition: opacity 0.2s ease-out;
+
+    &:hover {
+      opacity: 0.5;
+      cursor: pointer;
+    }
+  }
+
+  &:not(.is-display-mobile) {
+    @media ( max-width: $media__mobile ) {
+      display: none;
+    }
+  }
+
+  &.is-display-mobile.is-style-mobile-menu {
+    @media ( max-width: $media__mobile ) {
+      .eo-sticky__menu {
+        display: flex;
+      }
+      .eo-sticky__container {
+        display: none;
+
+        position: fixed;
+		box-sizing: border-box;
+        z-index: 100001;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        padding: 4em;
+      }
+
+      &.is-active-mobile-menu {
+        .eo-sticky__container {
+          display: flex;
+        }
+        .eo-sticky__menu-close {
+          display: block;
+        }
+      }
+    }
+  }
+}

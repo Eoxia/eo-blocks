@@ -1,0 +1,54 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+$media__mobile: 599px;
+
+.wp-block-eo-summary {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  color: #000;
+
+  &.is-orientation-horizontal {
+    flex-direction: row;
+  }
+  &.is-orientation-vertical {
+    flex-direction: column;
+  }
+
+  &.is-justification-left {
+    justify-content: flex-start;
+  }
+  &.is-justification-center {
+    justify-content: center;
+  }
+  &.is-justification-right {
+    justify-content: flex-end;
+  }
+  &.is-justification-space-between {
+    justify-content: space-between
+  }
+
+  &:not(.has-text-color) {
+    .eo-summary__item {
+      color: #000;
+
+      &.active {
+        text-shadow: 0.4px 0.4px 0 #000;
+      }
+    }
+  }
+  .eo-summary__item {
+    opacity: 0.6;
+    transition: all 0.2s ease-out;
+
+    &.active, &:hover {
+      opacity: 1;
+    }
+  }
+
+}
