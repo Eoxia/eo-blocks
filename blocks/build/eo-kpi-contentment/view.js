@@ -27,7 +27,3 @@ var __webpack_exports__ = {};
 
 /* eslint-disable no-console */
 console.log("Hello World! (from eo-blocks-kpi-contentment block)");
-/* eslint-enable no-console */
-/******/ })()
-;
-//# sourceMappingURL=view.js.map
