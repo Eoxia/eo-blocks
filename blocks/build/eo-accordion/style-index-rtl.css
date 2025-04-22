@@ -25,7 +25,7 @@
 .wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__title {
   opacity: 0.7;
 }
-.wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__header-toggle::before {
+.wp-block-eo-accordion .eo-accordion__header:hover .eo-accordion__header-toggle {
   opacity: 1 !important;
 }
 .wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container {
@@ -45,12 +45,10 @@
   font-weight: 700;
 }
 .wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__header-toggle {
-  transition: transform 0.2s ease-out;
-}
-.wp-block-eo-accordion .eo-accordion__header .eo-accordion__header-container .eo-accordion__header-toggle::before {
   opacity: 0.4;
   transition: all 0.2s ease-out;
   transform-origin: center;
+  width: 14px;
 }
 .wp-block-eo-accordion .eo-accordion__inner {
   padding: 0 0 1em 0;
