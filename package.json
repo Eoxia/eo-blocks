@@ -7,15 +7,19 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/",
+		"build:hooks": "wp-scripts build hooks/src/index.js --output-path=hooks/build/ --output-filename=hooks.js",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/"
+		"start": "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/",
+		"start:hooks": "wp-scripts start hooks/src/index.js --output-path=hooks/build/ --output-filename=hooks.js",
+		"start:all": "npm-run-all --parallel start start:hooks"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^27.9.0"
+		"@wordpress/scripts": "^27.9.0",
+		"npm-run-all": "^4.1.5"
 	},
 	"dependencies": {
 		"@wordpress/icons": "^10.10.0"
