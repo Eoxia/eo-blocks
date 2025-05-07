@@ -126,7 +126,14 @@ const eoGroupAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MODUL
         id: 'opensInNewTab',
         title: 'Ouvrir dans un nouvel onglet'
       }],
-      onChange: onChange
+      onChange: onChange,
+      onRemove: () => {
+        setLinkValue({});
+        setAttributes({
+          blockLink: {}
+        });
+        setIsOpen(false);
+      }
     })));
   };
 }, 'eoGroupAddAdvancedControls');

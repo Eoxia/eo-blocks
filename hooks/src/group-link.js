@@ -91,9 +91,14 @@ const eoGroupAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
                             searchInputPlaceholder="Rechercher une page..."
                             value={linkValue}
                             settings={[
-                                { id: 'opensInNewTab', title: 'Ouvrir dans un nouvel onglet' },
+                                {id: 'opensInNewTab', title: 'Ouvrir dans un nouvel onglet'},
                             ]}
                             onChange={onChange}
+                            onRemove={() => {
+                                setLinkValue({});
+                                setAttributes({blockLink: {}});
+                                setIsOpen(false);
+                            }}
                         />
                     </Popover>
                 )}
