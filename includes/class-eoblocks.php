@@ -71,7 +71,8 @@ class Eoblocks {
         wp_register_script( 'eo-blocks-swiper-js', EO_BLOCKS_URL . 'assets/inc/swiper-bundle.min.js', array(), '11.1.15', true );
 
         wp_enqueue_script( 'eo-blocks-js', EO_BLOCKS_URL . 'assets/js/eoblocks.js', array( 'jquery'), '1.1.0' );
-	}
+        wp_enqueue_style( 'eo-blocks-css', EO_BLOCKS_URL . 'assets/css/style.min.css', array(), '1.0.0', 'all' );
+    }
 
     /**
      * Enqueue custom block hooks
@@ -87,24 +88,42 @@ class Eoblocks {
             );
     }
 
-    public function group_link_frontend( $block_content, $block ) {
+    public function group_link_frontend($block_content, $block) {
         if ( $block['blockName'] !== 'core/group' ) {
             return $block_content;
         }
 
         $attrs = $block['attrs'];
-        if ( empty( $attrs['blockLink']['url'] ) ) {
+        if (empty($attrs['blockLink']['url'])) {
             return $block_content;
         }
 
-        $url = esc_url( $attrs['blockLink']['url'] );
-        $new_tab = ! empty( $attrs['blockLink']['opensInNewTab'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+        $url     = esc_url($attrs['blockLink']['url']);
+        $new_tab = !empty($attrs['blockLink']['opensInNewTab']) 
+            ? ' target="_blank" rel="noopener noreferrer"' 
+            : '';
 
-        return sprintf(
-            '<a href="%s" class="eo-group-link" %s>%s</a>',
-            $url,
-            $new_tab,
+        $block_content = preg_replace_callback(
+            '/<div\s[^>]*class="[^"]*wp-block-group[^"]*"/',
+            function ($matches) {
+                if (strpos($matches[0], 'has-link') === false) {
+                    return str_replace('class="', 'class="has-link ', $matches[0]);
+                }
+                return $matches[0];
+            },
+            $block_content,
+            1
+        );
+
+
+        $link = sprintf('<a href="%s" class="eo-group-link" %s></a>', $url, $new_tab);
+
+        $block_content = preg_replace(
+            '/<\/div>\s*$/',
+            $link . '</div>',
             $block_content
         );
+
+        return $block_content;
     }
 }
