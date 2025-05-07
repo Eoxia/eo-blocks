@@ -7,19 +7,21 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const carousels = document.querySelectorAll('.wp-block-eo-carousel');
 	carousels.forEach(carousel => {
-		const swiperCustomAttributes = jQuery(carousel).data('carousel');
+		const mainCarousel = jQuery(carousel).find('.eo-carousel__main-carousel')[0];
+		const thumbsCarousel = jQuery(carousel).find('.eo-carousel__thumbs-carousel')[0];
+
+		if (!mainCarousel || !(mainCarousel instanceof HTMLElement)) {
+			console.error('Main carousel is not a valid HTMLElement for:', carousel);
+			return;
+		}
+
 		const swiperDefaultAttributes = {
 			loop: true,
 			speed: 300,
 			autoplay: false,
 			effect: 'default',
 			spaceBetween: 0,
-			slidesPerView: 1, // Mobile
-			breakpoints: {
-				599: {
-					slidesPerView: 1 // Desktop
-				}
-			},
+			slidesPerView: 1,
 			pagination: {
 				el: '.swiper-pagination',
 				dynamicBullets: true,
@@ -27,10 +29,29 @@ document.addEventListener('DOMContentLoaded', () => {
 			navigation: {
 				nextEl: '.swiper-button-next',
 				prevEl: '.swiper-button-prev',
-			},
-		}
+			}
+		};
 
-		console.log(jQuery.extend( swiperDefaultAttributes, swiperCustomAttributes ));
-		const swiperInit = new Swiper(carousel, jQuery.extend( swiperDefaultAttributes, swiperCustomAttributes ) );
+		try {
+			if ( thumbsCarousel ) {
+				const swiperThumbs = new Swiper(thumbsCarousel, {
+					loop: false,
+					spaceBetween: 20,
+					slidesPerView: 3,
+					watchSlidesProgress: true,
+				});
+				swiperDefaultAttributes.thumbs = {
+					swiper: swiperThumbs,
+				}
+			}
+
+			const swiperCustomAttributes = jQuery(mainCarousel).data('carousel') || {};
+			const mainOptions = jQuery.extend({}, swiperDefaultAttributes, swiperCustomAttributes);
+
+			const swiperInit = new Swiper(mainCarousel, mainOptions);
+
+		} catch (error) {
+			console.error('Error initializing swiper for carousel:', carousel, error);
+		}
 	});
 });

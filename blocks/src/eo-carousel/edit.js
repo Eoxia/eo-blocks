@@ -125,6 +125,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					<ToggleControl
 						__nextHasNoMarginBottom
+						label={__('Thumbs navigation', 'eo-blocks')}
+						checked={attributes.thumbs}
+						onChange={(value) => setAttributes({thumbs: value})}
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
 						label={__('Loop', 'eo-blocks')}
 						checked={attributes.loop}
 						onChange={(value) => setAttributes({loop: value})}

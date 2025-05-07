@@ -49,18 +49,26 @@ endif;
     <?php endif; ?>
 </style>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes( [ 'class' => 'swiper' ] ) ); ?> data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>
-    <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
-        <?php echo wp_kses_post( $content ); ?>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+    <div class="swiper eo-carousel__main-carousel" data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>
+        <div class="swiper-wrapper">
+            <?php echo wp_kses_post( $content ); ?>
+        </div>
+
+        <?php if ( $attributes['pagination'] ) : ?>
+            <div class="swiper-pagination"></div>
+        <?php endif; ?>
+
+        <?php if ( $attributes['navigation'] ) : ?>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        <?php endif; ?>
     </div>
-
-    <?php if ( $attributes['pagination'] ) : ?>
-        <div class="swiper-pagination"></div>
-    <?php endif; ?>
-
-    <?php if ( $attributes['navigation'] ) : ?>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
+    <?php if ( $attributes['thumbs'] ) : ?>
+        <div class="swiper eo-carousel__thumbs-carousel">
+            <div class="swiper-wrapper">
+                <?php echo wp_kses_post( $content ); ?>
+            </div>
+        </div>
     <?php endif; ?>
 </div>
