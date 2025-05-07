@@ -87,24 +87,29 @@ class Eoblocks {
             );
     }
 
-    public function group_link_frontend( $block_content, $block ) {
+    public function group_link_frontend($block_content, $block) {
         if ( $block['blockName'] !== 'core/group' ) {
             return $block_content;
         }
 
         $attrs = $block['attrs'];
-        if ( empty( $attrs['blockLink']['url'] ) ) {
+        if (empty($attrs['blockLink']['url'])) {
             return $block_content;
         }
 
-        $url = esc_url( $attrs['blockLink']['url'] );
-        $new_tab = ! empty( $attrs['blockLink']['opensInNewTab'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+        $url     = esc_url($attrs['blockLink']['url']);
+        $new_tab = !empty($attrs['blockLink']['opensInNewTab']) 
+            ? ' target="_blank" rel="noopener noreferrer"' 
+            : '';
 
-        return sprintf(
-            '<a href="%s" class="eo-group-link" %s>%s</a>',
-            $url,
-            $new_tab,
+        $link = sprintf('<a href="%s" class="eo-group-link" %s></a>', $url, $new_tab);
+
+        $block_content = preg_replace(
+            '/<\/div>\s*$/',
+            $link . '</div>',
             $block_content
         );
+
+        return $block_content;
     }
 }
