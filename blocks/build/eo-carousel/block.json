@@ -36,6 +36,10 @@
       "type": "boolean",
       "default": true
     },
+    "thumbs": {
+      "type": "boolean",
+      "default": false
+    },
     "navigation": {
       "type": "boolean",
       "default": true
