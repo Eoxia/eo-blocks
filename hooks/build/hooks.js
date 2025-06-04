@@ -65,7 +65,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const allowedBlocks = ['core/group'];
+const allowedBlocks = ['core/group', 'core/cover'];
 function eoGroupAddAttributes(settings, name) {
   if (!allowedBlocks.includes(name)) {
     return settings;

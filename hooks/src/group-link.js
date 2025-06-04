@@ -12,7 +12,7 @@ import { LinkControl } from '@wordpress/block-editor';
 import { link } from '@wordpress/icons';
 import { createHigherOrderComponent } from "@wordpress/compose";
 
-const allowedBlocks = [ 'core/group' ];
+const allowedBlocks = [ 'core/group', 'core/cover' ];
 
 function eoGroupAddAttributes( settings, name ) {
 
