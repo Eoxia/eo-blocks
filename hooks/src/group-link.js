@@ -12,7 +12,7 @@ import { LinkControl } from '@wordpress/block-editor';
 import { link } from '@wordpress/icons';
 import { createHigherOrderComponent } from "@wordpress/compose";
 
-const allowedBlocks = [ 'core/group' ];
+const allowedBlocks = [ 'core/group', 'core/cover' ];
 
 function eoGroupAddAttributes( settings, name ) {
 
@@ -50,7 +50,7 @@ const eoGroupAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
 
         const [isOpen, setIsOpen] = useState(false);
         const [linkValue, setLinkValue] = useState(attributes.blockLink || {});
-        const buttonRef = useRef();
+        const [ popoverAnchor, setPopoverAnchor ] = useState( null );
 
         const onChange = (newLink) => {
             setLinkValue(newLink);
@@ -75,7 +75,8 @@ const eoGroupAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
                                 icon={link}
                                 label="Ajouter un lien"
                                 onClick={() => setIsOpen(!isOpen)}
-                                ref={buttonRef}
+                                ref={setPopoverAnchor}
+                                isActive={ !!attributes.blockLink.url }
                             />
                         </ToolbarGroup>
                     </BlockControls>
@@ -83,9 +84,11 @@ const eoGroupAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
 
                 {isOpen && isSelected && (
                     <Popover
-                        anchorRef={buttonRef}
+                        anchor={popoverAnchor}
                         onClose={() => setIsOpen(false)}
                         focusOnMount={false}
+                        position="bottom"
+                        offset={8}
                     >
                         <LinkControl
                             searchInputPlaceholder="Rechercher une page..."

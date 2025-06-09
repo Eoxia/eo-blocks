@@ -89,9 +89,13 @@ class Eoblocks {
     }
 
     public function group_link_frontend($block_content, $block) {
-        if ( $block['blockName'] !== 'core/group' ) {
+        $allowed_blocks = array( 'core/group', 'core/cover' );
+        if ( ! in_array($block['blockName'], $allowed_blocks ) ) {
             return $block_content;
         }
+
+        $block_name = explode( '/', $block['blockName'] );
+        $block_name = isset( $block_name[1] ) ? $block_name[1] : '';
 
         $attrs = $block['attrs'];
         if (empty($attrs['blockLink']['url'])) {
@@ -104,7 +108,7 @@ class Eoblocks {
             : '';
 
         $block_content = preg_replace_callback(
-            '/<div\s[^>]*class="[^"]*wp-block-group[^"]*"/',
+            '/<div\s[^>]*class="[^"]*wp-block-' . preg_quote($block_name, '/') . '[^"]*"/',
             function ($matches) {
                 if (strpos($matches[0], 'has-link') === false) {
                     return str_replace('class="', 'class="has-link ', $matches[0]);

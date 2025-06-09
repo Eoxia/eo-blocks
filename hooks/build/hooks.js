@@ -65,7 +65,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const allowedBlocks = ['core/group'];
+const allowedBlocks = ['core/group', 'core/cover'];
 function eoGroupAddAttributes(settings, name) {
   if (!allowedBlocks.includes(name)) {
     return settings;
@@ -94,7 +94,7 @@ const eoGroupAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MODUL
     }
     const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
     const [linkValue, setLinkValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(attributes.blockLink || {});
-    const buttonRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)();
+    const [popoverAnchor, setPopoverAnchor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
     const onChange = newLink => {
       setLinkValue(newLink);
       setAttributes({
@@ -114,11 +114,14 @@ const eoGroupAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MODUL
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
       label: "Ajouter un lien",
       onClick: () => setIsOpen(!isOpen),
-      ref: buttonRef
+      ref: setPopoverAnchor,
+      isActive: !!attributes.blockLink.url
     }))), isOpen && isSelected && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Popover, {
-      anchorRef: buttonRef,
+      anchor: popoverAnchor,
       onClose: () => setIsOpen(false),
-      focusOnMount: false
+      focusOnMount: false,
+      position: "bottom",
+      offset: 8
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.LinkControl, {
       searchInputPlaceholder: "Rechercher une page...",
       value: linkValue,

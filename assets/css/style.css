@@ -7,11 +7,16 @@
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       eo-blocks
  */
-.wp-block-group > .eo-group-link {
+.wp-block-group > .eo-group-link, .wp-block-cover > .eo-group-link {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   margin: 0;
+  z-index: 100;
+}
+.wp-block-group.has-link a:not(.eo-group-link), .wp-block-cover.has-link a:not(.eo-group-link) {
+  position: relative;
+  z-index: 101;
 }
