@@ -94,12 +94,8 @@ class Eoblocks {
             return $block_content;
         }
 
-        if ( $block['blockName'] == 'core/group' ) {
-            $block_name = 'group';
-        }
-        if ( $block['blockName'] == 'core/cover' ) {
-            $block_name = 'cover';
-        }
+        $block_name = explode( '/', $block['blockName'] );
+        $block_name = isset( $block_name[1] ) ? $block_name[1] : '';
 
         $attrs = $block['attrs'];
         if (empty($attrs['blockLink']['url'])) {

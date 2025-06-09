@@ -16,3 +16,7 @@
   margin: 0;
   z-index: 100;
 }
+.wp-block-group.has-link a:not(.eo-group-link), .wp-block-cover.has-link a:not(.eo-group-link) {
+  position: relative;
+  z-index: 101;
+}

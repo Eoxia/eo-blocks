@@ -8,4 +8,9 @@
     margin: 0;
     z-index: 100;
   }
+
+  &.has-link a:not(.eo-group-link) {
+    position: relative;
+    z-index: 101;
+  }
 }
