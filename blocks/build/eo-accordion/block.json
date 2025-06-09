@@ -16,7 +16,13 @@
     "title": {
       "type": "string"
     },
+    "titleFontSize": {
+      "type": "string"
+    },
     "subtitle": {
+      "type": "string"
+    },
+    "subtitleFontSize": {
       "type": "string"
     },
     "isOpened": {
@@ -25,6 +31,9 @@
     }
   },
   "supports": {
+    "typography": {
+      "fontSize": true
+    },
     "color": {
       "background": "true",
       "color": "true"
@@ -53,8 +62,7 @@
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": [
-    "file:./style-index.css",
-    "dashicons"
+    "file:./style-index.css"
   ],
   "render": "file:./render.php",
   "viewScript": "file:./view.js"
