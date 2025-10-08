@@ -1,0 +1,28 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo/tabs",
+	"version": "1.0.0",
+	"title": "Tabs",
+	"category": "eo-blocks",
+	"icon": "smiley",
+	"description": "Display tabs block",
+	"example": {},
+  	"attributes": {
+		"activeTabIndex": {
+			"type": "integer",
+			"default": 0
+		}
+	},
+	"providesContext": {
+		"eo/activeTab": "activeTabIndex",
+		"eo/setActiveTab": "setActiveTabFunction"
+	},
+	"supports": {},
+	"textdomain": "tabs",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+  	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

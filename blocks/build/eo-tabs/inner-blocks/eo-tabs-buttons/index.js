@@ -2,42 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./assets/images/digirisk-favicon.svg":
-/*!********************************************!*\
-  !*** ./assets/images/digirisk-favicon.svg ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ReactComponent: () => (/* binding */ SvgDigiriskFavicon),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _path, _path2, _path3;
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-
-var SvgDigiriskFavicon = function SvgDigiriskFavicon(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", _extends({
-    xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 96.74 84.43"
-  }, props), _path || (_path = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    fill: "#2a9d8f",
-    d: "M96.4 80.68 85.57 61.92l-24.2-41.91-13.01 22.5 11.21 19.41 13 22.51h21.66c1.92 0 3.13-2.08 2.17-3.75"
-  })), _path2 || (_path2 = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    fill: "#f7931e",
-    d: "M59.57 61.92H11.16L.34 80.65c-.96 1.67.24 3.75 2.16 3.75h21.63c16.14.02 32.29.02 48.43.02l-13-22.51Z"
-  })), _path3 || (_path3 = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    fill: "#0067a6",
-    d: "M50.54 1.25c-.96-1.67-3.37-1.67-4.33 0L35.37 20 11.16 61.92h25.99l11.22-19.41 13.01-22.5z"
-  })));
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5Ni43NCA4NC40MyI+DQoJPHBhdGggZmlsbD0iIzJhOWQ4ZiIgZD0ibTk2LjQsODAuNjhsLTEwLjgzLTE4Ljc2LTI0LjItNDEuOTEtMTMuMDEsMjIuNSwxMS4yMSwxOS40MSwxMywyMi41MWgyMS42NmMxLjkyLDAsMy4xMy0yLjA4LDIuMTctMy43NVoiLz4NCgk8cGF0aCBmaWxsPSIjZjc5MzFlIiBkPSJtNTkuNTcsNjEuOTJIMTEuMTZMLjM0LDgwLjY1Yy0uOTYsMS42Ny4yNCwzLjc1LDIuMTYsMy43NWgyMS42M2MxNi4xNC4wMiwzMi4yOS4wMiw0OC40My4wMmwtMTMtMjIuNTFaIi8+DQoJPHBhdGggZmlsbD0iIzAwNjdhNiIgZD0ibTUwLjU0LDEuMjVjLS45Ni0xLjY3LTMuMzctMS42Ny00LjMzLDBsLTEwLjg0LDE4Ljc1TDExLjE2LDYxLjkyaDI1Ljk5bDExLjIyLTE5LjQxLDEzLjAxLTIyLjVMNTAuNTQsMS4yNVoiLz4NCjwvc3ZnPg0K");
-
-/***/ }),
-
 /***/ "./assets/js/utils.js":
 /*!****************************!*\
   !*** ./assets/js/utils.js ***!
@@ -145,10 +109,33 @@ const findBlockRecursively = (blocks, blockName) => {
 
 /***/ }),
 
-/***/ "./blocks/src/digirisk-list-risk/edit.js":
-/*!***********************************************!*\
-  !*** ./blocks/src/digirisk-list-risk/edit.js ***!
-  \***********************************************/
+/***/ "./blocks/src/eo-tabs/context.js":
+/*!***************************************!*\
+  !*** ./blocks/src/eo-tabs/context.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   TabContext: () => (/* binding */ TabContext)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+const globalContext = window.EO_TABS_CONTEXT || (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createContext)({
+  activeTab: 0,
+  setActiveTab: () => console.error('setActiveTab not yet available in TabContext'),
+  removeTab: () => console.error('removeTab not yet available in TabContext')
+});
+window.EO_TABS_CONTEXT = globalContext;
+const TabContext = globalContext;
+
+/***/ }),
+
+/***/ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/edit.js":
+/*!*****************************************************************!*\
+  !*** ./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/edit.js ***!
+  \*****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -159,14 +146,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _assets_js_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../assets/js/utils */ "./assets/js/utils.js");
-/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/digirisk-list-risk/scss/editor.scss");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../context */ "./blocks/src/eo-tabs/context.js");
+/* harmony import */ var _assets_js_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../assets/js/utils */ "./assets/js/utils.js");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/scss/editor.scss");
 
 /**
  * Retrieves the translation of text.
@@ -175,14 +163,15 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+
+
 /**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-
-
 
 
 
@@ -204,123 +193,88 @@ __webpack_require__.r(__webpack_exports__);
  */
 function Edit({
   attributes,
-  setAttributes
+  setAttributes,
+  clientId
 }) {
   const {
-    blockGrid,
-    displayRisk1,
-    displayRisk2,
-    displayRisk3,
-    displayRisk4
-  } = attributes;
-  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)();
-  const customTooltipContent = value => `${value}`;
-  const routeApi = 'digiriskdolibarr/risk/getRisksByCotation';
-  const eoblocksSettings = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => select('core').getSite()?.eoblocks_settings);
+    activeTab,
+    setActiveTab
+  } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useContext)(_context__WEBPACK_IMPORTED_MODULE_3__.TabContext);
   const {
-    data,
-    error
-  } = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_5__.digiriskApiGet)(routeApi, eoblocksSettings);
-  if (error) {
-    console.log('Error:' + error);
-  }
-  const riskLabel = {
-    1: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('faible', 'eo-blocks'),
-    2: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('à planifier', 'eo-blocks'),
-    3: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('à traiter', 'eo-blocks'),
-    4: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('inacceptable', 'eo-blocks')
-  };
-  const riskRender = {
-    1: displayRisk1,
-    2: displayRisk2,
-    3: displayRisk3,
-    4: displayRisk4
-  };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Settings', 'eo-blocks')
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display grey risk', 'eo-blocks'),
-    checked: displayRisk1,
-    onChange: value => setAttributes({
-      displayRisk1: value
-    })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display orange risk', 'eo-blocks'),
-    checked: displayRisk2,
-    onChange: value => setAttributes({
-      displayRisk2: value
-    })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display red risk', 'eo-blocks'),
-    checked: displayRisk3,
-    onChange: value => setAttributes({
-      displayRisk3: value
-    })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display black risk', 'eo-blocks'),
-    checked: displayRisk4,
-    onChange: value => setAttributes({
-      displayRisk4: value
-    })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Columns', 'eo-blocks'),
-    value: blockGrid || 2,
-    onChange: value => setAttributes({
-      blockGrid: value
-    }),
-    min: 1,
-    max: 4,
-    renderTooltipContent: customTooltipContent
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, data && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `eo-digirisk-list-risk__list eo-grid eo-grid__col-${blockGrid}`
-  }, Object.entries(data).map(([key, value]) => {
-    if (!riskRender[key]) {
-      return null;
+    getBlock,
+    getBlockParents,
+    innerBlocksCount
+  } = wp.data.useSelect(select => {
+    const {
+      getBlock,
+      getBlockParents,
+      getBlockOrder
+    } = select('core/block-editor');
+    return {
+      getBlock: getBlock,
+      getBlockParents: getBlockParents,
+      innerBlocksCount: getBlockOrder(clientId).length
+    };
+  }, [clientId]);
+  const onAddTab = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(() => {
+    const parentBlocks = getBlockParents(clientId, true).map(id => getBlock(id));
+    const eoTabsBlock = parentBlocks.find(block => block && block.name === 'eo/tabs');
+    if (!eoTabsBlock) {
+      console.error('No eo/tabs parent block found');
+      return;
     }
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: `eo-digirisk-list-risk__element --risk-${key}`
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "eo-digirisk-list-risk__content"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "eo-digirisk-list-risk__content-label-group"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-      className: "eo-digirisk-list-risk__icon-risk",
-      xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 512 512"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-      d: "M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
-    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "eo-digirisk-list-risk__content-label"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Risque', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "eo-digirisk-list-risk__content-risk"
-    }, value)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "eo-digirisk-list-risk__label"
-    }, riskLabel[key]));
-  }))));
+    const eoTabsContentsBlock = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_4__.findBlockRecursively)(eoTabsBlock.innerBlocks, 'eo/tabs-contents');
+    if (!eoTabsContentsBlock) {
+      console.error('No eo/tabs-contents block found inside eo/tabs');
+      return;
+    }
+    const eoTabsContentsClientId = eoTabsContentsBlock.clientId;
+    wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('eo/tabs-buttons-inner'), innerBlocksCount, clientId);
+    wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('eo/tabs-contents-inner'), innerBlocksCount, eoTabsContentsClientId);
+    setActiveTab(innerBlocksCount);
+  }, [getBlock, getBlockParents, clientId, innerBlocksCount]);
+  const CustomAppender = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      textAlign: 'center',
+      margin: '10px 0'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.Button, {
+    variant: "primary",
+    onClick: onAddTab
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Add tab', 'eo-blocks')));
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)()
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InnerBlocks, {
+    template: [['eo/tabs-buttons-inner', {}], ['eo/tabs-buttons-inner', {}], ['eo/tabs-buttons-inner', {}]],
+    renderAppender: () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CustomAppender, null)
+  }));
 }
 
 /***/ }),
 
-/***/ "./blocks/src/digirisk-list-risk/index.js":
-/*!************************************************!*\
-  !*** ./blocks/src/digirisk-list-risk/index.js ***!
-  \************************************************/
+/***/ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/index.js":
+/*!******************************************************************!*\
+  !*** ./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/index.js ***!
+  \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/style.scss */ "./blocks/src/digirisk-list-risk/scss/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./blocks/src/digirisk-list-risk/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./blocks/src/digirisk-list-risk/block.json");
-/* harmony import */ var _assets_images_digirisk_favicon_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../../assets/images/digirisk-favicon.svg */ "./assets/images/digirisk-favicon.svg");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scss/style.scss */ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/scss/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./block.json */ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/block.json");
+
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
+
 
 
 /**
@@ -337,27 +291,38 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-
+const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  version: "1.1",
+  viewBox: "0 0 250 250"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+  d: "M240,23.7h-100.3c-5.5,0-10,4.5-10,10v14.5l-9.7-15.1c-1.8-2.8-4.4-5.1-7.4-6.6-4.2-2-8.9-3.1-13.6-3.1H31.2C14,23.4,0,37.4,0,54.7v140.6c0,17.3,14,31.2,31.2,31.2h187.5c17.3,0,31.2-14,31.2-31.2V33.7c0-5.5-4.5-10-10-10ZM230,61.3h-28.3v-17.5h28.3v17.5ZM149.7,43.8h31.9v17.5h-31.9v-17.5ZM226.6,195.3c0,4.3-3.5,7.8-7.8,7.8H31.2c-4.3,0-7.8-3.5-7.8-7.8V54.7c0-4.3,3.5-7.8,7.8-7.8h67.7c1.7,0,3.3.5,4.7,1.6l15.6,24.1c2.6,4,6.1,7.3,10.4,9.2,5.1,2.3,10.6,3.5,16.2,3.5h72.9c4.3,0,7.8,3.5,7.8,7.8v102.2Z",
+  fill: "#0066FF"
+}));
 
 /**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_3__.name, {
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_5__.name, {
   /**
    * @see ./edit.js
    */
-  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
-  icon: _assets_images_digirisk_favicon_svg__WEBPACK_IMPORTED_MODULE_4__.ReactComponent
+  usesContext: ['eo/tabActive'],
+  edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
+  save: props => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.Content, null);
+  },
+  icon: blockIcon
 });
 
 /***/ }),
 
-/***/ "./blocks/src/digirisk-list-risk/scss/editor.scss":
-/*!********************************************************!*\
-  !*** ./blocks/src/digirisk-list-risk/scss/editor.scss ***!
-  \********************************************************/
+/***/ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/scss/editor.scss":
+/*!**************************************************************************!*\
+  !*** ./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/scss/editor.scss ***!
+  \**************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -366,10 +331,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./blocks/src/digirisk-list-risk/scss/style.scss":
-/*!*******************************************************!*\
-  !*** ./blocks/src/digirisk-list-risk/scss/style.scss ***!
-  \*******************************************************/
+/***/ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/scss/style.scss":
+/*!*************************************************************************!*\
+  !*** ./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/scss/style.scss ***!
+  \*************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -418,13 +383,13 @@ module.exports = window["wp"]["components"];
 
 /***/ }),
 
-/***/ "@wordpress/data":
-/*!******************************!*\
-  !*** external ["wp","data"] ***!
-  \******************************/
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
 /***/ ((module) => {
 
-module.exports = window["wp"]["data"];
+module.exports = window["wp"]["element"];
 
 /***/ }),
 
@@ -438,13 +403,13 @@ module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
-/***/ "./blocks/src/digirisk-list-risk/block.json":
-/*!**************************************************!*\
-  !*** ./blocks/src/digirisk-list-risk/block.json ***!
-  \**************************************************/
+/***/ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/block.json":
+/*!********************************************************************!*\
+  !*** ./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/block.json ***!
+  \********************************************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/digirisk-list-risk","version":"1.0.0","title":"Digirisk - List Risk","category":"eo-blocks","icon":"smiley","description":"Displays a summary of the different risks of your Dolibarr","example":{},"attributes":{"displayRisk1":{"type":"boolean","default":true},"displayRisk2":{"type":"boolean","default":true},"displayRisk3":{"type":"boolean","default":true},"displayRisk4":{"type":"boolean","default":true},"blockGrid":{"type":"number","default":2}},"supports":{"html":false},"textdomain":"digirisk-list-risk","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs-buttons","version":"1.0.0","title":"Tab buttons","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo/tabs","core/column","core/group"],"example":{},"attributes":{},"supports":{},"textdomain":"tabs-buttons","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 
@@ -558,8 +523,8 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"digirisk-list-risk/index": 0,
-/******/ 			"digirisk-list-risk/style-index": 0
+/******/ 			"eo-tabs/inner-blocks/eo-tabs-buttons/index": 0,
+/******/ 			"eo-tabs/inner-blocks/eo-tabs-buttons/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -609,7 +574,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["digirisk-list-risk/style-index"], () => (__webpack_require__("./blocks/src/digirisk-list-risk/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["eo-tabs/inner-blocks/eo-tabs-buttons/style-index"], () => (__webpack_require__("./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

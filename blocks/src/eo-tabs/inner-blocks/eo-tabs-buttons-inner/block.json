@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo/tabs-buttons-inner",
+	"version": "1.0.0",
+	"title": "Tab button",
+	"category": "eo-blocks",
+	"icon": "smiley",
+	"description": "Display tabs block",
+	"parent": [ "eo/tabs-buttons" ],
+	"example": {},
+  	"attributes": {},
+	"supports": {},
+	"textdomain": "tabs-buttons-inner",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+  	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
