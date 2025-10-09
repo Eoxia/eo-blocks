@@ -11,7 +11,12 @@
     "eo/tabs-contents"
   ],
   "example": {},
-  "attributes": {},
+  "attributes": {
+    "tabKey": {
+      "type": "string",
+      "default": ""
+    }
+  },
   "supports": {},
   "textdomain": "tabs-contents-inner",
   "editorScript": "file:./index.js",

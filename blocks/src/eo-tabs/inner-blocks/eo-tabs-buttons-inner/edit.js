@@ -2,7 +2,7 @@
 
 import { __ } from '@wordpress/i18n';
 // Importez useContext de @wordpress/element, pas de 'react'
-import { useContext } from '@wordpress/element';
+import {useContext, useEffect} from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { TabContext } from '../../context';
 
@@ -12,21 +12,38 @@ import './scss/editor.scss';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	const { activeTab, setActiveTab } = useContext( TabContext );
+	const { tabKey } = attributes;
 
-	// Define Tab ID based on block index
+	// Définir le tabKey par défaut si vide
 	const myIndex = useSelect( ( select ) => {
 		const parentClientId = select( 'core/block-editor' ).getBlockRootClientId( clientId );
 		const siblings = select( 'core/block-editor' ).getBlocks( parentClientId );
 		return siblings.findIndex( ( block ) => block.clientId === clientId );
 	}, [ clientId ]);
 
-	const tabId = myIndex;
-	const isSelected = activeTab === tabId;
+	useEffect(() => {
+		if (!tabKey && myIndex >= 0) {
+			const staticKey = 'tab-' + (myIndex + 1);
+			setAttributes({ tabKey: staticKey });
+		}
+	}, [tabKey, myIndex, setAttributes]);
+
+	// Define Tab ID based on block index
+	// const myIndex = useSelect( ( select ) => {
+	// 	const parentClientId = select( 'core/block-editor' ).getBlockRootClientId( clientId );
+	// 	const siblings = select( 'core/block-editor' ).getBlocks( parentClientId );
+	// 	return siblings.findIndex( ( block ) => block.clientId === clientId );
+	// }, [ clientId ]);
+
+	// const tabId = myIndex;
+	const finalTabKey = tabKey || 'temp-loading';
+	const isSelected = activeTab === finalTabKey;
 
 	const blockProps = useBlockProps({
 		className: isSelected ? 'is-active' : '',
+		tabkey: finalTabKey,
 		onClick: () => {
-			setActiveTab( tabId );
+			setActiveTab( finalTabKey );
 		},
 	});
 

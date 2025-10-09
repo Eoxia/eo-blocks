@@ -4,7 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { useContext, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
 import { TabContext } from '../../context';
@@ -33,25 +33,42 @@ import './scss/editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit( { attributes, clientId } ) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
 	const { activeTab } = useContext( TabContext );
+	const { tabKey } = attributes;
+
+	// Définir le tabKey par défaut si vide
 	const myIndex = useSelect( ( select ) => {
 		const parentClientId = select( 'core/block-editor' ).getBlockRootClientId( clientId );
 		const siblings = select( 'core/block-editor' ).getBlocks( parentClientId );
 		return siblings.findIndex( ( block ) => block.clientId === clientId );
 	}, [ clientId ]);
-	const tabId = myIndex;
 
-	const isVisible = activeTab === tabId;
+	useEffect(() => {
+		if (!tabKey && myIndex >= 0) {
+			const staticKey = 'tab-' + (myIndex + 1);
+			setAttributes({ tabKey: staticKey });
+		}
+	}, [tabKey, myIndex, setAttributes]);
+
+	// const myIndex = useSelect( ( select ) => {
+	// 	const parentClientId = select( 'core/block-editor' ).getBlockRootClientId( clientId );
+	// 	const siblings = select( 'core/block-editor' ).getBlocks( parentClientId );
+	// 	return siblings.findIndex( ( block ) => block.clientId === clientId );
+	// }, [ clientId ]);
+	// const tabId = myIndex;
+
+	const finalTabKey = tabKey || 'temp-loading';
+	const isVisible = activeTab === finalTabKey;
 
 	const blockProps = useBlockProps( {
 		className: isVisible ? 'is-active' : 'is-inactive',
+		tabkey: finalTabKey,
 		style: {
 			display: isVisible ? 'block' : 'none',
 		}
 	} );
 
-	// Correction : on masque le contenu avec une classe CSS, pas avec display:none inline
 	return (
 		<div { ...blockProps }>
 			{/* Le contenu réel du bloc d'onglet */}

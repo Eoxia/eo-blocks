@@ -9,7 +9,12 @@
 	"description": "Display tabs block",
 	"parent": [ "eo/tabs-buttons" ],
 	"example": {},
-  	"attributes": {},
+  	"attributes": {
+		"tabKey": {
+			"type": "string",
+			"default": ""
+		}
+	},
 	"supports": {},
 	"textdomain": "tabs-buttons-inner",
 	"editorScript": "file:./index.js",

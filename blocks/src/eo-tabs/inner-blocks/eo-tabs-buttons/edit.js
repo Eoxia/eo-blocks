@@ -4,7 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import {__} from '@wordpress/i18n';
-import { useContext, useCallback } from '@wordpress/element';
+import { useContext, useCallback, useEffect } from '@wordpress/element';
 import { TabContext } from '../../context';
 import { findBlockRecursively } from '../../../../../assets/js/utils';
 
@@ -16,6 +16,7 @@ import { findBlockRecursively } from '../../../../../assets/js/utils';
  */
 import {useBlockProps, useInnerBlocksProps, InnerBlocks} from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
+import { v4 as uuid } from 'uuid';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -45,7 +46,14 @@ export default function Edit({attributes, setAttributes, clientId}) {
         };
     }, [ clientId ] );
 
+    useEffect(() => {
+        if (!activeTab) {
+            setActiveTab('tab-1');
+        }
+    }, [activeTab, setActiveTab]);
+
     const onAddTab = useCallback(() => {
+        const newTabKey = uuid();
         const parentBlocks = getBlockParents( clientId, true ).map( id => getBlock( id ) );
         const eoTabsBlock = parentBlocks.find( block => block && block.name === 'eo/tabs' );
 
@@ -63,19 +71,21 @@ export default function Edit({attributes, setAttributes, clientId}) {
 
         const eoTabsContentsClientId = eoTabsContentsBlock.clientId;
 
+        const newTabAttributes = { tabKey: newTabKey };
+
         wp.data.dispatch('core/block-editor').insertBlock(
-            wp.blocks.createBlock('eo/tabs-buttons-inner'),
+            wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes),
             innerBlocksCount,
             clientId
         );
 
         wp.data.dispatch('core/block-editor').insertBlock(
-            wp.blocks.createBlock('eo/tabs-contents-inner'),
+            wp.blocks.createBlock('eo/tabs-contents-inner', newTabAttributes),
             innerBlocksCount,
             eoTabsContentsClientId
         );
 
-        setActiveTab( innerBlocksCount );
+        setActiveTab( newTabKey );
 
     }, [ getBlock, getBlockParents, clientId, innerBlocksCount ]);
 
@@ -94,9 +104,9 @@ export default function Edit({attributes, setAttributes, clientId}) {
         <div {...useBlockProps()}>
             <InnerBlocks
                 template={[
-                    ['eo/tabs-buttons-inner', {}],
-                    ['eo/tabs-buttons-inner', {}],
-                    ['eo/tabs-buttons-inner', {}],
+                    ['eo/tabs-buttons-inner', {tabKey: 'tab-1'}],
+                    ['eo/tabs-buttons-inner', {tabKey: 'tab-2'}],
+                    ['eo/tabs-buttons-inner', {tabKey: 'tab-3'}],
                 ]}
                 renderAppender={ () => <CustomAppender/> }
             />

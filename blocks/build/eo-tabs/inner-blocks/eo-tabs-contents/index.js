@@ -57,7 +57,14 @@ function Edit({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks, {
-    template: [['eo/tabs-contents-inner', {}], ['eo/tabs-contents-inner', {}], ['eo/tabs-contents-inner', {}]]
+    allowedBlocks: ['eo/tabs-contents-inner'],
+    template: [['eo/tabs-contents-inner', {
+      tabKey: 'tab-1'
+    }], ['eo/tabs-contents-inner', {
+      tabKey: 'tab-2'
+    }], ['eo/tabs-contents-inner', {
+      tabKey: 'tab-3'
+    }]]
   }));
 }
 

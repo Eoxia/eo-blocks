@@ -84,26 +84,47 @@ __webpack_require__.r(__webpack_exports__);
  */
 function Edit({
   attributes,
+  setAttributes,
   clientId
 }) {
   const {
     activeTab
   } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useContext)(_context__WEBPACK_IMPORTED_MODULE_4__.TabContext);
+  const {
+    tabKey
+  } = attributes;
+
+  // Définir le tabKey par défaut si vide
   const myIndex = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
     const parentClientId = select('core/block-editor').getBlockRootClientId(clientId);
     const siblings = select('core/block-editor').getBlocks(parentClientId);
     return siblings.findIndex(block => block.clientId === clientId);
   }, [clientId]);
-  const tabId = myIndex;
-  const isVisible = activeTab === tabId;
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if (!tabKey && myIndex >= 0) {
+      const staticKey = 'tab-' + (myIndex + 1);
+      setAttributes({
+        tabKey: staticKey
+      });
+    }
+  }, [tabKey, myIndex, setAttributes]);
+
+  // const myIndex = useSelect( ( select ) => {
+  // 	const parentClientId = select( 'core/block-editor' ).getBlockRootClientId( clientId );
+  // 	const siblings = select( 'core/block-editor' ).getBlocks( parentClientId );
+  // 	return siblings.findIndex( ( block ) => block.clientId === clientId );
+  // }, [ clientId ]);
+  // const tabId = myIndex;
+
+  const finalTabKey = tabKey || 'temp-loading';
+  const isVisible = activeTab === finalTabKey;
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)({
     className: isVisible ? 'is-active' : 'is-inactive',
+    tabkey: finalTabKey,
     style: {
       display: isVisible ? 'block' : 'none'
     }
   });
-
-  // Correction : on masque le contenu avec une classe CSS, pas avec display:none inline
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InnerBlocks, {
@@ -273,7 +294,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs-contents-inner","version":"1.0.0","title":"Tab Content","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo/tabs-contents"],"example":{},"attributes":{},"supports":{},"textdomain":"tabs-contents-inner","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs-contents-inner","version":"1.0.0","title":"Tab Content","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo/tabs-contents"],"example":{},"attributes":{"tabKey":{"type":"string","default":""}},"supports":{},"textdomain":"tabs-contents-inner","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 
