@@ -18,7 +18,13 @@
     "eo/activeTab": "activeTabIndex",
     "eo/setActiveTab": "setActiveTabFunction"
   },
-  "supports": {},
+  "supports": {
+    "color": {
+      "text": true,
+      "background": true,
+      "link": false
+    }
+  },
   "textdomain": "tabs",
   "editorScript": [
     "file:./index.js"

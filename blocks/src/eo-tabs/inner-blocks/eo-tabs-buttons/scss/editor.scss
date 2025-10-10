@@ -4,6 +4,21 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-eo-tabs {
+.wp-block-eo-tabs-buttons {
+  > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    display: flex;
+  }
 
+  &.is-orientation-vertical {
+    > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      flex-direction: column;
+    }
+  }
+  @for $i from 0 through 6 {
+    &.gap-#{$i} {
+      > .block-editor-inner-blocks > .block-editor-block-list__layout {
+        gap: #{$i}em;
+      }
+    }
+  }
 }

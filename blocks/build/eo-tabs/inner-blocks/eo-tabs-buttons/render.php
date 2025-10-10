@@ -9,8 +9,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
+
+echo '<pre>'; print_r( $attributes ); echo '</pre>';
+
 ?>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-
+Coucou ?
 </div>

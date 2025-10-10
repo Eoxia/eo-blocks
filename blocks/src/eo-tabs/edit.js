@@ -2,7 +2,14 @@
 
 import { __ } from '@wordpress/i18n';
 import { useState, useMemo, useEffect, useCallback, useRef } from '@wordpress/element';
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import {
+	useBlockProps,
+	InnerBlocks,
+	InspectorControls
+} from '@wordpress/block-editor';
+import {
+	PanelBody
+} from '@wordpress/components';
 import './scss/editor.scss';
 import { useSelect } from '@wordpress/data';
 import { v4 as uuid } from 'uuid';
@@ -75,29 +82,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		if (!tabKey || initiatorType !== 'content' || !buttonContainerId || !contentContainerId) return;
 
 		const { insertBlock } = wp.data.dispatch('core/block-editor');
-		// Utilisez le select pour être sûr d'avoir la dernière liste des contenus
 		const siblingsContents = wp.data.select('core/block-editor').getBlocks(contentContainerId);
 		const siblingsButtons = wp.data.select('core/block-editor').getBlocks(buttonContainerId);
 
-		// 1. Vérifier si le bouton jumeau existe déjà
 		const twinButtonExists = siblingsButtons.some(block => block.attributes.tabKey === tabKey);
 		if (twinButtonExists) return;
 
-		// 2. Trouver l'index du bloc de contenu qui vient d'être inséré
-		// Le bloc de contenu est le SEUL bloc dans 'siblingsContents' qui possède cette clé 'tabKey'.
 		const newContentIndex = siblingsContents.findIndex(block => block.attributes.tabKey === tabKey);
 
-		// Si l'index est -1, le bloc n'est pas encore visible. Nous ne pouvons pas continuer sans un index valide.
-		// Cependant, comme le wp.data.subscribe a détecté l'ajout, il y a de fortes chances que ce soit le dernier bloc.
-		// Pour la robustesse, nous gardons la vérification d'index:
 		if (newContentIndex === -1) {
 			console.error(`handleAddTabSync: Bloc de contenu avec la clé ${tabKey} non trouvé ou pas encore indexé.`);
 			return;
 		}
 
 		const newTabAttributes = { tabKey: tabKey };
-
-		console.log(`LOG Sync: Inserting twin button with tabKey: ${tabKey} at index ${newContentIndex}`);
 
 		insertBlock(
 			wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes),
@@ -116,7 +114,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}), [activeTab, handleSetActiveTab]);
 
 	const blockProps = useBlockProps( {
-		'data-active-tab-key': activeTab,
+		'data-active-tab-key': activeTab
 	} );
 	const lastInnerBlocksRef = useRef(null); // Assurez-vous d'avoir useRef pour l'état précédent
 
@@ -151,9 +149,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 				// Ajout
 				if (currentSiblings.length > oldSiblingsClientIds.length) {
-					console.log(`LOG Addition: Addition detected in ${containerName}.`);
-
-					// Trouver le nouveau bloc inséré (le "nouveau-né")
 					currentSiblings.forEach((currentBlock) => {
 						const stillExists = oldSiblingsClientIds.some(oldId => oldId === currentBlock.clientId);
 
@@ -171,9 +166,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							const initiatorType = isButtonInner ? 'button' : 'content';
 
 							if (newTabKey && initiatorType === 'content') {
-								// ALERTE ROUGE : Un contenu a été ajouté !
-								console.log(`LOG Found: New content block with tabKey ${newTabKey} added. Triggering sync.`);
-								// Nous appelons la nouvelle fonction de synchronisation
 								handleAddTabSync(newTabKey, 'content');
 							}
 						}
@@ -205,15 +197,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}, [clientId, getBlock, getBlocks, buttonContainerId, contentContainerId, handleRemoveTabSync, handleAddTabSync]);
 
 	return (
-		<div { ...blockProps }>
-			<TabContext.Provider value={contextValue}>
-				<InnerBlocks
-					template={[
-						[ 'eo/tabs-buttons', {} ],
-						[ 'eo/tabs-contents', {} ],
-					]}
-				/>
-			</TabContext.Provider>
-		</div>
+		<>
+
+			<div { ...blockProps }>
+				<TabContext.Provider value={contextValue}>
+					<InnerBlocks
+						template={[
+							[ 'eo/tabs-buttons', {} ],
+							[ 'eo/tabs-contents', {} ],
+						]}
+					/>
+				</TabContext.Provider>
+			</div>
+		</>
 	);
 }

@@ -13,8 +13,62 @@
     "core/group"
   ],
   "example": {},
-  "attributes": {},
-  "supports": {},
+  "attributes": {
+    "orientation": {
+      "type": "string",
+      "default": "horizontal"
+    },
+    "mobileWrap": {
+      "type": "boolean",
+      "default": true
+    },
+    "justification": {
+      "type": "string",
+      "default": "left"
+    },
+    "gap": {
+      "type": "number",
+      "default": 1
+    },
+    "TabColor": {
+      "type": "string",
+      "default": "#2F2F2F"
+    },
+    "TabBackgroundColor": {
+      "type": "string",
+      "default": ""
+    },
+    "activeTabColor": {
+      "type": "string",
+      "default": "#000"
+    },
+    "activeTabBackgroundColor": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "color": {
+      "background": "true",
+      "color": "true"
+    },
+    "spacing": {
+      "margin": false,
+      "padding": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "radius": true,
+        "style": true,
+        "width": true
+      }
+    }
+  },
   "textdomain": "tabs-buttons",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",

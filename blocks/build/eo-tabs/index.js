@@ -150,14 +150,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-tabs/scss/editor.scss");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./context */ "./blocks/src/eo-tabs/context.js");
-/* harmony import */ var _assets_js_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../assets/js/utils */ "./assets/js/utils.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-tabs/scss/editor.scss");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./context */ "./blocks/src/eo-tabs/context.js");
+/* harmony import */ var _assets_js_utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../assets/js/utils */ "./assets/js/utils.js");
 
 // src/edit.js
+
 
 
 
@@ -184,14 +187,14 @@ function Edit({
     getBlocks,
     buttonContainerId,
     contentContainerId
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.useSelect)(select => {
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.useSelect)(select => {
     const {
       getBlock,
       getBlocks
     } = select('core/block-editor');
     const parentBlock = getBlock(clientId);
-    const btnContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_7__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo/tabs-buttons');
-    const contentContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_7__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo/tabs-contents');
+    const btnContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo/tabs-buttons');
+    const contentContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo/tabs-contents');
     return {
       getBlock,
       getBlocks,
@@ -238,21 +241,11 @@ function Edit({
     const {
       insertBlock
     } = wp.data.dispatch('core/block-editor');
-    // Utilisez le select pour être sûr d'avoir la dernière liste des contenus
     const siblingsContents = wp.data.select('core/block-editor').getBlocks(contentContainerId);
     const siblingsButtons = wp.data.select('core/block-editor').getBlocks(buttonContainerId);
-
-    // 1. Vérifier si le bouton jumeau existe déjà
     const twinButtonExists = siblingsButtons.some(block => block.attributes.tabKey === tabKey);
     if (twinButtonExists) return;
-
-    // 2. Trouver l'index du bloc de contenu qui vient d'être inséré
-    // Le bloc de contenu est le SEUL bloc dans 'siblingsContents' qui possède cette clé 'tabKey'.
     const newContentIndex = siblingsContents.findIndex(block => block.attributes.tabKey === tabKey);
-
-    // Si l'index est -1, le bloc n'est pas encore visible. Nous ne pouvons pas continuer sans un index valide.
-    // Cependant, comme le wp.data.subscribe a détecté l'ajout, il y a de fortes chances que ce soit le dernier bloc.
-    // Pour la robustesse, nous gardons la vérification d'index:
     if (newContentIndex === -1) {
       console.error(`handleAddTabSync: Bloc de contenu avec la clé ${tabKey} non trouvé ou pas encore indexé.`);
       return;
@@ -260,7 +253,6 @@ function Edit({
     const newTabAttributes = {
       tabKey: tabKey
     };
-    console.log(`LOG Sync: Inserting twin button with tabKey: ${tabKey} at index ${newContentIndex}`);
     insertBlock(wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes), newContentIndex,
     // Utilisation de l'index du bloc de contenu
     buttonContainerId);
@@ -290,24 +282,21 @@ function Edit({
         const isButtonInner = blockName === 'eo/tabs-buttons-inner';
         const containerName = isButtonInner ? 'eo/tabs-buttons' : 'eo/tabs-contents';
         const containerId = isButtonInner ? buttonContainerId : contentContainerId;
-        const oldContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_7__.findBlockRecursively)(lastInnerBlocks, containerName);
+        const oldContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(lastInnerBlocks, containerName);
         if (!oldContainer) return;
         const currentSiblings = getBlocks(containerId);
         const oldSiblingsClientIds = oldContainer.innerBlocks.map(block => block.clientId);
-        const newContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_7__.findBlockRecursively)(currentInnerBlocks, containerName);
+        const newContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(currentInnerBlocks, containerName);
         if (!newContainer) return;
 
         // Ajout
         if (currentSiblings.length > oldSiblingsClientIds.length) {
-          console.log(`LOG Addition: Addition detected in ${containerName}.`);
-
-          // Trouver le nouveau bloc inséré (le "nouveau-né")
           currentSiblings.forEach(currentBlock => {
             const stillExists = oldSiblingsClientIds.some(oldId => oldId === currentBlock.clientId);
             if (!stillExists) {
               let newTabKey;
               if (!currentBlock.attributes.tabKey) {
-                newTabKey = (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])();
+                newTabKey = (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])();
                 wp.data.dispatch('core/block-editor').updateBlockAttributes(currentBlock.clientId, {
                   tabKey: newTabKey
                 });
@@ -316,9 +305,6 @@ function Edit({
               }
               const initiatorType = isButtonInner ? 'button' : 'content';
               if (newTabKey && initiatorType === 'content') {
-                // ALERTE ROUGE : Un contenu a été ajouté !
-                console.log(`LOG Found: New content block with tabKey ${newTabKey} added. Triggering sync.`);
-                // Nous appelons la nouvelle fonction de synchronisation
                 handleAddTabSync(newTabKey, 'content');
               }
             }
@@ -343,13 +329,13 @@ function Edit({
     });
     return () => unsubscribe();
   }, [clientId, getBlock, getBlocks, buttonContainerId, contentContainerId, handleRemoveTabSync, handleAddTabSync]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context__WEBPACK_IMPORTED_MODULE_6__.TabContext.Provider, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context__WEBPACK_IMPORTED_MODULE_7__.TabContext.Provider, {
     value: contextValue
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks, {
     template: [['eo/tabs-buttons', {}], ['eo/tabs-contents', {}]]
-  })));
+  }))));
 }
 
 /***/ }),
@@ -624,6 +610,16 @@ module.exports = window["wp"]["blocks"];
 
 /***/ }),
 
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
 /***/ "@wordpress/data":
 /*!******************************!*\
   !*** external ["wp","data"] ***!
@@ -660,7 +656,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs","version":"1.0.0","title":"Tabs","category":"eo-blocks","icon":"smiley","description":"Display tabs block","example":{},"attributes":{"activeTabIndex":{"type":"integer","default":0}},"providesContext":{"eo/activeTab":"activeTabIndex","eo/setActiveTab":"setActiveTabFunction"},"supports":{},"textdomain":"tabs","editorScript":["file:./index.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs","version":"1.0.0","title":"Tabs","category":"eo-blocks","icon":"smiley","description":"Display tabs block","example":{},"attributes":{"activeTabIndex":{"type":"integer","default":0}},"providesContext":{"eo/activeTab":"activeTabIndex","eo/setActiveTab":"setActiveTabFunction"},"supports":{"color":{"text":true,"background":true,"link":false}},"textdomain":"tabs","editorScript":["file:./index.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

@@ -10,7 +10,12 @@
 	"parent": [ "eo/tabs", "core/column", "core/group" ],
 	"example": {},
   	"attributes": {},
-	"supports": {},
+	"supports": {
+		"color": {
+			"background": "true",
+			"color": "true"
+		}
+	},
 	"textdomain": "tabs-contents",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
