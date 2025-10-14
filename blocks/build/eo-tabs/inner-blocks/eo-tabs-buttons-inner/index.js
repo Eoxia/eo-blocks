@@ -46,12 +46,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../context */ "./blocks/src/eo-tabs/context.js");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons-inner/scss/editor.scss");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _scss_editor_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scss/editor.scss */ "./blocks/src/eo-tabs/inner-blocks/eo-tabs-buttons-inner/scss/editor.scss");
 
 // src/edit.js de eo-tabs-buttons-inner
 
 
 // Importez useContext de @wordpress/element, pas de 'react'
+
 
 
 
@@ -85,13 +88,6 @@ function Edit({
     }
   }, [tabKey, myIndex, setAttributes]);
 
-  // Define Tab ID based on block index
-  // const myIndex = useSelect( ( select ) => {
-  // 	const parentClientId = select( 'core/block-editor' ).getBlockRootClientId( clientId );
-  // 	const siblings = select( 'core/block-editor' ).getBlocks( parentClientId );
-  // 	return siblings.findIndex( ( block ) => block.clientId === clientId );
-  // }, [ clientId ]);
-
   // const tabId = myIndex;
   const finalTabKey = tabKey || 'temp-loading';
   const isSelected = activeTab === finalTabKey;
@@ -102,14 +98,46 @@ function Edit({
       setActiveTab(finalTabKey);
     }
   });
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  const PARENT_BLOCK_NAME = 'eo/tabs-buttons';
+  const targetParentClientId = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const {
+      getBlockParents,
+      getBlock
+    } = select('core/block-editor');
+    const allParentsIds = getBlockParents(clientId);
+    for (const parentId of allParentsIds) {
+      const parentBlock = getBlock(parentId);
+      if (parentBlock && parentBlock.name === PARENT_BLOCK_NAME) {
+        return parentId;
+      }
+    }
+    return null;
+  }, [clientId]);
+  const {
+    selectBlock
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
+  const handleLinkClick = event => {
+    event.preventDefault();
+    if (targetParentClientId) {
+      selectBlock(targetParentClientId);
+    }
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('To modify the properties of this block, ', 'eo-blocks'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "#",
+    onClick: handleLinkClick,
+    style: {
+      cursor: 'pointer',
+      textDecoration: 'underline'
+    },
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select the parent block', 'eo-blocks')
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('refer to its parent Tab Buttons', 'eo-blocks')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InnerBlocks, {
     template: [['core/paragraph', {
       content: 'Tab button'
     }]],
     templateLock: false
-  }));
+  })));
 }
 
 /***/ }),
@@ -231,6 +259,16 @@ module.exports = window["wp"]["blockEditor"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["blocks"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
 
 /***/ }),
 

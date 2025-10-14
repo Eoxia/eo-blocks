@@ -30,6 +30,8 @@ import {
     __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
     __experimentalToolsPanel as ToolsPanel,
     __experimentalToolsPanelItem as ToolsPanelItem,
+    __experimentalUnitControl as UnitControl,
+    __experimentalBoxControl as BoxControl
 } from '@wordpress/components';
 
 import { v4 as uuid } from 'uuid';
@@ -56,10 +58,17 @@ export default function Edit({attributes, setAttributes, clientId}) {
 
     const colorSettings = useMultipleOriginColorsAndGradients();
     const inlineStyles = {
-        '--eo-tab-color': attributes.tabColor || '#414141',
+        '--eo-tab-color': attributes.tabColor || '#a1a1a1',
         '--eo-tab-bg': attributes.tabBackgroundColor,
         '--eo-active-tab-color': attributes.activeTabColor || '#000000',
-        '--eo-active-tab-bg': attributes.activeTabBackgroundColor,
+        '--eo-active-tab-bg': attributes.activeTabBackgroundColor || '#eeeeee',
+        '--eo-hover-tab-color': attributes.hoverTabColor,
+        '--eo-hover-tab-bg': attributes.hoverTabBackgroundColor,
+        '--eo-tab-border-radius': attributes.tabRadius,
+        '--eo-tab-padding-top': attributes.tabPadding?.top,
+        '--eo-tab-padding-right': attributes.tabPadding?.right,
+        '--eo-tab-padding-bottom': attributes.tabPadding?.bottom,
+        '--eo-tab-padding-left': attributes.tabPadding?.left,
     };
 
     const { getBlock, getBlockParents, innerBlocksCount } = wp.data.useSelect( ( select ) => {
@@ -194,7 +203,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
                         </FlexBlock>
                     </Flex>
                     <ToggleControl
-                        label={ __( 'Autoriser le passage sur plusieurs lignes', 'eo-blocks' ) }
+                        label={ __( 'Allow multiple lines to cross', 'eo-blocks' ) }
                         checked={ attributes.mobileWrap }
                         onChange={ ( value ) => setAttributes( { mobileWrap: value } ) }
                     />
@@ -217,7 +226,11 @@ export default function Edit({attributes, setAttributes, clientId}) {
                             attributes.tabColor !== undefined ||
                             attributes.tabBackgroundColor !== undefined ||
                             attributes.activeTabColor !== undefined ||
-                            attributes.activeTabBackgroundColor !== undefined
+                            attributes.activeTabBackgroundColor !== undefined ||
+                            attributes.hoverTabColor !== undefined ||
+                            attributes.hoverTabBackgroundColor !== undefined ||
+                            attributes.tabRadius !== undefined ||
+                            (attributes.tabPadding && Object.keys(attributes.tabPadding).length > 0)
                         ) }
                         isShownByDefault={ true }
                         panelId='eo-tab-colors-settings'
@@ -225,26 +238,35 @@ export default function Edit({attributes, setAttributes, clientId}) {
                             tabColor: undefined,
                             tabBackgroundColor: undefined,
                             activeTabColor: undefined,
-                            activeTabBackgroundColor: undefined
+                            activeTabBackgroundColor: undefined,
+                            hoverTabColor: undefined,
+                            hoverTabBackgroundColor: undefined,
+                            tabRadius: undefined,
+                            tabPadding: {
+                                top: '0em',
+                                right: '1.2em',
+                                bottom: '0em',
+                                left: '1.2em',
+                            }
                         }) }
                     >
-                        <div style={{ marginBottom: '10px' }}>
-                            <strong>{ __( 'Tab par défaut', 'eo-blocks' ) }</strong>
+                        <div>
+                            <strong>{ __( 'Default tab', 'eo-blocks' ) }</strong>
                         </div>
                         <ColorGradientSettingsDropdown
                             settings={ [
                                 {
-                                    label: __( 'Couleur du texte', 'eo-blocks' ),
+                                    label: __( 'Text color', 'eo-blocks' ),
                                     colorValue: attributes.tabColor,
                                     onColorChange: ( value ) => setAttributes( { tabColor: value } )
                                 },
                                 {
-                                    label: __( 'Couleur de fond', 'eo-blocks' ),
+                                    label: __( 'Background color', 'eo-blocks' ),
                                     colorValue: attributes.tabBackgroundColor,
                                     onColorChange: ( value ) => setAttributes( { tabBackgroundColor: value } )
                                 }
                             ] }
-                            panelId={ clientId }
+                            panelId={ `${ clientId }-default-colors` }
                             hasColorsOrGradients={ false }
                             disableCustomColors={ false }
                             __experimentalIsRenderedInSidebar
@@ -252,26 +274,87 @@ export default function Edit({attributes, setAttributes, clientId}) {
                         />
 
                         <div style={{ margin: '15px 0 10px 0' }}>
-                            <strong>{ __( 'Tab actif', 'eo-blocks' ) }</strong>
+                            <strong>{ __( 'Hover tab', 'eo-blocks' ) }</strong>
                         </div>
                         <ColorGradientSettingsDropdown
                             settings={ [
                                 {
-                                    label: __( 'Couleur du texte', 'eo-blocks' ),
-                                    colorValue: attributes.activeTabColor,
-                                    onColorChange: ( value ) => setAttributes( { activeTabColor: value } )
+                                    label: __( 'Text color', 'eo-blocks' ),
+                                    colorValue: attributes.hoverTabColor,
+                                    onColorChange: ( value ) => setAttributes( { hoverTabColor: value } )
                                 },
                                 {
-                                    label: __( 'Couleur de fond', 'eo-blocks' ),
-                                    colorValue: attributes.activeTabBackgroundColor,
-                                    onColorChange: ( value ) => setAttributes( { activeTabBackgroundColor: value } )
+                                    label: __( 'Background color', 'eo-blocks' ),
+                                    colorValue: attributes.hoverTabBackgroundColor,
+                                    onColorChange: ( value ) => setAttributes( { hoverTabBackgroundColor: value } )
                                 }
                             ] }
-                            panelId={ clientId }
+                            panelId={ `${ clientId }-hover-colors` }
                             hasColorsOrGradients={ false }
                             disableCustomColors={ false }
                             __experimentalIsRenderedInSidebar
                             { ...colorSettings }
+                        />
+
+                        <div style={{ margin: '15px 0 10px 0' }}>
+                            <strong>{ __( 'Active tab', 'eo-blocks' ) }</strong>
+                        </div>
+                        <ColorGradientSettingsDropdown
+                            settings={ [
+                                {
+                                    label: __( 'Text color', 'eo-blocks' ),
+                                    colorValue: attributes.activeTabColor,
+                                    onColorChange: ( value ) => setAttributes( { activeTabColor: value } )
+                                },
+                                {
+                                    label: __( 'Background color', 'eo-blocks' ),
+                                    colorValue: attributes.activeTabBackgroundColor,
+                                    onColorChange: ( value ) => setAttributes( { activeTabBackgroundColor: value } )
+                                }
+                            ] }
+                            panelId={ `${ clientId }-active-colors` }
+                            hasColorsOrGradients={ false }
+                            disableCustomColors={ false }
+                            __experimentalIsRenderedInSidebar
+                            { ...colorSettings }
+                        />
+
+                        <div style={{ margin: '15px 0 10px 0' }}>
+                            <strong>{ __( 'Tab radius', 'eo-blocks' ) }</strong>
+                        </div>
+                        <UnitControl
+                            label={ __( 'Radius', 'eo-blocks' ) }
+                            key="eo-tab-radius"
+                            labelPosition="top"
+                            value={ attributes.tabRadius }
+                            onChange={ ( value ) => setAttributes( { tabRadius: value } ) }
+                            units={[
+                                { value: 'px', label: 'px', step: 1, key: 'px' },
+                                { value: '%', label: '%', step: 1, key: '%' },
+                                { value: 'em', label: 'em', step: 0.1, key: 'em' },
+                            ]}
+                            min={0}
+                            max={100}
+                            step={1}
+                            __next40pxDefaultSize
+                            />
+                        <div style={{ margin: '15px 0 10px 0' }}>
+                            <strong>{ __( 'Tab padding', 'eo-blocks' ) }</strong>
+                        </div>
+                        <BoxControl
+                            label={ __( 'Internal margins (Padding)', 'eo-blocks' ) }
+                            key="eo-tab-padding"
+                            values={ attributes.tabPadding }
+                            onChange={ ( newPadding ) => setAttributes( { tabPadding: newPadding } ) }
+                            // units={[
+                            //     { value: 'px', label: 'px', key: 'px' },
+                            //     { value: '%', label: '%', key: '%' },
+                            //     { value: 'em', label: 'em', key: 'em' },
+                            //     { value: 'rem', label: 'rem', key: 'rem' }
+                            // ]}
+                            // sides={[ 'top', 'right', 'bottom', 'left' ]}
+                            allowReset={ false }
+                            __next40pxDefaultSize
                         />
                     </ToolsPanelItem>
                 </ToolsPanel>

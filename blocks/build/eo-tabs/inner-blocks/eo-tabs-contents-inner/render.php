@@ -7,10 +7,15 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly.
 }
+
+$additional_attributes = [];
+$additional_attributes['data-tab-key'] = esc_attr( $attributes['tabKey'] ?? '' );
+
+$wrapper_attributes = get_block_wrapper_attributes( $additional_attributes );
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-
+<div <?php echo $wrapper_attributes; ?>>
+    <?php echo wp_kses_post( $content ); ?>
 </div>

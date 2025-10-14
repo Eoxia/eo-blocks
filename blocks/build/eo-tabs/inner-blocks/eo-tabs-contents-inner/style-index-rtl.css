@@ -7,3 +7,24 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.wp-block-eo-tabs-contents-inner {
+  animation: fadeInTabs 0.5s ease-in-out;
+}
+.wp-block-eo-tabs-contents-inner:not(.is-active) {
+  display: none;
+}
+.wp-block-eo-tabs-contents-inner > :first-child {
+  margin-block-start: 0;
+}
+.wp-block-eo-tabs-contents-inner > :last-child {
+  margin-block-end: 0;
+}
+
+@keyframes fadeInTabs {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

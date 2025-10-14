@@ -26,11 +26,11 @@
 			"type": "number",
 			"default": 1
 		},
-		"TabColor": {
+		"tabColor": {
 			"type": "string",
-			"default": "#2F2F2F"
+			"default": "#a1a1a1"
 		},
-		"TabBackgroundColor": {
+		"tabBackgroundColor": {
 			"type": "string",
 			"default": ""
 		},
@@ -40,7 +40,28 @@
 		},
 		"activeTabBackgroundColor": {
 			"type": "string",
+			"default": "#eeeeee"
+		},
+		"hoverTabColor": {
+			"type": "string",
+			"default": "#000"
+		},
+		"hoverTabBackgroundColor": {
+			"type": "string",
 			"default": ""
+		},
+		"tabRadius": {
+			"type": "string",
+			"default": ""
+		},
+		"tabPadding": {
+			"type": "object",
+			"default": {
+				"top": "0em",
+				"right": "1.2em",
+				"bottom": "0em",
+				"left": "1.2em"
+			}
 		}
 	},
 	"supports": {
@@ -63,6 +84,9 @@
 				"style": true,
 				"width": true
 			}
+		},
+		"lock": {
+			"remove": true
 		}
 	},
 	"textdomain": "tabs-buttons",

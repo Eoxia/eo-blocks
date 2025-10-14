@@ -18,7 +18,24 @@
     "color": {
       "background": "true",
       "color": "true"
-    }
+    },
+    "spacing": {
+      "margin": false,
+      "padding": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "radius": true,
+        "style": true,
+        "width": true
+      }
+    },
+    "shadow": true
   },
   "textdomain": "tabs-contents",
   "editorScript": "file:./index.js",

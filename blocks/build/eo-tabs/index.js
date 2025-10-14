@@ -334,7 +334,9 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context__WEBPACK_IMPORTED_MODULE_7__.TabContext.Provider, {
     value: contextValue
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks, {
-    template: [['eo/tabs-buttons', {}], ['eo/tabs-contents', {}]]
+    template: [['eo/tabs-buttons', {}], ['core/spacer', {
+      height: '20px'
+    }], ['eo/tabs-contents', {}]]
   }))));
 }
 
@@ -656,7 +658,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs","version":"1.0.0","title":"Tabs","category":"eo-blocks","icon":"smiley","description":"Display tabs block","example":{},"attributes":{"activeTabIndex":{"type":"integer","default":0}},"providesContext":{"eo/activeTab":"activeTabIndex","eo/setActiveTab":"setActiveTabFunction"},"supports":{"color":{"text":true,"background":true,"link":false}},"textdomain":"tabs","editorScript":["file:./index.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs","version":"1.0.0","title":"Tabs","category":"eo-blocks","icon":"smiley","description":"Display tabs block","example":{},"attributes":{"defaultActiveTabIndex":{"type":"integer","default":0},"activeTabIndex":{"type":"integer","default":0}},"providesContext":{"eo/activeTab":"activeTabIndex","eo/setActiveTab":"setActiveTabFunction"},"supports":{"align":true,"color":{"text":true,"background":true,"link":false},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}},"shadow":true},"textdomain":"tabs","editorScript":["file:./index.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

@@ -9,6 +9,10 @@
   "description": "Display tabs block",
   "example": {},
   "attributes": {
+    "defaultActiveTabIndex": {
+      "type": "integer",
+      "default": 0
+    },
     "activeTabIndex": {
       "type": "integer",
       "default": 0
@@ -19,11 +23,29 @@
     "eo/setActiveTab": "setActiveTabFunction"
   },
   "supports": {
+    "align": true,
     "color": {
       "text": true,
       "background": true,
       "link": false
-    }
+    },
+    "spacing": {
+      "margin": false,
+      "padding": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "radius": true,
+        "style": true,
+        "width": true
+      }
+    },
+    "shadow": true
   },
   "textdomain": "tabs",
   "editorScript": [

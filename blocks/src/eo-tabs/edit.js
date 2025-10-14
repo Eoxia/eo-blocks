@@ -204,6 +204,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<InnerBlocks
 						template={[
 							[ 'eo/tabs-buttons', {} ],
+							[ 'core/spacer', { height: '20px' } ],
 							[ 'eo/tabs-contents', {} ],
 						]}
 					/>

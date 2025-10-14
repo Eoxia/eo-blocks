@@ -403,10 +403,17 @@ function Edit({
   } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useContext)(_context__WEBPACK_IMPORTED_MODULE_3__.TabContext);
   const colorSettings = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.__experimentalUseMultipleOriginColorsAndGradients)();
   const inlineStyles = {
-    '--eo-tab-color': attributes.tabColor || '#414141',
+    '--eo-tab-color': attributes.tabColor || '#a1a1a1',
     '--eo-tab-bg': attributes.tabBackgroundColor,
     '--eo-active-tab-color': attributes.activeTabColor || '#000000',
-    '--eo-active-tab-bg': attributes.activeTabBackgroundColor
+    '--eo-active-tab-bg': attributes.activeTabBackgroundColor || '#eeeeee',
+    '--eo-hover-tab-color': attributes.hoverTabColor,
+    '--eo-hover-tab-bg': attributes.hoverTabBackgroundColor,
+    '--eo-tab-border-radius': attributes.tabRadius,
+    '--eo-tab-padding-top': attributes.tabPadding?.top,
+    '--eo-tab-padding-right': attributes.tabPadding?.right,
+    '--eo-tab-padding-bottom': attributes.tabPadding?.bottom,
+    '--eo-tab-padding-left': attributes.tabPadding?.left
   };
   const {
     getBlock,
@@ -510,7 +517,7 @@ function Edit({
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_15__["default"],
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Vertical', 'eo-blocks')
   })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Autoriser le passage sur plusieurs lignes', 'eo-blocks'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Allow multiple lines to cross', 'eo-blocks'),
     checked: attributes.mobileWrap,
     onChange: value => setAttributes({
       mobileWrap: value
@@ -530,34 +537,39 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab styles', 'eo-blocks'),
     panelId: "eo-tab-colors-panel"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__.__experimentalToolsPanelItem, {
-    hasValue: () => attributes.tabColor !== undefined || attributes.tabBackgroundColor !== undefined || attributes.activeTabColor !== undefined || attributes.activeTabBackgroundColor !== undefined,
+    hasValue: () => attributes.tabColor !== undefined || attributes.tabBackgroundColor !== undefined || attributes.activeTabColor !== undefined || attributes.activeTabBackgroundColor !== undefined || attributes.hoverTabColor !== undefined || attributes.hoverTabBackgroundColor !== undefined || attributes.tabRadius !== undefined || attributes.tabPadding && Object.keys(attributes.tabPadding).length > 0,
     isShownByDefault: true,
     panelId: "eo-tab-colors-settings",
     resetAll: () => setAttributes({
       tabColor: undefined,
       tabBackgroundColor: undefined,
       activeTabColor: undefined,
-      activeTabBackgroundColor: undefined
+      activeTabBackgroundColor: undefined,
+      hoverTabColor: undefined,
+      hoverTabBackgroundColor: undefined,
+      tabRadius: undefined,
+      tabPadding: {
+        top: '0em',
+        right: '1.2em',
+        bottom: '0em',
+        left: '1.2em'
+      }
     })
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    style: {
-      marginBottom: '10px'
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab par défaut', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.__experimentalColorGradientSettingsDropdown, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default tab', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.__experimentalColorGradientSettingsDropdown, {
     settings: [{
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Couleur du texte', 'eo-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text color', 'eo-blocks'),
       colorValue: attributes.tabColor,
       onColorChange: value => setAttributes({
         tabColor: value
       })
     }, {
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Couleur de fond', 'eo-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color', 'eo-blocks'),
       colorValue: attributes.tabBackgroundColor,
       onColorChange: value => setAttributes({
         tabBackgroundColor: value
       })
     }],
-    panelId: clientId,
+    panelId: `${clientId}-default-colors`,
     hasColorsOrGradients: false,
     disableCustomColors: false,
     __experimentalIsRenderedInSidebar: true,
@@ -566,25 +578,101 @@ function Edit({
     style: {
       margin: '15px 0 10px 0'
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab actif', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.__experimentalColorGradientSettingsDropdown, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover tab', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.__experimentalColorGradientSettingsDropdown, {
     settings: [{
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Couleur du texte', 'eo-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text color', 'eo-blocks'),
+      colorValue: attributes.hoverTabColor,
+      onColorChange: value => setAttributes({
+        hoverTabColor: value
+      })
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color', 'eo-blocks'),
+      colorValue: attributes.hoverTabBackgroundColor,
+      onColorChange: value => setAttributes({
+        hoverTabBackgroundColor: value
+      })
+    }],
+    panelId: `${clientId}-hover-colors`,
+    hasColorsOrGradients: false,
+    disableCustomColors: false,
+    __experimentalIsRenderedInSidebar: true,
+    ...colorSettings
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      margin: '15px 0 10px 0'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Active tab', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.__experimentalColorGradientSettingsDropdown, {
+    settings: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text color', 'eo-blocks'),
       colorValue: attributes.activeTabColor,
       onColorChange: value => setAttributes({
         activeTabColor: value
       })
     }, {
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Couleur de fond', 'eo-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color', 'eo-blocks'),
       colorValue: attributes.activeTabBackgroundColor,
       onColorChange: value => setAttributes({
         activeTabBackgroundColor: value
       })
     }],
-    panelId: clientId,
+    panelId: `${clientId}-active-colors`,
     hasColorsOrGradients: false,
     disableCustomColors: false,
     __experimentalIsRenderedInSidebar: true,
     ...colorSettings
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      margin: '15px 0 10px 0'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab radius', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__.__experimentalUnitControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Radius', 'eo-blocks'),
+    key: "eo-tab-radius",
+    labelPosition: "top",
+    value: attributes.tabRadius,
+    onChange: value => setAttributes({
+      tabRadius: value
+    }),
+    units: [{
+      value: 'px',
+      label: 'px',
+      step: 1,
+      key: 'px'
+    }, {
+      value: '%',
+      label: '%',
+      step: 1,
+      key: '%'
+    }, {
+      value: 'em',
+      label: 'em',
+      step: 0.1,
+      key: 'em'
+    }],
+    min: 0,
+    max: 100,
+    step: 1,
+    __next40pxDefaultSize: true
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      margin: '15px 0 10px 0'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab padding', 'eo-blocks'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__.__experimentalBoxControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Internal margins (Padding)', 'eo-blocks'),
+    key: "eo-tab-padding",
+    values: attributes.tabPadding,
+    onChange: newPadding => setAttributes({
+      tabPadding: newPadding
+    })
+    // units={[
+    //     { value: 'px', label: 'px', key: 'px' },
+    //     { value: '%', label: '%', key: '%' },
+    //     { value: 'em', label: 'em', key: 'em' },
+    //     { value: 'rem', label: 'rem', key: 'rem' }
+    // ]}
+    // sides={[ 'top', 'right', 'bottom', 'left' ]}
+    ,
+    allowReset: false,
+    __next40pxDefaultSize: true
   })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.InnerBlocks, {
@@ -2380,7 +2468,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs-buttons","version":"1.0.0","title":"Tab buttons","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo/tabs","core/column","core/group"],"example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"mobileWrap":{"type":"boolean","default":true},"justification":{"type":"string","default":"left"},"gap":{"type":"number","default":1},"TabColor":{"type":"string","default":"#2F2F2F"},"TabBackgroundColor":{"type":"string","default":""},"activeTabColor":{"type":"string","default":"#000"},"activeTabBackgroundColor":{"type":"string","default":""}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}}},"textdomain":"tabs-buttons","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs-buttons","version":"1.0.0","title":"Tab buttons","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo/tabs","core/column","core/group"],"example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"mobileWrap":{"type":"boolean","default":true},"justification":{"type":"string","default":"left"},"gap":{"type":"number","default":1},"tabColor":{"type":"string","default":"#a1a1a1"},"tabBackgroundColor":{"type":"string","default":""},"activeTabColor":{"type":"string","default":"#000"},"activeTabBackgroundColor":{"type":"string","default":"#eeeeee"},"hoverTabColor":{"type":"string","default":"#000"},"hoverTabBackgroundColor":{"type":"string","default":""},"tabRadius":{"type":"string","default":""},"tabPadding":{"type":"object","default":{"top":"0em","right":"1.2em","bottom":"0em","left":"1.2em"}}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}},"lock":{"remove":true}},"textdomain":"tabs-buttons","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

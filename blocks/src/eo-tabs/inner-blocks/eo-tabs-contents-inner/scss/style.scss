@@ -7,6 +7,27 @@
 
 $media__mobile: 599px;
 
-.wp-block-eo-tabs {
+.wp-block-eo-tabs-contents-inner {
+  animation: fadeInTabs .5s ease-in-out;
 
+  &:not(.is-active) {
+    display: none;
+  }
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+  > :last-child {
+    margin-block-end: 0;
+  }
 }
+
+@keyframes fadeInTabs {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
