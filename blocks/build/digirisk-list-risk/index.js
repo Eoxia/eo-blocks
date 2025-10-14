@@ -46,7 +46,8 @@ var SvgDigiriskFavicon = function SvgDigiriskFavicon(props) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   digiriskApiGet: () => (/* binding */ digiriskApiGet)
+/* harmony export */   digiriskApiGet: () => (/* binding */ digiriskApiGet),
+/* harmony export */   findBlockRecursively: () => (/* binding */ findBlockRecursively)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -126,6 +127,20 @@ const digiriskApiGet = (route, params) => {
     data,
     error
   };
+};
+const findBlockRecursively = (blocks, blockName) => {
+  for (const block of blocks) {
+    if (block.name === blockName) {
+      return block;
+    }
+    if (block.innerBlocks && block.innerBlocks.length) {
+      const found = findBlockRecursively(block.innerBlocks, blockName);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
 };
 
 /***/ }),

@@ -77,3 +77,19 @@ export const digiriskApiGet = (route, params) => {
 
 	return { data, error };
 }
+
+
+export const findBlockRecursively = ( blocks, blockName ) => {
+	for ( const block of blocks ) {
+		if ( block.name === blockName ) {
+			return block;
+		}
+		if ( block.innerBlocks && block.innerBlocks.length ) {
+			const found = findBlockRecursively( block.innerBlocks, blockName );
+			if ( found ) {
+				return found;
+			}
+		}
+	}
+	return null;
+};

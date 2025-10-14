@@ -1,0 +1,98 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo/tabs-buttons",
+	"version": "1.0.0",
+	"title": "Tab buttons",
+	"category": "eo-blocks",
+	"icon": "smiley",
+	"description": "Display tabs block",
+	"parent": [ "eo/tabs", "core/column", "core/group" ],
+	"example": {},
+  	"attributes": {
+		"orientation": {
+			"type": "string",
+			"default": "horizontal"
+		},
+		"mobileWrap": {
+			"type": "boolean",
+			"default": true
+		},
+		"justification": {
+			"type": "string",
+			"default": "left"
+		},
+		"gap": {
+			"type": "number",
+			"default": 1
+		},
+		"tabColor": {
+			"type": "string",
+			"default": "#a1a1a1"
+		},
+		"tabBackgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"activeTabColor": {
+			"type": "string",
+			"default": "#000"
+		},
+		"activeTabBackgroundColor": {
+			"type": "string",
+			"default": "#eeeeee"
+		},
+		"hoverTabColor": {
+			"type": "string",
+			"default": "#000"
+		},
+		"hoverTabBackgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"tabRadius": {
+			"type": "string",
+			"default": ""
+		},
+		"tabPadding": {
+			"type": "object",
+			"default": {
+				"top": "0em",
+				"right": "1.2em",
+				"bottom": "0em",
+				"left": "1.2em"
+			}
+		}
+	},
+	"supports": {
+		"color": {
+			"background": "true",
+			"color": "true"
+		},
+		"spacing": {
+			"margin": false,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"style": true,
+				"width": true
+			}
+		},
+		"lock": {
+			"remove": true
+		}
+	},
+	"textdomain": "tabs-buttons",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+  	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

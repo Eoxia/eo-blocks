@@ -1,0 +1,54 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+$media__mobile: 599px;
+
+.wp-block-eo-tabs-buttons {
+  display: flex;
+
+  &.is-orientation-vertical {
+    flex-direction: column;
+  }
+  @for $i from 0 through 6 {
+    &.gap-#{$i} {
+      gap: #{$i}em;
+    }
+  }
+  &.is-justify-left {
+    justify-content: flex-start;
+  }
+  &.is-justify-center {
+    justify-content: center;
+  }
+  &.is-justify-right {
+    justify-content: flex-end;
+  }
+  &.is-justify-space-between {
+    justify-content: space-between;
+  }
+
+  .wp-block-eo-tabs-buttons-inner.is-active {
+    color: var(--eo-active-tab-color);
+    background-color: var(--eo-active-tab-bg);
+  }
+  .wp-block-eo-tabs-buttons-inner {
+    color: var(--eo-tab-color);
+    background-color: var(--eo-tab-bg);
+    padding-top: var(--eo-tab-padding-top);
+    padding-right: var(--eo-tab-padding-right);
+    padding-bottom: var(--eo-tab-padding-bottom);
+    padding-left: var(--eo-tab-padding-left);
+    border-radius: var(--eo-tab-border-radius);
+    transition: all 0.2s ease-out;
+
+    &:not(.is-active):hover {
+      color: var(--eo-hover-tab-color);
+      background-color: var(--eo-hover-tab-bg);
+      cursor: pointer;
+    }
+  }
+}
