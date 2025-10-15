@@ -17,5 +17,5 @@ $wrapper_attributes = get_block_wrapper_attributes( $additional_attributes );
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <?php echo wp_kses_post( $content ); ?>
+    <?php echo do_blocks( $content ); ?>
 </div>

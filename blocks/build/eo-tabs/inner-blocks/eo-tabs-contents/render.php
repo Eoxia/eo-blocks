@@ -9,8 +9,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
+
 ?>
 
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-    <?php echo wp_kses_post( $content ); ?>
+    <?php echo do_blocks( $content ); ?>
 </div>
