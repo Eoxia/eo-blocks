@@ -72,6 +72,12 @@ class Eoblocks {
 
         wp_enqueue_script( 'eo-blocks-js', EO_BLOCKS_URL . 'assets/js/eoblocks.js', array( 'jquery'), '1.1.0' );
         wp_enqueue_style( 'eo-blocks-css', EO_BLOCKS_URL . 'assets/css/style.min.css', array(), '1.0.0', 'all' );
+
+        // Localize AJAX URL for eo-search block
+        wp_localize_script( 'eo-blocks-js', 'eoSearch', array(
+            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            'homeUrl' => home_url(),
+        ) );
     }
 
     /**
@@ -86,6 +92,12 @@ class Eoblocks {
                 '1.2.0',
                 true
             );
+
+            // Localize AJAX URL for eo-search block in editor
+            wp_localize_script( 'eo-blocks-hooks', 'eoSearch', array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'homeUrl' => home_url(),
+            ) );
     }
 
     public function group_link_frontend($block_content, $block) {
