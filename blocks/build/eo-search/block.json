@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "eo/search",
+  "version": "1.0.0",
+  "title": "Search",
+  "category": "eo-blocks",
+  "icon": "search",
+  "description": "Display a search block with filtered post types",
+  "example": {},
+  "attributes": {
+    "showIcon": {
+      "type": "boolean",
+      "default": true
+    },
+    "showLabel": {
+      "type": "boolean",
+      "default": true
+    },
+    "searchText": {
+      "type": "string",
+      "default": "Rechercher"
+    },
+    "searchIcon": {
+      "type": "string",
+      "default": "search"
+    },
+    "selectedPostTypes": {
+      "type": "array",
+      "default": []
+    },
+    "showThumbnail": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "showDescription": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "supports": {
+    "typography": {
+      "fontSize": true
+    },
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "radius": true,
+        "style": true,
+        "width": true
+      }
+    },
+    "html": false
+  },
+  "textdomain": "eo-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": [
+    "file:./style-index.css"
+  ],
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

@@ -1,0 +1,51 @@
+/**
+ * Styles for the editor view
+ */
+
+.wp-block-eo-search {
+	display: block;
+
+	.eo-search__container {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		width: fit-content;
+
+		&:hover {
+			opacity: 0.6;
+		}
+
+		.eo-search__icon {
+			width: 20px;
+			height: 20px;
+			flex-shrink: 0;
+			stroke: currentColor;
+			fill: none;
+			stroke-width: 2;
+		}
+
+		.eo-search__text {
+			font-size: 14px;
+			color: #333;
+			font-weight: 500;
+			white-space: nowrap;
+		}
+	}
+
+	.eo-search__panel-divider {
+		border-top: 1px solid #e0e0e0;
+		padding-top: 15px;
+
+		h3 {
+			color: #333;
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+		p {
+			color: #666;
+		}
+	}
+}
