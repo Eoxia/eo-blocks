@@ -87,3 +87,32 @@ function eo_search_ajax_perform_search() {
 
 	wp_send_json_success( $results );
 }
+
+/**
+ * Filter search query to respect post_type parameters from URL
+ * This allows the search page to filter results by post type
+ */
+add_action( 'pre_get_posts', 'eo_search_filter_by_post_type' );
+
+function eo_search_filter_by_post_type( $query ) {
+	// Only apply to main search query on frontend
+	if ( is_admin() || ! $query->is_main_query() || ! is_search() ) {
+		return;
+	}
+
+	// Check if post_type parameter is in URL
+	if ( isset( $_GET['post_type'] ) ) {
+		$post_type_param = sanitize_text_field( wp_unslash( $_GET['post_type'] ) );
+
+		// Split by comma if it's a comma-separated list
+		$post_types = array_map( 'trim', explode( ',', $post_type_param ) );
+
+		// Filter out empty values
+		$post_types = array_filter( $post_types );
+
+		// Ensure we have valid post types
+		if ( ! empty( $post_types ) ) {
+			$query->set( 'post_type', $post_types );
+		}
+	}
+} 
