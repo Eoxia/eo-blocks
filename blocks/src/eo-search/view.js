@@ -135,14 +135,14 @@
 					// Build search page URL with post types
 					var homeUrl = (window.eoSearch && window.eoSearch.homeUrl) ? window.eoSearch.homeUrl : '/';
 					var searchUrl = homeUrl + '?s=' + encodeURIComponent(term);
-					for (var i = 0; i < postTypes.length; i++) {
-						searchUrl += '&post_type=' + encodeURIComponent(postTypes[i]);
+					if (postTypes.length > 0) {
+						searchUrl += '&post_type=' + postTypes.join(',');
 					}
 
-					// Add "View all results" link 
-					//resultsHtml += '<div class="eo-search__view-all">';
-					//resultsHtml += '<a href="' + searchUrl + '" class="eo-search__view-all-link">Voir tous les résultats</a>';
-					//resultsHtml += '</div>';
+					// Add "View all results" link
+					resultsHtml += '<div class="eo-search__view-all">';
+					resultsHtml += '<a href="' + searchUrl + '" class="eo-search__view-all-link">Voir tous les résultats</a>';
+					resultsHtml += '</div>';
 
 					$resultsContainer.html(resultsHtml);
 				},
