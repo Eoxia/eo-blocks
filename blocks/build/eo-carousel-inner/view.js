@@ -16,7 +16,7 @@ var __webpack_exports__ = {};
    */
   var initializeBlock = function ($block) {};
   $(document).ready(function () {
-    $('.wp-block-eo-slide').each(function () {
+    $('.wp-block-eo-blocks-slide').each(function () {
       initializeBlock($(this));
     });
   });

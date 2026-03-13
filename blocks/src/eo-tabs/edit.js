@@ -29,8 +29,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		const { getBlock, getBlocks } = select( 'core/block-editor' );
 		const parentBlock = getBlock(clientId);
 
-		const btnContainer = findBlockRecursively(parentBlock?.innerBlocks || [], 'eo/tabs-buttons');
-		const contentContainer = findBlockRecursively(parentBlock?.innerBlocks || [], 'eo/tabs-contents');
+		const btnContainer = findBlockRecursively(parentBlock?.innerBlocks || [], 'eo-blocks/tabs-buttons');
+		const contentContainer = findBlockRecursively(parentBlock?.innerBlocks || [], 'eo-blocks/tabs-contents');
 
 		return {
 			getBlock,
@@ -98,7 +98,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		const newTabAttributes = { tabKey: tabKey };
 
 		insertBlock(
-			wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes),
+			wp.blocks.createBlock('eo-blocks/tabs-buttons-inner', newTabAttributes),
 			newContentIndex, // Utilisation de l'index du bloc de contenu
 			buttonContainerId
 		);
@@ -125,7 +125,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			lastInnerBlocksRef.current = getBlock(clientId)?.innerBlocks || [];
 		}
 
-		const targetBlockNames = ['eo/tabs-buttons-inner', 'eo/tabs-contents-inner'];
+		const targetBlockNames = ['eo-blocks/tabs-buttons-inner', 'eo-blocks/tabs-contents-inner'];
 
 		const unsubscribe = wp.data.subscribe(() => {
 			const currentInnerBlocks = getBlock(clientId)?.innerBlocks;
@@ -134,8 +134,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			if (!currentInnerBlocks || !lastInnerBlocks) return;
 
 			targetBlockNames.forEach(blockName => {
-				const isButtonInner = blockName === 'eo/tabs-buttons-inner';
-				const containerName = isButtonInner ? 'eo/tabs-buttons' : 'eo/tabs-contents';
+				const isButtonInner = blockName === 'eo-blocks/tabs-buttons-inner';
+				const containerName = isButtonInner ? 'eo-blocks/tabs-buttons' : 'eo-blocks/tabs-contents';
 				const containerId = isButtonInner ? buttonContainerId : contentContainerId;
 
 				const oldContainer = findBlockRecursively(lastInnerBlocks, containerName);
@@ -203,9 +203,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<TabContext.Provider value={contextValue}>
 					<InnerBlocks
 						template={[
-							[ 'eo/tabs-buttons', {} ],
+							[ 'eo-blocks/tabs-buttons', {} ],
 							[ 'core/spacer', { height: '20px' } ],
-							[ 'eo/tabs-contents', {} ],
+							[ 'eo-blocks/tabs-contents', {} ],
 						]}
 					/>
 				</TabContext.Provider>

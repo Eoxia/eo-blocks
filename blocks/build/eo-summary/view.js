@@ -68,7 +68,7 @@ var __webpack_exports__ = {};
     }
   };
   $(document).ready(function () {
-    $('.wp-block-eo-summary').each(function () {
+    $('.wp-block-eo-blocks-summary').each(function () {
       initializeBlock($(this));
     });
     $(window).on('scroll', updateActiveMenu);

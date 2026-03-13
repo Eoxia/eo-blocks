@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "eo/tabs-contents",
+	"name": "eo-blocks/tabs-contents",
 	"version": "1.0.0",
 	"title": "Tab Contents",
 	"category": "eo-blocks",
 	"icon": "smiley",
 	"description": "Display tabs block",
-	"parent": [ "eo/tabs", "core/column", "core/group" ],
+	"parent": [ "eo-blocks/tabs", "core/column", "core/group" ],
 	"example": {},
   	"attributes": {},
 	"supports": {

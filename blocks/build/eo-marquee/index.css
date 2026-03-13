@@ -6,12 +6,12 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-marquee .eo-marquee__track {
+.wp-block-eo-blocks-marquee .eo-marquee__track {
   display: flex;
   gap: 2rem; /* ou margin-right dans inner */
   overflow: hidden;
 }
-.wp-block-eo-marquee .eo-marquee__inner {
+.wp-block-eo-blocks-marquee .eo-marquee__inner {
   flex-shrink: 0;
 }
 

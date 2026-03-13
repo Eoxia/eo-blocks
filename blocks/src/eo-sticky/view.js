@@ -20,7 +20,7 @@
 	}
 
 	$(document).ready(function(){
-		$('.wp-block-eo-sticky').each(function(){
+		$('.wp-block-eo-blocks-sticky').each(function(){
 			initializeBlock( $(this) );
 		});
 	});

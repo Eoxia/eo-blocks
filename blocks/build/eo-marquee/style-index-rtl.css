@@ -7,18 +7,18 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-marquee {
+.wp-block-eo-blocks-marquee {
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
   position: relative;
 }
-.wp-block-eo-marquee .eo-marquee__track {
+.wp-block-eo-blocks-marquee .eo-marquee__track {
   display: flex;
   white-space: nowrap;
   will-change: transform;
 }
-.wp-block-eo-marquee .eo-marquee__inner {
+.wp-block-eo-blocks-marquee .eo-marquee__inner {
   margin-left: 2em;
   flex-shrink: 0;
 }

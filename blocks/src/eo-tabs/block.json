@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "eo/tabs",
+	"name": "eo-blocks/tabs",
 	"version": "1.0.0",
 	"title": "Tabs",
 	"category": "eo-blocks",
@@ -19,8 +19,8 @@
 		}
 	},
 	"providesContext": {
-		"eo/activeTab": "activeTabIndex",
-		"eo/setActiveTab": "setActiveTabFunction"
+		"eo-blocks/activeTab": "activeTabIndex",
+		"eo-blocks/setActiveTab": "setActiveTabFunction"
 	},
 	"supports": {
 		"align": true,

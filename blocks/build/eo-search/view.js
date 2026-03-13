@@ -138,7 +138,7 @@ var __webpack_exports__ = {};
     }
   };
   $(document).ready(function () {
-    $('.wp-block-eo-search').each(function () {
+    $('.wp-block-eo-blocks-search').each(function () {
       initializeBlock($(this));
     });
   });

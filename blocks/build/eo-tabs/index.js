@@ -43,9 +43,10 @@ const cleanUrl = url => {
  *
  * @param route
  * @param params
+ * @param queryParams Optional query parameters object or string (e.g., 'entity=1' or {entity: 1})
  * @returns {{data: unknown, error: unknown}}
  */
-const digiriskApiGet = (route, params) => {
+const digiriskApiGet = (route, params, queryParams = '') => {
   const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -62,6 +63,14 @@ const digiriskApiGet = (route, params) => {
         return;
       }
       let digiriskUrlApi = `${baseUrlApi}/api/index.php/${route}?DOLAPIKEY=${apiKey}`;
+      if (queryParams) {
+        if (typeof queryParams === 'object') {
+          const queryString = Object.keys(queryParams).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`).join('&');
+          digiriskUrlApi += `&${queryString}`;
+        } else {
+          digiriskUrlApi += `&${queryParams}`;
+        }
+      }
       digiriskUrlApi = cleanUrl(digiriskUrlApi);
       try {
         const response = await fetch(digiriskUrlApi);
@@ -86,7 +95,7 @@ const digiriskApiGet = (route, params) => {
       }
     };
     fetchData();
-  }, [route, params]);
+  }, [route, params, queryParams]);
   return {
     data,
     error
@@ -193,8 +202,8 @@ function Edit({
       getBlocks
     } = select('core/block-editor');
     const parentBlock = getBlock(clientId);
-    const btnContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo/tabs-buttons');
-    const contentContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo/tabs-contents');
+    const btnContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo-blocks/tabs-buttons');
+    const contentContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(parentBlock?.innerBlocks || [], 'eo-blocks/tabs-contents');
     return {
       getBlock,
       getBlocks,
@@ -253,7 +262,7 @@ function Edit({
     const newTabAttributes = {
       tabKey: tabKey
     };
-    insertBlock(wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes), newContentIndex,
+    insertBlock(wp.blocks.createBlock('eo-blocks/tabs-buttons-inner', newTabAttributes), newContentIndex,
     // Utilisation de l'index du bloc de contenu
     buttonContainerId);
     handleSetActiveTab(tabKey);
@@ -273,14 +282,14 @@ function Edit({
     if (lastInnerBlocksRef.current === null) {
       lastInnerBlocksRef.current = getBlock(clientId)?.innerBlocks || [];
     }
-    const targetBlockNames = ['eo/tabs-buttons-inner', 'eo/tabs-contents-inner'];
+    const targetBlockNames = ['eo-blocks/tabs-buttons-inner', 'eo-blocks/tabs-contents-inner'];
     const unsubscribe = wp.data.subscribe(() => {
       const currentInnerBlocks = getBlock(clientId)?.innerBlocks;
       const lastInnerBlocks = lastInnerBlocksRef.current;
       if (!currentInnerBlocks || !lastInnerBlocks) return;
       targetBlockNames.forEach(blockName => {
-        const isButtonInner = blockName === 'eo/tabs-buttons-inner';
-        const containerName = isButtonInner ? 'eo/tabs-buttons' : 'eo/tabs-contents';
+        const isButtonInner = blockName === 'eo-blocks/tabs-buttons-inner';
+        const containerName = isButtonInner ? 'eo-blocks/tabs-buttons' : 'eo-blocks/tabs-contents';
         const containerId = isButtonInner ? buttonContainerId : contentContainerId;
         const oldContainer = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_8__.findBlockRecursively)(lastInnerBlocks, containerName);
         if (!oldContainer) return;
@@ -334,9 +343,9 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context__WEBPACK_IMPORTED_MODULE_7__.TabContext.Provider, {
     value: contextValue
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks, {
-    template: [['eo/tabs-buttons', {}], ['core/spacer', {
+    template: [['eo-blocks/tabs-buttons', {}], ['core/spacer', {
       height: '20px'
-    }], ['eo/tabs-contents', {}]]
+    }], ['eo-blocks/tabs-contents', {}]]
   }))));
 }
 
@@ -658,7 +667,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs","version":"1.0.0","title":"Tabs","category":"eo-blocks","icon":"smiley","description":"Display tabs block","example":{},"attributes":{"defaultActiveTabIndex":{"type":"integer","default":0},"activeTabIndex":{"type":"integer","default":0}},"providesContext":{"eo/activeTab":"activeTabIndex","eo/setActiveTab":"setActiveTabFunction"},"supports":{"align":true,"color":{"text":true,"background":true,"link":false},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}},"shadow":true},"textdomain":"tabs","editorScript":["file:./index.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/tabs","version":"1.0.0","title":"Tabs","category":"eo-blocks","icon":"smiley","description":"Display tabs block","example":{},"attributes":{"defaultActiveTabIndex":{"type":"integer","default":0},"activeTabIndex":{"type":"integer","default":0}},"providesContext":{"eo-blocks/activeTab":"activeTabIndex","eo-blocks/setActiveTab":"setActiveTabFunction"},"supports":{"align":true,"color":{"text":true,"background":true,"link":false},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}},"shadow":true},"textdomain":"tabs","editorScript":["file:./index.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

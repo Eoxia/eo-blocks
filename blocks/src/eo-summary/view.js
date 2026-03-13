@@ -68,7 +68,7 @@
 	}
 
 	$(document).ready(function(){
-		$('.wp-block-eo-summary').each(function(){
+		$('.wp-block-eo-blocks-summary').each(function(){
 			initializeBlock( $(this) );
 		});
 

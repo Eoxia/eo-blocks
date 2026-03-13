@@ -7,41 +7,41 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-summary {
+.wp-block-eo-blocks-summary {
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
   color: #000;
 }
-.wp-block-eo-summary.is-orientation-horizontal {
+.wp-block-eo-blocks-summary.is-orientation-horizontal {
   flex-direction: row;
 }
-.wp-block-eo-summary.is-orientation-vertical {
+.wp-block-eo-blocks-summary.is-orientation-vertical {
   flex-direction: column;
 }
-.wp-block-eo-summary.is-justification-left {
+.wp-block-eo-blocks-summary.is-justification-left {
   justify-content: flex-start;
 }
-.wp-block-eo-summary.is-justification-center {
+.wp-block-eo-blocks-summary.is-justification-center {
   justify-content: center;
 }
-.wp-block-eo-summary.is-justification-right {
+.wp-block-eo-blocks-summary.is-justification-right {
   justify-content: flex-end;
 }
-.wp-block-eo-summary.is-justification-space-between {
+.wp-block-eo-blocks-summary.is-justification-space-between {
   justify-content: space-between;
 }
-.wp-block-eo-summary:not(.has-text-color) .eo-summary__item {
+.wp-block-eo-blocks-summary:not(.has-text-color) .eo-summary__item {
   color: #000;
 }
-.wp-block-eo-summary:not(.has-text-color) .eo-summary__item.active {
+.wp-block-eo-blocks-summary:not(.has-text-color) .eo-summary__item.active {
   text-shadow: 0.4px 0.4px 0 #000;
 }
-.wp-block-eo-summary .eo-summary__item {
+.wp-block-eo-blocks-summary .eo-summary__item {
   opacity: 0.6;
   transition: all 0.2s ease-out;
 }
-.wp-block-eo-summary .eo-summary__item.active, .wp-block-eo-summary .eo-summary__item:hover {
+.wp-block-eo-blocks-summary .eo-summary__item.active, .wp-block-eo-blocks-summary .eo-summary__item:hover {
   opacity: 1;
 }
 

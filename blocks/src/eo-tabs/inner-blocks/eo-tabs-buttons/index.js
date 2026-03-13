@@ -36,7 +36,7 @@ registerBlockType(metadata.name, {
 	/**
 	 * @see ./edit.js
 	 */
-	usesContext: [ 'eo/tabActive' ],
+	usesContext: [ 'eo-blocks/tabActive' ],
 	edit: Edit,
 	save: props => {
 		return <InnerBlocks.Content />

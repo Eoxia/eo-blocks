@@ -33,11 +33,11 @@ export default function Edit( { attributes } ) {
     return (
 		<div {...useBlockProps()}>
 			<InnerBlocks
-				allowedBlocks={[ 'eo/tabs-contents-inner' ]}
+				allowedBlocks={[ 'eo-blocks/tabs-contents-inner' ]}
 				template={[
-					['eo/tabs-contents-inner', {tabKey: 'tab-1'}],
-					['eo/tabs-contents-inner', {tabKey: 'tab-2'}],
-					['eo/tabs-contents-inner', {tabKey: 'tab-3'}],
+					['eo-blocks/tabs-contents-inner', {tabKey: 'tab-1'}],
+					['eo-blocks/tabs-contents-inner', {tabKey: 'tab-2'}],
+					['eo-blocks/tabs-contents-inner', {tabKey: 'tab-3'}],
 				]}
 			/>
 		</div>

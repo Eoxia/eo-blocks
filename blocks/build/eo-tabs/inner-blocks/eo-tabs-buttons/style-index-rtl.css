@@ -7,50 +7,50 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-tabs-buttons {
+.wp-block-eo-blocks-tabs-buttons {
   display: flex;
 }
-.wp-block-eo-tabs-buttons.is-orientation-vertical {
+.wp-block-eo-blocks-tabs-buttons.is-orientation-vertical {
   flex-direction: column;
 }
-.wp-block-eo-tabs-buttons.gap-0 {
+.wp-block-eo-blocks-tabs-buttons.gap-0 {
   gap: 0em;
 }
-.wp-block-eo-tabs-buttons.gap-1 {
+.wp-block-eo-blocks-tabs-buttons.gap-1 {
   gap: 1em;
 }
-.wp-block-eo-tabs-buttons.gap-2 {
+.wp-block-eo-blocks-tabs-buttons.gap-2 {
   gap: 2em;
 }
-.wp-block-eo-tabs-buttons.gap-3 {
+.wp-block-eo-blocks-tabs-buttons.gap-3 {
   gap: 3em;
 }
-.wp-block-eo-tabs-buttons.gap-4 {
+.wp-block-eo-blocks-tabs-buttons.gap-4 {
   gap: 4em;
 }
-.wp-block-eo-tabs-buttons.gap-5 {
+.wp-block-eo-blocks-tabs-buttons.gap-5 {
   gap: 5em;
 }
-.wp-block-eo-tabs-buttons.gap-6 {
+.wp-block-eo-blocks-tabs-buttons.gap-6 {
   gap: 6em;
 }
-.wp-block-eo-tabs-buttons.is-justify-left {
+.wp-block-eo-blocks-tabs-buttons.is-justify-left {
   justify-content: flex-start;
 }
-.wp-block-eo-tabs-buttons.is-justify-center {
+.wp-block-eo-blocks-tabs-buttons.is-justify-center {
   justify-content: center;
 }
-.wp-block-eo-tabs-buttons.is-justify-right {
+.wp-block-eo-blocks-tabs-buttons.is-justify-right {
   justify-content: flex-end;
 }
-.wp-block-eo-tabs-buttons.is-justify-space-between {
+.wp-block-eo-blocks-tabs-buttons.is-justify-space-between {
   justify-content: space-between;
 }
-.wp-block-eo-tabs-buttons .wp-block-eo-tabs-buttons-inner.is-active {
+.wp-block-eo-blocks-tabs-buttons .wp-block-eo-blocks-tabs-buttons-inner.is-active {
   color: var(--eo-active-tab-color);
   background-color: var(--eo-active-tab-bg);
 }
-.wp-block-eo-tabs-buttons .wp-block-eo-tabs-buttons-inner {
+.wp-block-eo-blocks-tabs-buttons .wp-block-eo-blocks-tabs-buttons-inner {
   color: var(--eo-tab-color);
   background-color: var(--eo-tab-bg);
   padding-top: var(--eo-tab-padding-top);
@@ -60,7 +60,7 @@
   border-radius: var(--eo-tab-border-radius);
   transition: all 0.2s ease-out;
 }
-.wp-block-eo-tabs-buttons .wp-block-eo-tabs-buttons-inner:not(.is-active):hover {
+.wp-block-eo-blocks-tabs-buttons .wp-block-eo-blocks-tabs-buttons-inner:not(.is-active):hover {
   color: var(--eo-hover-tab-color);
   background-color: var(--eo-hover-tab-bg);
   cursor: pointer;

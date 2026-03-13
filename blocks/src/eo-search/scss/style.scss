@@ -2,7 +2,7 @@
  * Styles for the frontend
  */
 
-.wp-block-eo-search {
+.wp-block-eo-blocks-search {
 	display: block;
 
 	.eo-search__container {
@@ -229,6 +229,6 @@
 	}
 }
 
-body.admin-bar .wp-block-eo-search .eo-search__modal .eo-search__modal-content {
+body.admin-bar .wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-content {
 	top: 32px !important;
 }

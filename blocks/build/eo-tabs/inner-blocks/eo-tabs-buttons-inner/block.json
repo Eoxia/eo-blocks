@@ -1,14 +1,14 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "eo/tabs-buttons-inner",
+  "name": "eo-blocks/tabs-buttons-inner",
   "version": "1.0.0",
   "title": "Tab button",
   "category": "eo-blocks",
   "icon": "smiley",
   "description": "Display tabs block",
   "parent": [
-    "eo/tabs-buttons"
+    "eo-blocks/tabs-buttons"
   ],
   "example": {},
   "attributes": {

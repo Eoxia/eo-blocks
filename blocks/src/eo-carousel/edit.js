@@ -43,7 +43,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<Button
 				variant="secondary"
 				onClick={() => wp.data.dispatch('core/block-editor').insertBlock(
-					wp.blocks.createBlock('eo/slide'),
+					wp.blocks.createBlock('eo-blocks/slide'),
 					innerBlocksCount,
 					clientId
 				)}
