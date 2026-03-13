@@ -4,7 +4,7 @@
 	};
 
 	$(document).ready(function() {
-		$('.wp-block-eo-tabs').each(function() {
+		$('.wp-block-eo-blocks-tabs').each(function() {
 			initializeBlock($(this));
 		});
 	});

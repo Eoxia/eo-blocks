@@ -6,9 +6,9 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-tabs-contents-inner {
+.wp-block-eo-blocks-tabs-contents-inner {
   display: none;
 }
-.wp-block-eo-tabs-contents-inner.is-active {
+.wp-block-eo-blocks-tabs-contents-inner.is-active {
   display: block;
 }

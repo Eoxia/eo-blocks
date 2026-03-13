@@ -74,7 +74,7 @@
 	};
 
 	$(document).ready(function() {
-		$('.wp-block-eo-marquee').each(function() {
+		$('.wp-block-eo-blocks-marquee').each(function() {
 			initializeBlock($(this));
 		});
 	});

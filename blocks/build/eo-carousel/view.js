@@ -10,7 +10,7 @@ var __webpack_exports__ = {};
 // import 'swiper/css/pagination';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const carousels = document.querySelectorAll('.wp-block-eo-carousel');
+  const carousels = document.querySelectorAll('.wp-block-eo-blocks-carousel');
   carousels.forEach(carousel => {
     const mainCarousel = jQuery(carousel).find('.eo-carousel__main-carousel')[0];
     const thumbsCarousel = jQuery(carousel).find('.eo-carousel__thumbs-carousel')[0];

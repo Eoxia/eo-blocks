@@ -89,14 +89,14 @@ export default function Edit({attributes, setAttributes, clientId}) {
     const onAddTab = useCallback(() => {
         const newTabKey = uuid();
         const parentBlocks = getBlockParents( clientId, true ).map( id => getBlock( id ) );
-        const eoTabsBlock = parentBlocks.find( block => block && block.name === 'eo/tabs' );
+        const eoTabsBlock = parentBlocks.find( block => block && block.name === 'eo-blocks/tabs' );
 
         if ( !eoTabsBlock ) {
             console.error('No eo/tabs parent block found');
             return;
         }
 
-        const eoTabsContentsBlock = findBlockRecursively( eoTabsBlock.innerBlocks, 'eo/tabs-contents' );
+        const eoTabsContentsBlock = findBlockRecursively( eoTabsBlock.innerBlocks, 'eo-blocks/tabs-contents' );
 
         if ( !eoTabsContentsBlock ) {
             console.error('No eo/tabs-contents block found inside eo/tabs');
@@ -108,13 +108,13 @@ export default function Edit({attributes, setAttributes, clientId}) {
         const newTabAttributes = { tabKey: newTabKey };
 
         wp.data.dispatch('core/block-editor').insertBlock(
-            wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes),
+            wp.blocks.createBlock('eo-blocks/tabs-buttons-inner', newTabAttributes),
             innerBlocksCount,
             clientId
         );
 
         wp.data.dispatch('core/block-editor').insertBlock(
-            wp.blocks.createBlock('eo/tabs-contents-inner', newTabAttributes),
+            wp.blocks.createBlock('eo-blocks/tabs-contents-inner', newTabAttributes),
             innerBlocksCount,
             eoTabsContentsClientId
         );
@@ -364,9 +364,9 @@ export default function Edit({attributes, setAttributes, clientId}) {
             <div {...blockProps }>
                 <InnerBlocks
                     template={[
-                        ['eo/tabs-buttons-inner', {tabKey: 'tab-1'}],
-                        ['eo/tabs-buttons-inner', {tabKey: 'tab-2'}],
-                        ['eo/tabs-buttons-inner', {tabKey: 'tab-3'}],
+                        ['eo-blocks/tabs-buttons-inner', {tabKey: 'tab-1'}],
+                        ['eo-blocks/tabs-buttons-inner', {tabKey: 'tab-2'}],
+                        ['eo-blocks/tabs-buttons-inner', {tabKey: 'tab-3'}],
                     ]}
                     renderAppender={ () => <CustomAppender/> }
                 />

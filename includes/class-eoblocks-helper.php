@@ -28,6 +28,9 @@ class Eoblocks_Helper {
 		}
 
 		$digirsk_url_api = $base_url_api . '/api/index.php/' . $route . '?DOLAPIKEY=' . $api_key;
+		if ( ! empty( $params ) ) {
+			$digirsk_url_api .= '&' . $params;
+		}
 		$digirsk_url_api =  str_replace(':/','://', trim(preg_replace('/\/+/', '/', $digirsk_url_api), '/'));
 
 		$digirisk_request_api = wp_remote_get( $digirsk_url_api );

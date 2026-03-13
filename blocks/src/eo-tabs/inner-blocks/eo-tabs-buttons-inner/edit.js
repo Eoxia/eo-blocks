@@ -41,7 +41,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		},
 	});
 
-	const PARENT_BLOCK_NAME = 'eo/tabs-buttons';
+	const PARENT_BLOCK_NAME = 'eo-blocks/tabs-buttons';
 	const targetParentClientId = useSelect( ( select ) => {
 		const { getBlockParents, getBlock } = select( 'core/block-editor' );
 		const allParentsIds = getBlockParents( clientId );

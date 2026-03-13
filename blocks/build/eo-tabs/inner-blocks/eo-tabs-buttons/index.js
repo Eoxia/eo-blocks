@@ -229,9 +229,10 @@ const cleanUrl = url => {
  *
  * @param route
  * @param params
+ * @param queryParams Optional query parameters object or string (e.g., 'entity=1' or {entity: 1})
  * @returns {{data: unknown, error: unknown}}
  */
-const digiriskApiGet = (route, params) => {
+const digiriskApiGet = (route, params, queryParams = '') => {
   const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -248,6 +249,14 @@ const digiriskApiGet = (route, params) => {
         return;
       }
       let digiriskUrlApi = `${baseUrlApi}/api/index.php/${route}?DOLAPIKEY=${apiKey}`;
+      if (queryParams) {
+        if (typeof queryParams === 'object') {
+          const queryString = Object.keys(queryParams).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`).join('&');
+          digiriskUrlApi += `&${queryString}`;
+        } else {
+          digiriskUrlApi += `&${queryParams}`;
+        }
+      }
       digiriskUrlApi = cleanUrl(digiriskUrlApi);
       try {
         const response = await fetch(digiriskUrlApi);
@@ -272,7 +281,7 @@ const digiriskApiGet = (route, params) => {
       }
     };
     fetchData();
-  }, [route, params]);
+  }, [route, params, queryParams]);
   return {
     data,
     error
@@ -439,12 +448,12 @@ function Edit({
   const onAddTab = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(() => {
     const newTabKey = (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])();
     const parentBlocks = getBlockParents(clientId, true).map(id => getBlock(id));
-    const eoTabsBlock = parentBlocks.find(block => block && block.name === 'eo/tabs');
+    const eoTabsBlock = parentBlocks.find(block => block && block.name === 'eo-blocks/tabs');
     if (!eoTabsBlock) {
       console.error('No eo/tabs parent block found');
       return;
     }
-    const eoTabsContentsBlock = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_4__.findBlockRecursively)(eoTabsBlock.innerBlocks, 'eo/tabs-contents');
+    const eoTabsContentsBlock = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_4__.findBlockRecursively)(eoTabsBlock.innerBlocks, 'eo-blocks/tabs-contents');
     if (!eoTabsContentsBlock) {
       console.error('No eo/tabs-contents block found inside eo/tabs');
       return;
@@ -453,8 +462,8 @@ function Edit({
     const newTabAttributes = {
       tabKey: newTabKey
     };
-    wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('eo/tabs-buttons-inner', newTabAttributes), innerBlocksCount, clientId);
-    wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('eo/tabs-contents-inner', newTabAttributes), innerBlocksCount, eoTabsContentsClientId);
+    wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('eo-blocks/tabs-buttons-inner', newTabAttributes), innerBlocksCount, clientId);
+    wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('eo-blocks/tabs-contents-inner', newTabAttributes), innerBlocksCount, eoTabsContentsClientId);
     setActiveTab(newTabKey);
   }, [getBlock, getBlockParents, clientId, innerBlocksCount]);
   const CustomAppender = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -676,11 +685,11 @@ function Edit({
   })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.InnerBlocks, {
-    template: [['eo/tabs-buttons-inner', {
+    template: [['eo-blocks/tabs-buttons-inner', {
       tabKey: 'tab-1'
-    }], ['eo/tabs-buttons-inner', {
+    }], ['eo-blocks/tabs-buttons-inner', {
       tabKey: 'tab-2'
-    }], ['eo/tabs-buttons-inner', {
+    }], ['eo-blocks/tabs-buttons-inner', {
       tabKey: 'tab-3'
     }]],
     renderAppender: () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CustomAppender, null)
@@ -747,7 +756,7 @@ const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
   /**
    * @see ./edit.js
    */
-  usesContext: ['eo/tabActive'],
+  usesContext: ['eo-blocks/tabActive'],
   edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
   save: props => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.Content, null);
@@ -2468,7 +2477,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/tabs-buttons","version":"1.0.0","title":"Tab buttons","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo/tabs","core/column","core/group"],"example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"mobileWrap":{"type":"boolean","default":true},"justification":{"type":"string","default":"left"},"gap":{"type":"number","default":1},"tabColor":{"type":"string","default":"#a1a1a1"},"tabBackgroundColor":{"type":"string","default":""},"activeTabColor":{"type":"string","default":"#000"},"activeTabBackgroundColor":{"type":"string","default":"#eeeeee"},"hoverTabColor":{"type":"string","default":"#000"},"hoverTabBackgroundColor":{"type":"string","default":""},"tabRadius":{"type":"string","default":""},"tabPadding":{"type":"object","default":{"top":"0em","right":"1.2em","bottom":"0em","left":"1.2em"}}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}},"lock":{"remove":true}},"textdomain":"tabs-buttons","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/tabs-buttons","version":"1.0.0","title":"Tab buttons","category":"eo-blocks","icon":"smiley","description":"Display tabs block","parent":["eo-blocks/tabs","core/column","core/group"],"example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"mobileWrap":{"type":"boolean","default":true},"justification":{"type":"string","default":"left"},"gap":{"type":"number","default":1},"tabColor":{"type":"string","default":"#a1a1a1"},"tabBackgroundColor":{"type":"string","default":""},"activeTabColor":{"type":"string","default":"#000"},"activeTabBackgroundColor":{"type":"string","default":"#eeeeee"},"hoverTabColor":{"type":"string","default":"#000"},"hoverTabBackgroundColor":{"type":"string","default":""},"tabRadius":{"type":"string","default":""},"tabPadding":{"type":"object","default":{"top":"0em","right":"1.2em","bottom":"0em","left":"1.2em"}}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true,"__experimentalDefaultControls":{"color":true,"radius":true,"style":true,"width":true}},"lock":{"remove":true}},"textdomain":"tabs-buttons","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

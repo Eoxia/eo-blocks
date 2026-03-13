@@ -6,12 +6,12 @@ var __webpack_exports__ = {};
 (function ($) {
   /**
    * Initialise la logique d'interaction pour un bloc d'onglets spécifique.
-   * @param {jQuery} $block - L'objet jQuery représentant le conteneur .wp-block-eo-tabs.
+   * @param {jQuery} $block - L'objet jQuery représentant le conteneur .wp-block-eo-blocks-tabs.
    */
   var initializeBlock = function ($block) {
     // Sélecteurs jQuery : utilisation de .find() pour cibler les conteneurs enfants
-    const $buttonsContainer = $block.find('.wp-block-eo-tabs-buttons');
-    const $contentsContainer = $block.find('.wp-block-eo-tabs-contents');
+    const $buttonsContainer = $block.find('.wp-block-eo-blocks-tabs-buttons');
+    const $contentsContainer = $block.find('.wp-block-eo-blocks-tabs-contents');
 
     // Vérification de l'existence des conteneurs
     if ($buttonsContainer.length === 0 || $contentsContainer.length === 0) {
@@ -59,7 +59,7 @@ var __webpack_exports__ = {};
    */
   $(document).ready(function () {
     // Parcours de chaque instance du bloc d'onglets sur la page
-    $('.wp-block-eo-tabs').each(function () {
+    $('.wp-block-eo-blocks-tabs').each(function () {
       initializeBlock($(this));
     });
   });

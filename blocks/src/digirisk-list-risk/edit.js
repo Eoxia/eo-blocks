@@ -29,7 +29,7 @@ import './scss/editor.scss';
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit 
  *
  * @return {Element} Element to render.
  */
@@ -40,11 +40,12 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const routeApi = 'digiriskdolibarr/risk/getRisksByCotation';
 	const eoblocksSettings = useSelect( ( select ) => select( 'core' ).getSite()?.eoblocks_settings );
-	const { data, error } = digiriskApiGet(routeApi, eoblocksSettings);
+	const { data, error } = digiriskApiGet(routeApi, eoblocksSettings, 'entity=1');
 
 	if (error) {
-		console.log('Error:' + error);
+		console.log('Error:' + error); 
 	}
+	console.log(data); 
 
 	const riskLabel = {
 		1: __( 'faible', 'eo-blocks' ),
@@ -94,7 +95,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>
-				{data && (
+				{data && Object.keys(data).length > 0 ? (
 					<div className={`eo-digirisk-list-risk__list eo-grid eo-grid__col-${blockGrid}`}>
 						{Object.entries(data).map(([key, value]) => {
 							if (!riskRender[key]) {
@@ -115,6 +116,8 @@ export default function Edit( { attributes, setAttributes } ) {
 							)
 						})}
 					</div>
+				) : (
+					<div className='eo-digirisk-list-risk__no-data'>{__('No risk found', 'eo-blocks')}</div>
 				)}
 			</div>
 		</>

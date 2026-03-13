@@ -32,7 +32,7 @@ function eoGroupAddAttributes( settings, name ) {
 
 addFilter(
     'blocks.registerBlockType',
-    'eo/group-custom-attributes',
+    'eo-blocks/group-custom-attributes',
     eoGroupAddAttributes
 );
 
@@ -112,6 +112,6 @@ const eoGroupAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
 
 addFilter(
     'editor.BlockEdit',
-    'eo/group-custom-advanced-control',
+    'eo-blocks/group-custom-advanced-control',
     eoGroupAddAdvancedControls
 );

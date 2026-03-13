@@ -28,8 +28,8 @@ define( 'EO_BLOCKS_VERSION', '1.0.0' );
  */
 require_once EO_BLOCKS_PATH . '/includes/autoload.php';
 
-// Load REST API endpoints
-require_once EO_BLOCKS_PATH . '/blocks/src/eo-search/api.php';
+// Load AJAX API endpoints
+require_once EO_BLOCKS_PATH . '/includes/api-eo-search.php';
 
 use EoBlocks\Includes\Eoblocks;
 

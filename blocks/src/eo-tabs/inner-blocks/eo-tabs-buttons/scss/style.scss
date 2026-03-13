@@ -7,7 +7,7 @@
 
 $media__mobile: 599px;
 
-.wp-block-eo-tabs-buttons {
+.wp-block-eo-blocks-tabs-buttons {
   display: flex;
 
   &.is-orientation-vertical {
@@ -31,11 +31,11 @@ $media__mobile: 599px;
     justify-content: space-between;
   }
 
-  .wp-block-eo-tabs-buttons-inner.is-active {
+  .wp-block-eo-blocks-tabs-buttons-inner.is-active {
     color: var(--eo-active-tab-color);
     background-color: var(--eo-active-tab-bg);
   }
-  .wp-block-eo-tabs-buttons-inner {
+  .wp-block-eo-blocks-tabs-buttons-inner {
     color: var(--eo-tab-color);
     background-color: var(--eo-tab-bg);
     padding-top: var(--eo-tab-padding-top);

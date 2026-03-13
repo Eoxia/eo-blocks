@@ -3,7 +3,7 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-$risk_data = \EoBlocks\Includes\Eoblocks_Helper::digirisk_api_get('digiriskdolibarr/risk/getRisksByCotation', '');
+$risk_data = \EoBlocks\Includes\Eoblocks_Helper::digirisk_api_get('digiriskdolibarr/risk/getRisksByCotation', 'entity=1');
 
 $risk_label = [
     1 => __( 'faible', 'eo-blocks' ),
