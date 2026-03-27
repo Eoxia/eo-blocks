@@ -18,6 +18,7 @@ class Eoblocks_Settings {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'wp_ajax_eoblocks_migrate_blocks', array( $this, 'ajax_migrate_blocks' ) );
+		add_action( 'admin_notices', array( $this, 'display_migration_notice' ) );
 //		add_action( 'rest_api_init', array( $this, 'api_test' ) );
 	}
 
@@ -186,5 +187,73 @@ class Eoblocks_Settings {
 			),
 			'count' => $migrated,
 		) );
+	}
+
+	/**
+	 * Vérifier s'il y a des anciennes références de blocs dans la base de données
+	 */
+	public function check_for_old_block_names() {
+		global $wpdb;
+
+		$blocks = $this->get_blocks_to_migrate();
+		$old_blocks_count = 0;
+
+		foreach ( $blocks as $block ) {
+			$old_name = '<!-- wp:eo/' . $block;
+
+			// Vérifier dans les posts
+			$posts_count = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->posts}
+					WHERE post_content LIKE %s",
+					'%' . $wpdb->esc_like( $old_name ) . '%'
+				)
+			);
+
+			// Vérifier dans les postmeta
+			$postmeta_count = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->postmeta}
+					WHERE meta_value LIKE %s",
+					'%' . $wpdb->esc_like( $old_name ) . '%'
+				)
+			);
+
+			$old_blocks_count += intval( $posts_count ) + intval( $postmeta_count );
+		}
+
+		return $old_blocks_count;
+	}
+
+	/**
+	 * Afficher une notice admin si migration nécessaire
+	 */
+	public function display_migration_notice() {
+		// Voir seulement aux administrateurs
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Vérifier s'il y a des anciennes références
+		$old_blocks_count = $this->check_for_old_block_names();
+
+		if ( $old_blocks_count === 0 ) {
+			return;
+		}
+
+		// Créer le lien vers la page de migration cachée
+		$migration_url = admin_url( 'admin.php?page=eo-blocks-migration' );
+		$message = sprintf(
+			__( 'EO Blocks a détecté %d bloc(s) utilisant l\'ancienne convention de nommage. <a href="%s">Cliquez ici pour effectuer la migration</a>.', 'eo-blocks' ),
+			$old_blocks_count,
+			esc_url( $migration_url )
+		);
+
+		?>
+		<div class="notice notice-warning is-dismissible">
+			<p><strong><?php esc_html_e( 'EO Blocks - Migration recommandée', 'eo-blocks' ); ?></strong></p>
+			<p><?php echo wp_kses_post( $message ); ?></p>
+		</div>
+		<?php
 	}
 }
