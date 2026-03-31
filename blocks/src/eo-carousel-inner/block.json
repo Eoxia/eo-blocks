@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "eo/slide",
+	"name": "eo-blocks/slide",
 	"version": "1.0.0",
 	"title": "Slide",
 	"category": "eo-blocks",
 	"icon": "smiley",
 	"description": "Display Slide of carousel block",
-	"parent": [ "eo/carousel" ],
+	"parent": [ "eo-blocks/carousel" ],
 	"example": {},
   	"attributes": {
 

@@ -1,0 +1,25 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+$media__mobile: 599px;
+
+.wp-block-eo-blocks-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  position: relative;
+
+  .eo-marquee__track {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .eo-marquee__inner {
+    margin-right: 2em;
+    flex-shrink: 0;
+  }
+}

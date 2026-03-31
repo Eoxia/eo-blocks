@@ -22,7 +22,7 @@ var __webpack_exports__ = {};
     });
   };
   $(document).ready(function () {
-    $('.wp-block-eo-accordion').each(function () {
+    $('.wp-block-eo-blocks-accordion').each(function () {
       initializeBlock($(this));
     });
   });

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "eo/digirisk-list-risk",
+	"name": "eo-blocks/digirisk-list-risk",
 	"version": "1.0.0",
 	"title": "Digirisk - List Risk",
 	"category": "eo-blocks",

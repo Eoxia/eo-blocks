@@ -1,0 +1,214 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/eo-search/scss/style.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * Styles for the frontend
+ */
+.wp-block-eo-blocks-search {
+  display: block;
+}
+.wp-block-eo-blocks-search .eo-search__container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.wp-block-eo-blocks-search .eo-search__container:hover {
+  opacity: 0.6;
+}
+.wp-block-eo-blocks-search .eo-search__container .eo-search__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+.wp-block-eo-blocks-search .eo-search__container .eo-search__text {
+  white-space: nowrap;
+}
+.wp-block-eo-blocks-search .eo-search__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.3s ease;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__input:focus {
+  border-color: var(--wp--preset--color--primary) #0066ff;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__input::-moz-placeholder {
+  color: #999;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__input::placeholder {
+  color: #999;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: color 0.3s ease;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__close:hover {
+  color: #333;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-header .eo-search__close svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results {
+  padding: 0 24px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__loading,
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__no-results,
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__error {
+  text-align: center;
+  color: #666;
+  padding: 24px;
+  font-size: 14px;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__error {
+  color: #d32f2f;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: var(--wp--preset--color--primary) #0066ff;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item a:hover {
+  background-color: #f5f5f5;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item a .eo-search__result-thumbnail {
+  display: block;
+  width: 50px;
+  height: 50px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 6px;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item a .eo-search__result-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wp--preset--color--primary, #0066ff);
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__results-list .eo-search__result-item a .eo-search__result-excerpt {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__view-all {
+  padding: 16px 0;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 16px;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__view-all .eo-search__view-all-link {
+  display: inline-block;
+  color: var(--wp--preset--color--primary, #0066ff);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 16px;
+  border: 1px solid var(--wp--preset--color--primary, #0066ff);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.wp-block-eo-blocks-search .eo-search__modal .eo-search__results .eo-search__view-all .eo-search__view-all-link:hover {
+  background-color: var(--wp--preset--color--primary, #0066ff);
+  color: white;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+body.admin-bar .wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-content {
+  top: 32px !important;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

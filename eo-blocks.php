@@ -4,7 +4,7 @@
  * Description:       A collection of Gutenberg blocks for WordPress made by Eoxia
  * Requires at least: 6.6.2
  * Requires PHP:      7.0
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            Eoxia
  * Author URI:        https://www.eoxia.com
  * License:           GPL-3.0-or-later
@@ -28,6 +28,9 @@ define( 'EO_BLOCKS_VERSION', '1.0.0' );
  */
 require_once EO_BLOCKS_PATH . '/includes/autoload.php';
 
+// Load AJAX API endpoints
+require_once EO_BLOCKS_PATH . '/includes/api-eo-search.php';
+
 use EoBlocks\Includes\Eoblocks;
 
 $eoblocks = new Eoblocks();
@@ -46,8 +49,25 @@ function eo_blocks_block_init() {
 	$block_dir_urls = scandir( $block_build_dir );
 	foreach ( $block_dir_urls as $url ) {
 		$block_dir = $block_build_dir . '/' . $url;
-		if ( ! empty( $url ) && file_exists( $block_dir . '/block.json' ) ) {
-			register_block_type( $block_dir );
+		if ( ! empty( $url ) && $url !== '.' && $url !== '..' && is_dir( $block_dir ) ) {
+			// Register main block if block.json exists
+			if ( file_exists( $block_dir . '/block.json' ) ) {
+				register_block_type( $block_dir );
+			}
+
+			// Register inner-blocks if present
+			$inner_blocks_dir = $block_dir . '/inner-blocks';
+			if ( is_dir( $inner_blocks_dir ) ) {
+				$inner_block_dirs = scandir( $inner_blocks_dir );
+				foreach ( $inner_block_dirs as $inner_url ) {
+					$inner_block_dir = $inner_blocks_dir . '/' . $inner_url;
+					if ( ! empty( $inner_url ) && $inner_url !== '.' && $inner_url !== '..' && is_dir( $inner_block_dir ) ) {
+						if ( file_exists( $inner_block_dir . '/block.json' ) ) {
+							register_block_type( $inner_block_dir );
+						}
+					}
+				}
+			}
 		}
 	}
 

@@ -46,7 +46,8 @@ var SvgDigiriskFavicon = function SvgDigiriskFavicon(props) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   digiriskApiGet: () => (/* binding */ digiriskApiGet)
+/* harmony export */   digiriskApiGet: () => (/* binding */ digiriskApiGet),
+/* harmony export */   findBlockRecursively: () => (/* binding */ findBlockRecursively)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -78,9 +79,10 @@ const cleanUrl = url => {
  *
  * @param route
  * @param params
+ * @param queryParams Optional query parameters object or string (e.g., 'entity=1' or {entity: 1})
  * @returns {{data: unknown, error: unknown}}
  */
-const digiriskApiGet = (route, params) => {
+const digiriskApiGet = (route, params, queryParams = '') => {
   const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -97,6 +99,14 @@ const digiriskApiGet = (route, params) => {
         return;
       }
       let digiriskUrlApi = `${baseUrlApi}/api/index.php/${route}?DOLAPIKEY=${apiKey}`;
+      if (queryParams) {
+        if (typeof queryParams === 'object') {
+          const queryString = Object.keys(queryParams).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`).join('&');
+          digiriskUrlApi += `&${queryString}`;
+        } else {
+          digiriskUrlApi += `&${queryParams}`;
+        }
+      }
       digiriskUrlApi = cleanUrl(digiriskUrlApi);
       try {
         const response = await fetch(digiriskUrlApi);
@@ -121,11 +131,25 @@ const digiriskApiGet = (route, params) => {
       }
     };
     fetchData();
-  }, [route, params]);
+  }, [route, params, queryParams]);
   return {
     data,
     error
   };
+};
+const findBlockRecursively = (blocks, blockName) => {
+  for (const block of blocks) {
+    if (block.name === blockName) {
+      return block;
+    }
+    if (block.innerBlocks && block.innerBlocks.length) {
+      const found = findBlockRecursively(block.innerBlocks, blockName);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
 };
 
 /***/ }),
@@ -183,7 +207,7 @@ __webpack_require__.r(__webpack_exports__);
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit 
  *
  * @return {Element} Element to render.
  */
@@ -205,10 +229,11 @@ function Edit({
   const {
     data,
     error
-  } = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_5__.digiriskApiGet)(routeApi, eoblocksSettings);
+  } = (0,_assets_js_utils__WEBPACK_IMPORTED_MODULE_5__.digiriskApiGet)(routeApi, eoblocksSettings, 'entity=1');
   if (error) {
     console.log('Error:' + error);
   }
+  console.log(data);
   const riskLabel = {
     1: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('faible', 'eo-blocks'),
     2: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('à planifier', 'eo-blocks'),
@@ -258,7 +283,7 @@ function Edit({
     renderTooltipContent: customTooltipContent
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, data && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, data && Object.keys(data).length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `eo-digirisk-list-risk__list eo-grid eo-grid__col-${blockGrid}`
   }, Object.entries(data).map(([key, value]) => {
     if (!riskRender[key]) {
@@ -283,7 +308,9 @@ function Edit({
     }, value)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "eo-digirisk-list-risk__label"
     }, riskLabel[key]));
-  }))));
+  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "eo-digirisk-list-risk__no-data"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('No risk found', 'eo-blocks'))));
 }
 
 /***/ }),
@@ -429,7 +456,7 @@ module.exports = window["wp"]["i18n"];
   \**************************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/digirisk-list-risk","version":"1.0.0","title":"Digirisk - List Risk","category":"eo-blocks","icon":"smiley","description":"Displays a summary of the different risks of your Dolibarr","example":{},"attributes":{"displayRisk1":{"type":"boolean","default":true},"displayRisk2":{"type":"boolean","default":true},"displayRisk3":{"type":"boolean","default":true},"displayRisk4":{"type":"boolean","default":true},"blockGrid":{"type":"number","default":2}},"supports":{"html":false},"textdomain":"digirisk-list-risk","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/digirisk-list-risk","version":"1.0.0","title":"Digirisk - List Risk","category":"eo-blocks","icon":"smiley","description":"Displays a summary of the different risks of your Dolibarr","example":{},"attributes":{"displayRisk1":{"type":"boolean","default":true},"displayRisk2":{"type":"boolean","default":true},"displayRisk3":{"type":"boolean","default":true},"displayRisk4":{"type":"boolean","default":true},"blockGrid":{"type":"number","default":2}},"supports":{"html":false},"textdomain":"digirisk-list-risk","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

@@ -29,9 +29,23 @@ class Eoblocks_Menu {
 			'eo-blocks',
 			[ $this, 'settings_page_view' ]
 		);
+
+		// Page cachée pour la migration (pas visible dans le menu)
+		add_submenu_page(
+			null, // null = page cachée, pas visible dans le menu
+			__('EO Blocks - Migration', 'eo-blocks'),
+			__('EO Blocks - Migration', 'eo-blocks'),
+			'manage_options',
+			'eo-blocks-migration',
+			[ $this, 'migration_page_view' ]
+		);
 	}
 
 	public function settings_page_view() {
 		include EO_BLOCKS_PATH . '/includes/admin/views/html-admin-page-settings.php';
+	}
+
+	public function migration_page_view() {
+		include EO_BLOCKS_PATH . '/includes/admin/views/html-admin-page-migration.php';
 	}
 }

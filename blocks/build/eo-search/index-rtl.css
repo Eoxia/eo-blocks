@@ -1,0 +1,47 @@
+/*!**************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/eo-search/scss/editor.scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * Styles for the editor view
+ */
+.wp-block-eo-blocks-search {
+  display: block;
+}
+.wp-block-eo-blocks-search .eo-search__container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.wp-block-eo-blocks-search .eo-search__container:hover {
+  opacity: 0.6;
+}
+.wp-block-eo-blocks-search .eo-search__container .eo-search__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+.wp-block-eo-blocks-search .eo-search__container .eo-search__text {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.wp-block-eo-blocks-search .eo-search__panel-divider {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 15px;
+}
+.wp-block-eo-blocks-search .eo-search__panel-divider h3 {
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+.wp-block-eo-blocks-search .eo-search__panel-divider p {
+  color: #666;
+}

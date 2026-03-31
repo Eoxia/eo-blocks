@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "eo-blocks/marquee",
+  "version": "1.0.0",
+  "title": "Marquee",
+  "category": "eo-blocks",
+  "icon": "smiley",
+  "description": "Display marquee block",
+  "example": {},
+  "attributes": {},
+  "supports": {
+    "spacing": {
+      "margin": false,
+      "padding": true,
+      "blockGap": true
+    }
+  },
+  "textdomain": "marquee",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

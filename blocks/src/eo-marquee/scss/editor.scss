@@ -1,0 +1,16 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-eo-blocks-marquee {
+  .eo-marquee__track {
+    display: flex;
+    gap: 2rem; /* ou margin-right dans inner */
+    overflow: hidden;
+  }
+  .eo-marquee__inner {
+    flex-shrink: 0;
+  }
+}

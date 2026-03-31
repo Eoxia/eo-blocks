@@ -2,7 +2,7 @@
 Contributors:      Eoxia
 Tags:              block, gutenberg
 Tested up to:      6.7.1
-Stable tag:        1.1.0
+Stable tag:        1.2.0
 License:           GPL-3.0
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,6 +31,19 @@ EO Blocks offers an extensive range of customizable blocks, making it easier tha
 All development for this plugin is open source and handled via [GitHub](https://github.com/Eoxia/eo-blocks) any issues or pull requests should be posted there.
 
 == Changelog ==
+
+= 1.2.0 =
+* New naming convention for blocks: eo/ becomes eo-blocks/ to comply with the WordPress standard. Migration script added.
+* New block Search: opens a search bar in a popup, with the ability to filter by post type.
+* New block Tabs: organize content in tabbed sections directly in the editor.
+* New block Marquee: display scrolling content with a configurable marquee effect.
+* Add thumbnail pagination option on the Carousel block.
+* Add custom link support on Group blocks.
+* Add custom link support on Cover blocks.
+* Add custom title size option on the Accordion block.
+* Fix rendering issue with shortcodes and external blocks (e.g. Gravity Forms) inside the Tabs block.
+* Fix search results display in the Search block.
+* Remove Dashicons dependency in the Accordion block, replaced by an inline SVG (performance improvement).
 
 = 1.1.0 =
 * New block Carousel.

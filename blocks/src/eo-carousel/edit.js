@@ -43,7 +43,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<Button
 				variant="secondary"
 				onClick={() => wp.data.dispatch('core/block-editor').insertBlock(
-					wp.blocks.createBlock('eo/slide'),
+					wp.blocks.createBlock('eo-blocks/slide'),
 					innerBlocksCount,
 					clientId
 				)}
@@ -122,6 +122,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						label={__('Dots navigation', 'eo-blocks')}
 						checked={attributes.pagination}
 						onChange={(value) => setAttributes({pagination: value})}
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={__('Thumbs navigation', 'eo-blocks')}
+						checked={attributes.thumbs}
+						onChange={(value) => setAttributes({thumbs: value})}
 					/>
 					<ToggleControl
 						__nextHasNoMarginBottom

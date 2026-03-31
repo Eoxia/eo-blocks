@@ -7,5 +7,18 @@
 
 $media__mobile: 599px;
 
-.wp-block-eo-carousel {
+.wp-block-eo-blocks-carousel {
+  .eo-carousel__thumbs-carousel {
+    .wp-block-eo-slide {
+      transition: opacity 0.2s ease-out;
+
+      &:not(.swiper-slide-thumb-active) {
+      opacity: 0.6;
+      }
+      &:hover {
+        opacity: 1;
+        cursor: pointer;
+      }
+    }
+  }
 }

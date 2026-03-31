@@ -6,27 +6,27 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-summary {
+.wp-block-eo-blocks-summary {
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
 }
-.wp-block-eo-summary.is-orientation-horizontal {
+.wp-block-eo-blocks-summary.is-orientation-horizontal {
   flex-direction: row;
 }
-.wp-block-eo-summary.is-orientation-vertical {
+.wp-block-eo-blocks-summary.is-orientation-vertical {
   flex-direction: column;
 }
-.wp-block-eo-summary.is-justification-left {
+.wp-block-eo-blocks-summary.is-justification-left {
   justify-content: flex-start;
 }
-.wp-block-eo-summary.is-justification-center {
+.wp-block-eo-blocks-summary.is-justification-center {
   justify-content: center;
 }
-.wp-block-eo-summary.is-justification-right {
+.wp-block-eo-blocks-summary.is-justification-right {
   justify-content: flex-end;
 }
-.wp-block-eo-summary.is-justification-space-between {
+.wp-block-eo-blocks-summary.is-justification-space-between {
   justify-content: space-between;
 }
 

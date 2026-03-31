@@ -188,7 +188,7 @@ function eoSummaryAddAttributes(settings, name) {
   });
   return settings;
 }
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.registerBlockType', 'eo/summary-custom-attributes', eoSummaryAddAttributes);
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.registerBlockType', 'eo-blocks/summary-custom-attributes', eoSummaryAddAttributes);
 const eoSummaryAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__.createHigherOrderComponent)(Block => {
   return props => {
     const {
@@ -233,7 +233,7 @@ const eoSummaryAddAdvancedControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MOD
     }))));
   };
 }, 'eoSummaryAddAdvancedControls');
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockEdit', 'eo/summary-custom-advanced-control', eoSummaryAddAdvancedControls);
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockEdit', 'eo-blocks/summary-custom-advanced-control', eoSummaryAddAdvancedControls);
 function eoSummaryApplyExtraClass(extraProps, blockType, attributes) {
   if (!allowedBlocks.includes(blockType.name)) {
     return extraProps;
@@ -266,7 +266,7 @@ function eoSummaryApplyExtraClass(extraProps, blockType, attributes) {
   }
   return extraProps;
 }
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.getSaveContent.extraProps', 'eo/summary-applyExtraClass', eoSummaryApplyExtraClass);
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.getSaveContent.extraProps', 'eo-blocks/summary-applyExtraClass', eoSummaryApplyExtraClass);
 String.prototype.cleanup = function () {
   return this.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-");
 };

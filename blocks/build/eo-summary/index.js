@@ -1872,7 +1872,7 @@ module.exports = window["wp"]["primitives"];
   \******************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/summary","version":"1.0.0","title":"Summary","category":"eo-blocks","icon":"smiley","description":"Display Summary block","example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"justification":{"type":"string","default":"left"}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true}},"textdomain":"summary","editorScript":["file:./index.js","file:./hooks.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/summary","version":"1.0.0","title":"Summary","category":"eo-blocks","icon":"smiley","description":"Display Summary block","example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"justification":{"type":"string","default":"left"}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true}},"textdomain":"summary","editorScript":["file:./index.js","file:./hooks.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

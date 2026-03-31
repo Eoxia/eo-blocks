@@ -285,7 +285,7 @@ module.exports = window["wp"]["i18n"];
   \*************************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/slide","version":"1.0.0","title":"Slide","category":"eo-blocks","icon":"smiley","description":"Display Slide of carousel block","parent":["eo/carousel"],"example":{},"attributes":{},"supports":{},"textdomain":"slide","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["file:./style-index.css"],"render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/slide","version":"1.0.0","title":"Slide","category":"eo-blocks","icon":"smiley","description":"Display Slide of carousel block","parent":["eo-blocks/carousel"],"example":{},"attributes":{},"supports":{},"textdomain":"slide","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":["file:./style-index.css"],"render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

@@ -1,0 +1,234 @@
+/**
+ * Styles for the frontend
+ */
+
+.wp-block-eo-blocks-search {
+	display: block;
+
+	.eo-search__container {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		width: fit-content;
+
+		&:hover {
+			opacity: 0.6;
+		}
+
+		.eo-search__icon {
+			width: 20px;
+			height: 20px;
+			flex-shrink: 0;
+			stroke: currentColor;
+			fill: none;
+			stroke-width: 2;
+		}
+
+		.eo-search__text {
+			white-space: nowrap;
+		}
+	}
+
+	.eo-search__modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 9999;
+		background: rgba(0, 0, 0, 0.5);
+
+		.eo-search__modal-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 9999;
+		}
+
+		.eo-search__modal-content {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			background: white;
+			z-index: 10000;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			animation: slideDown 0.3s ease;
+		}
+
+		.eo-search__modal-header {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 16px 24px;
+			border-bottom: 1px solid #e0e0e0;
+
+			.eo-search__input {
+				flex: 1;
+				padding: 12px 16px;
+				border: 2px solid #e0e0e0;
+				border-radius: 4px;
+				font-size: 16px;
+				outline: none;
+				transition: border-color 0.3s ease;
+
+				&:focus {
+					border-color: var(--wp--preset--color--primary) #0066ff;
+				}
+
+					&::placeholder {
+					color: #999;
+				}
+			}
+
+			.eo-search__close {
+				background: none;
+				border: none;
+				cursor: pointer;
+				padding: 8px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #666;
+				transition: color 0.3s ease;
+
+				&:hover {
+					color: #333;
+				}
+
+				svg {
+					width: 24px;
+					height: 24px;
+					stroke: currentColor;
+					fill: none;
+					stroke-width: 2;
+				}
+			}
+		}
+
+		.eo-search__results {
+			padding: 0 24px;
+			max-height: calc(100vh - 120px);
+			overflow-y: auto;
+
+			.eo-search__loading,
+			.eo-search__no-results,
+			.eo-search__error {
+				text-align: center;
+				color: #666;
+				padding: 24px;
+				font-size: 14px;
+			}
+
+			.eo-search__error {
+				color: #d32f2f;
+			}
+
+			.eo-search__results-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				display: grid;
+				gap: 16px;
+				margin: 24px 0;
+
+				.eo-search__result-item {
+					border: 1px solid #e0e0e0;
+					border-radius: 4px;
+					overflow: hidden;
+					transition: all 0.3s ease;
+
+					&:hover {
+						box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+						border-color: var(--wp--preset--color--primary) #0066ff;
+					}
+
+					a {
+						display: block;
+						padding: 10px;
+						text-decoration: none;
+						color: inherit;
+						transition: background-color 0.3s ease;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						gap: 10px;
+
+						&:hover {
+							background-color: #f5f5f5;
+						}
+
+						.eo-search__result-thumbnail {
+							display: block;
+							width: 50px;
+							height: 50px;
+							object-fit: cover;
+							border-radius: 6px;
+						}
+
+						.eo-search__result-title {
+							margin: 0;
+							font-size: 16px;
+							font-weight: 600;
+							color: var(--wp--preset--color--primary, #0066ff);
+						}
+
+						.eo-search__result-excerpt {
+							margin: 0;
+							font-size: 14px;
+							color: #666;
+							line-height: 1.5;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							-webkit-line-clamp: 1;
+							-webkit-box-orient: vertical;
+						}
+					}
+				}
+			}
+
+			.eo-search__view-all {
+				padding: 16px 0;
+				text-align: center;
+				border-top: 1px solid #e0e0e0;
+				margin-top: 16px;
+
+				.eo-search__view-all-link {
+					display: inline-block;
+					color: var(--wp--preset--color--primary, #0066ff);
+					text-decoration: none;
+					font-weight: 600;
+					font-size: 14px;
+					padding: 8px 16px;
+					border: 1px solid var(--wp--preset--color--primary, #0066ff);;
+					border-radius: 4px;
+					transition: all 0.3s ease;
+
+					&:hover {
+						background-color: var(--wp--preset--color--primary, #0066ff);
+						color: white;
+					}
+				}
+			}
+		}
+	}
+}
+
+@keyframes slideDown {
+	from {
+		transform: translateY(-100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+body.admin-bar .wp-block-eo-blocks-search .eo-search__modal .eo-search__modal-content {
+	top: 32px !important;
+}

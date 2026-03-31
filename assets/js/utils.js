@@ -26,9 +26,10 @@ const cleanUrl = (url) => {
  *
  * @param route
  * @param params
+ * @param queryParams Optional query parameters object or string (e.g., 'entity=1' or {entity: 1})
  * @returns {{data: unknown, error: unknown}}
  */
-export const digiriskApiGet = (route, params) => {
+export const digiriskApiGet = (route, params, queryParams = '') => {
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 
@@ -44,6 +45,17 @@ export const digiriskApiGet = (route, params) => {
 			}
 
 			let digiriskUrlApi = `${baseUrlApi}/api/index.php/${route}?DOLAPIKEY=${apiKey}`;
+
+			if (queryParams) {
+				if (typeof queryParams === 'object') {
+					const queryString = Object.keys(queryParams)
+						.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+						.join('&');
+					digiriskUrlApi += `&${queryString}`;
+				} else {
+					digiriskUrlApi += `&${queryParams}`;
+				}
+			}
 			digiriskUrlApi = cleanUrl(digiriskUrlApi);
 
 			try {
@@ -73,7 +85,23 @@ export const digiriskApiGet = (route, params) => {
 			}
 		};
 		fetchData();
-	}, [route, params]);
+	}, [route, params, queryParams]);
 
 	return { data, error };
 }
+
+
+export const findBlockRecursively = ( blocks, blockName ) => {
+	for ( const block of blocks ) {
+		if ( block.name === blockName ) {
+			return block;
+		}
+		if ( block.innerBlocks && block.innerBlocks.length ) {
+			const found = findBlockRecursively( block.innerBlocks, blockName );
+			if ( found ) {
+				return found;
+			}
+		}
+	}
+	return null;
+};

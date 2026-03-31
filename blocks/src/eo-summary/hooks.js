@@ -34,7 +34,7 @@ function eoSummaryAddAttributes( settings, name ) {
 
 addFilter(
     'blocks.registerBlockType',
-    'eo/summary-custom-attributes',
+    'eo-blocks/summary-custom-attributes',
     eoSummaryAddAttributes
 );
 
@@ -86,7 +86,7 @@ const eoSummaryAddAdvancedControls = createHigherOrderComponent( ( Block ) => {
 
 addFilter(
     'editor.BlockEdit',
-    'eo/summary-custom-advanced-control',
+    'eo-blocks/summary-custom-advanced-control',
     eoSummaryAddAdvancedControls
 );
 
@@ -130,7 +130,7 @@ function eoSummaryApplyExtraClass( extraProps, blockType, attributes ) {
 
 addFilter(
     'blocks.getSaveContent.extraProps',
-    'eo/summary-applyExtraClass',
+    'eo-blocks/summary-applyExtraClass',
     eoSummaryApplyExtraClass
 );
 

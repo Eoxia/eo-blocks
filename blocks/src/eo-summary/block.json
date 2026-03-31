@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "eo/summary",
+	"name": "eo-blocks/summary",
 	"version": "1.0.0",
 	"title": "Summary",
 	"category": "eo-blocks",

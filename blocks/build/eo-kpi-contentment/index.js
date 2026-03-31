@@ -377,7 +377,7 @@ module.exports = window["wp"]["i18n"];
   \**************************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo/kpi-contentment","version":"1.0.0","title":"KPI Contentment","category":"eo-blocks","icon":"smiley","description":"Display satisfaction KPI","example":{},"attributes":{"blockLabel":{"type":"string","default":"Contentment rate"},"contentmentLabel":{"type":"number","default":50}},"supports":{"html":false},"textdomain":"kpi-contentment","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/kpi-contentment","version":"1.0.0","title":"KPI Contentment","category":"eo-blocks","icon":"smiley","description":"Display satisfaction KPI","example":{},"attributes":{"blockLabel":{"type":"string","default":"Contentment rate"},"contentmentLabel":{"type":"number","default":50}},"supports":{"html":false},"textdomain":"kpi-contentment","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 
