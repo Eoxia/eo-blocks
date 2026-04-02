@@ -108,4 +108,16 @@
   }
 }
 
+html, body {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --eo-blocks--summary--scroll-offset: 100px;
+}
+
+.eo-summary__control {
+  scroll-margin-top: var(--eo-blocks--summary--scroll-offset);
+}
+
 /*# sourceMappingURL=style-index.css.map*/
