@@ -7,28 +7,28 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-eo-blocks-summary {
+.wp-block-eo-blocks-summary .eo-summary__container {
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
   color: #000;
 }
-.wp-block-eo-blocks-summary.is-orientation-horizontal {
+.wp-block-eo-blocks-summary.is-orientation-horizontal .eo-summary__container {
   flex-direction: row;
 }
-.wp-block-eo-blocks-summary.is-orientation-vertical {
+.wp-block-eo-blocks-summary.is-orientation-vertical .eo-summary__container {
   flex-direction: column;
 }
-.wp-block-eo-blocks-summary.is-justification-left {
+.wp-block-eo-blocks-summary.is-justification-left .eo-summary__container {
   justify-content: flex-start;
 }
-.wp-block-eo-blocks-summary.is-justification-center {
+.wp-block-eo-blocks-summary.is-justification-center .eo-summary__container {
   justify-content: center;
 }
-.wp-block-eo-blocks-summary.is-justification-right {
+.wp-block-eo-blocks-summary.is-justification-right .eo-summary__container {
   justify-content: flex-end;
 }
-.wp-block-eo-blocks-summary.is-justification-space-between {
+.wp-block-eo-blocks-summary.is-justification-space-between .eo-summary__container {
   justify-content: space-between;
 }
 .wp-block-eo-blocks-summary:not(.has-text-color) .eo-summary__item {
@@ -43,6 +43,69 @@
 }
 .wp-block-eo-blocks-summary .eo-summary__item.active, .wp-block-eo-blocks-summary .eo-summary__item:hover {
   opacity: 1;
+}
+
+/**
+ * Summary version mobile
+ */
+.wp-block-eo-blocks-summary .eo-summary__menu {
+  display: none;
+  background: #fff;
+  border-radius: 8px;
+  transition: opacity 0.2s ease-out;
+}
+.wp-block-eo-blocks-summary .eo-summary__menu:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.wp-block-eo-blocks-summary .eo-summary__menu .eo-summary__menu-icon {
+  width: 100%;
+  max-width: 16px;
+  margin: 0 0.5em 0 0;
+}
+.wp-block-eo-blocks-summary .eo-summary__menu-close {
+  display: none;
+  position: absolute;
+  top: 2em;
+  right: 2em;
+  width: 100%;
+  max-width: 20px;
+  transition: opacity 0.2s ease-out;
+}
+.wp-block-eo-blocks-summary .eo-summary__menu-close:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+@media (max-width: 599px) {
+  .wp-block-eo-blocks-summary:not(.is-display-mobile) {
+    display: none;
+  }
+}
+@media (max-width: 599px) {
+  .wp-block-eo-blocks-summary.is-display-mobile.is-style-mobile-menu .eo-summary__menu {
+    display: flex;
+  }
+  .wp-block-eo-blocks-summary.is-display-mobile.is-style-mobile-menu .eo-summary__container {
+    display: none;
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 100001;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    padding: 4em;
+    flex-direction: column;
+  }
+  .wp-block-eo-blocks-summary.is-display-mobile.is-style-mobile-menu.is-active-mobile-menu .eo-summary__container {
+    display: flex;
+  }
+  .wp-block-eo-blocks-summary.is-display-mobile.is-style-mobile-menu.is-active-mobile-menu .eo-summary__menu-close {
+    display: block;
+  }
 }
 
 /*# sourceMappingURL=style-index.css.map*/
