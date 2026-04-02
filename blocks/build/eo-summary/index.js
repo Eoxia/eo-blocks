@@ -264,6 +264,7 @@ function Edit({
     });
   }
   const {
+    labelMenuMobile,
     justification,
     orientation
   } = attributes;
@@ -313,7 +314,36 @@ function Edit({
     value: "space-between",
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Space between blocks', 'eo-blocks')
-  })))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile settings', 'eo-blocks')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show in mobile', 'eo-blocks'),
+    checked: attributes.displayMobile,
+    onChange: value => setAttributes({
+      displayMobile: value
+    })
+  }), attributes.displayMobile && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToggleGroupControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Style in mobile', 'eo-blocks'),
+    isBlock: true,
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true,
+    value: attributes.styleMobile,
+    onChange: value => setAttributes({
+      styleMobile: value
+    })
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToggleGroupControlOption, {
+    value: "standard",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Standard', 'eo-blocks')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToggleGroupControlOption, {
+    value: "menu",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Menu', 'eo-blocks')
+  })), attributes.styleMobile === 'menu' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Menu label', 'eo-blocks'),
+    value: labelMenuMobile || '',
+    onChange: value => setAttributes({
+      labelMenuMobile: value
+    })
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, headers.map((header, index) => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1872,7 +1902,7 @@ module.exports = window["wp"]["primitives"];
   \******************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/summary","version":"1.0.0","title":"Summary","category":"eo-blocks","icon":"smiley","description":"Display Summary block","example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"justification":{"type":"string","default":"left"}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true}},"textdomain":"summary","editorScript":["file:./index.js","file:./hooks.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"eo-blocks/summary","version":"1.0.0","title":"Summary","category":"eo-blocks","icon":"smiley","description":"Display Summary block","example":{},"attributes":{"orientation":{"type":"string","default":"horizontal"},"justification":{"type":"string","default":"left"},"displayMobile":{"type":"boolean","default":true},"styleMobile":{"type":"string","default":"standard"},"labelMenuMobile":{"type":"string","default":"View summary"}},"supports":{"color":{"background":"true","color":"true"},"spacing":{"margin":false,"padding":true}},"textdomain":"summary","editorScript":["file:./index.js","file:./hooks.js"],"editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 

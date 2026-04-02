@@ -13,7 +13,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { useSelect  } from '@wordpress/data';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { Flex, FlexBlock, FlexItem, PanelBody } from '@wordpress/components';
+import { Flex, FlexBlock, FlexItem, ToggleControl, TextControl, PanelBody } from '@wordpress/components';
 import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -61,7 +61,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		});
 	}
 
-	const { justification, orientation } = attributes;
+	const { labelMenuMobile, justification, orientation } = attributes;
 
 	const className = [
 		justification ? `is-justification-${justification}` : '',
@@ -132,6 +132,36 @@ export default function Edit( { attributes, setAttributes } ) {
 					</Flex>
 				</PanelBody>
 
+				<PanelBody title={ __( 'Mobile settings', 'eo-blocks' ) }>
+					<ToggleControl
+						label={ __( 'Show in mobile', 'eo-blocks' ) }
+						checked={ attributes.displayMobile }
+						onChange={ ( value ) => setAttributes( { displayMobile: value } ) }
+					/>
+					{ attributes.displayMobile &&
+						<>
+							<ToggleGroupControl
+								label={ __( 'Style in mobile', 'eo-blocks' ) }
+								isBlock
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								value={ attributes.styleMobile }
+								onChange={ ( value ) => setAttributes( { styleMobile: value } ) }
+							>
+								<ToggleGroupControlOption value="standard" label={ __( 'Standard', 'eo-blocks' ) } />
+								<ToggleGroupControlOption value="menu" label={ __( 'Menu', 'eo-blocks' ) } />
+							</ToggleGroupControl>
+							
+							{ attributes.styleMobile === 'menu' && (
+								<TextControl
+									label={ __( 'Menu label', 'eo-blocks' ) }
+									value={ labelMenuMobile || '' }
+									onChange={ ( value ) => setAttributes( { labelMenuMobile: value } ) }
+								/>
+							) }
+						</>
+					}
+				</PanelBody>
 			</InspectorControls>
 
 			<div {...blockProps}>
