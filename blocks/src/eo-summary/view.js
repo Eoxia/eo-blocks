@@ -12,7 +12,7 @@
 	 */
 	var initializeBlock = function( $block ) {
 		$( '.eo-summary__control' ).each( function() {
-			$( $block ).find( '.eo-summary__container' ).append( '<a href="#' +  $( this ).attr( 'id' ) + '" class="eo-summary__item ' + $( this ).attr( 'id' ) + '">' + $( this ).attr( 'summary-label' ) + '</a>' );
+			$( $block ).find( '.eo-summary__container' ).append( '<a href="#' +  $( this ).attr( 'id' ) + '" class="eo-summary__item ' + $( this ).attr( 'id' ) + '"><span class="eo-summary__item-label">' + $( this ).attr( 'summary-label' ) + '</span></a>' );
 		});
 
 		// Smooth Scroll.
