@@ -1,0 +1,209 @@
+/* CSS Styles for EO Maps Admin Interface */
+
+.eo-maps-admin-wrapper {
+    margin-right: 20px;
+}
+
+.eo-maps-tabs button {
+    outline: none;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+    color: #666;
+}
+
+.eo-maps-tabs button:hover {
+    background-color: #e9e9e9;
+    color: #000;
+}
+
+.eo-maps-tabs button.active {
+    background-color: #fff;
+    border-bottom: 3px solid #2271b1;
+    color: #2271b1;
+}
+
+.eo-maps-tab-content {
+    display: none;
+    background: #fff;
+}
+
+.eo-maps-tab-content.active {
+    display: block;
+}
+
+.eo-map-form-group {
+    margin-bottom: 15px;
+}
+
+.eo-map-form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+    color: #23282d;
+}
+
+.eo-map-form-group input[type="text"],
+.eo-map-form-group input[type="url"],
+.eo-map-form-group select,
+.eo-map-form-group textarea {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    box-shadow: 0 0 0 transparent;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.eo-map-form-group input:focus,
+.eo-map-form-group select:focus,
+.eo-map-form-group textarea:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: 2px solid transparent;
+}
+
+/* Markers List styling */
+.eo-marker-item {
+    background: #f6f7f7;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.eo-marker-item:hover {
+    border-color: #8c8f94;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.eo-marker-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.eo-marker-item-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin: 0 0 2px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.eo-marker-item-coords {
+    font-size: 10px;
+    color: #646970;
+    margin: 0;
+}
+
+.eo-marker-item-actions {
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.eo-marker-item-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #646970;
+    transition: color 0.15s ease;
+}
+
+.eo-marker-item-actions button:hover {
+    color: #2271b1;
+}
+
+.eo-marker-item-actions button.eo-marker-delete-btn:hover {
+    color: #b32d2e;
+}
+
+/* Gallery preview in form */
+.eo-gallery-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f0f0f1;
+}
+
+.eo-gallery-image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.eo-gallery-image-delete {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(179, 45, 46, 0.9);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+}
+
+.eo-gallery-image-delete:hover {
+    background: #b32d2e;
+}
+
+/* Actions in Table list */
+.eo-maps-actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Custom leaflet marker styling */
+.leaflet-popup-content-wrapper {
+    border-radius: 6px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.2);
+}
+
+.leaflet-popup-content h3 {
+    margin: 0 0 6px 0 !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
+.leaflet-popup-content p {
+    margin: 0 0 10px 0 !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    color: #555;
+}
+
+.eo-map-popup-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.eo-map-popup-gallery img {
+    width: 100%;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+}

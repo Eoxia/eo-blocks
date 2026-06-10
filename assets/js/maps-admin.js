@@ -1,0 +1,736 @@
+jQuery(document).ready(function($) {
+
+    // Helper: Escape HTML
+    function escapeHtml(string) {
+        var entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return String(string).replace(/[&<>"'`=\/]/g, function(s) {
+            return entityMap[s];
+        });
+    }
+
+    // ==========================================
+    // STATE 1: MAP LIST PAGE
+    // ==========================================
+    $('.eo-delete-map-btn').on('click', function(e) {
+        e.preventDefault();
+        var mapId = $(this).data('id');
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette carte ? Cette action est irréversible.')) {
+            return;
+        }
+
+        var $btn = $(this);
+        $btn.text('Suppression...').prop('disabled', true);
+
+        $.post(eoMapsAdmin.ajaxUrl, {
+            action: 'eo_maps_delete_map',
+            map_id: mapId,
+            nonce: eoMapsAdmin.nonce
+        }, function(response) {
+            if (response.success) {
+                $btn.closest('tr').fadeOut(function() {
+                    $(this).remove();
+                    if ($('table.posts tbody tr').length === 0) {
+                        location.reload();
+                    }
+                });
+            } else {
+                alert(response.data.message || 'Une erreur est survenue.');
+                $btn.text('Supprimer').prop('disabled', false);
+            }
+        }).fail(function() {
+            alert('Une erreur serveur est survenue.');
+            $btn.text('Supprimer').prop('disabled', false);
+        });
+    });
+
+    // ==========================================
+    // STATE 2: MAP EDITOR PAGE
+    // ==========================================
+    if (typeof window.eoMapData === 'undefined' || window.eoMapData === null) {
+        return; // Not on the editor page
+    }
+
+    var mapId = parseInt(window.eoMapData.id) || 0;
+    var mapSettings = window.eoMapData.settings || {};
+    var markersList = window.eoMapData.markers || [];
+    
+    var leafletMap = null;
+    var currentTileLayer = null;
+    var leafletMarkersMap = {}; // id -> L.marker
+    var currentGallery = []; // Holds URLs of current editing marker gallery
+
+    // Save button state manager
+    function setSaveButtonState(state) {
+        var $btn = $('#eo-save-map-btn');
+        if (state === 'active') {
+            $btn.text('Enregistrer la carte')
+                .css({
+                    'background-color': '#2271b1',
+                    'border-color': '#2271b1',
+                    'color': '#fff',
+                    'cursor': 'pointer'
+                })
+                .prop('disabled', false);
+        } else if (state === 'saving') {
+            $btn.text('Enregistrement en cours...')
+                .css({
+                    'background-color': '#46b450',
+                    'border-color': '#46b450',
+                    'color': '#fff',
+                    'cursor': 'not-allowed'
+                })
+                .prop('disabled', true);
+        } else if (state === 'saved') {
+            $btn.text('Carte enregistrée √')
+                .css({
+                    'background-color': '#c3c4c7',
+                    'border-color': '#c3c4c7',
+                    'color': '#787c82',
+                    'cursor': 'not-allowed'
+                })
+                .prop('disabled', true);
+        }
+    }
+
+    var hasUnsavedChanges = false;
+
+    function markChangesAsUnsaved() {
+        hasUnsavedChanges = true;
+        setSaveButtonState('active');
+    }
+
+    // Save map logic (AJAX helper)
+    function saveMap(onSuccess) {
+        var title = $('#eo-map-title-input').val().trim();
+        if (!title) {
+            title = 'Ma carte';
+            $('#eo-map-title-input').val(title);
+        }
+
+        var settings = {
+            width: $('#eo-map-width').val().trim() || '100%',
+            height: $('#eo-map-height').val().trim() || '600px',
+            zoom: parseInt($('#eo-map-zoom').val()) || 12,
+            centerLat: parseFloat($('#eo-map-center-lat').val()) || 43.6107,
+            centerLng: parseFloat($('#eo-map-center-lng').val()) || 3.8767,
+            tileStyle: $('#eo-map-style').val() || 'osm'
+        };
+
+        setSaveButtonState('saving');
+
+        $.post(eoMapsAdmin.ajaxUrl, {
+            action: 'eo_maps_save_map',
+            map_id: mapId,
+            title: title,
+            settings: JSON.stringify(settings),
+            markers: JSON.stringify(markersList),
+            nonce: eoMapsAdmin.nonce
+        }, function(response) {
+            if (response.success) {
+                hasUnsavedChanges = false; // Reset unsaved changes flag
+                if (mapId === 0) {
+                    window.location.href = '?page=eo-blocks-maps&action=edit&map_id=' + response.data.map_id;
+                } else {
+                    setSaveButtonState('saved');
+                    if (typeof onSuccess === 'function') {
+                        onSuccess();
+                    }
+                }
+            } else {
+                alert(response.data.message || 'Une erreur est survenue lors de la sauvegarde.');
+                setSaveButtonState('active');
+            }
+        }).fail(function() {
+            alert('Une erreur réseau est survenue.');
+            setSaveButtonState('active');
+        });
+    }
+
+    // Prevent leaving with unsaved changes
+    $(window).on('beforeunload', function(e) {
+        if (hasUnsavedChanges) {
+            var message = 'Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter cette page ?';
+            e.returnValue = message;
+            return message;
+        }
+    });
+
+    // Default icon config
+    var defaultIcon = L.icon({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34]
+    });
+
+    // 1. Initialize Tabs
+    $('.eo-maps-tab-link').on('click', function() {
+        $('.eo-maps-tab-link').removeClass('active');
+        $(this).addClass('active');
+
+        var targetTab = $(this).data('tab');
+        $('.eo-maps-tab-content').removeClass('active').hide();
+        $('#' + targetTab).addClass('active').show();
+    });
+
+    // 2. Initialize Leaflet Map
+    var centerLat = parseFloat(mapSettings.centerLat) || 43.6107;
+    var centerLng = parseFloat(mapSettings.centerLng) || 3.8767;
+    var zoomLevel = parseInt(mapSettings.zoom) || 12;
+
+    leafletMap = L.map('eo-maps-leaflet-admin').setView([centerLat, centerLng], zoomLevel);
+
+    // Map style provider layers
+    var tileProviders = {
+        'osm': 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'carto-light': 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        'carto-dark': 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        'opentopo': 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+    };
+
+    function setTileLayer(styleKey) {
+        if (currentTileLayer) {
+            leafletMap.removeLayer(currentTileLayer);
+        }
+        var url = tileProviders[styleKey] || tileProviders['osm'];
+        var attrib = '© OpenStreetMap contributors';
+        if (styleKey.indexOf('carto') !== -1) {
+            attrib = '© OpenStreetMap contributors, © CartoDB';
+        } else if (styleKey === 'opentopo') {
+            attrib = '© OpenTopoMap contributors';
+        }
+        currentTileLayer = L.tileLayer(url, {
+            maxZoom: 19,
+            attribution: attrib
+        }).addTo(leafletMap);
+    }
+
+    setTileLayer(mapSettings.tileStyle || 'osm');
+
+    // Flag to avoid triggering unsaved changes on initial map load
+    var isMapInitialized = false;
+
+    // Handle map style dropdown change
+    $('#eo-map-style').on('change', function() {
+        setTileLayer($(this).val());
+        markChangesAsUnsaved();
+    });
+
+    // Sync viewport coordinates on map move/zoom
+    leafletMap.on('moveend zoomend', function() {
+        var center = leafletMap.getCenter();
+        var zoom = leafletMap.getZoom();
+        
+        $('#eo-map-center-lat').val(center.lat.toFixed(6));
+        $('#eo-map-center-lng').val(center.lng.toFixed(6));
+        $('#eo-map-zoom').val(zoom);
+
+        if (isMapInitialized) {
+            markChangesAsUnsaved();
+        }
+    });
+
+    // Monitor input changes
+    $('#eo-map-title-input, #eo-map-width, #eo-map-height').on('input', function() {
+        markChangesAsUnsaved();
+    });
+
+    // Add marker helper
+    function addMarkerToLeafletMap(markerData) {
+        var customIcon = defaultIcon;
+        if (markerData.icon) {
+            customIcon = L.icon({
+                iconUrl: markerData.icon,
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+        }
+
+        var marker = L.marker([markerData.lat, markerData.lng], {
+            icon: customIcon,
+            draggable: true
+        }).addTo(leafletMap);
+
+        // Build popup content
+        var popupHtml = '<div style="min-width: 150px;">';
+        popupHtml += '<strong>' + escapeHtml(markerData.title || 'Marqueur') + '</strong>';
+        if (markerData.description) {
+            popupHtml += '<p style="margin: 5px 0 0 0; font-size:12px; color:#555;">' + escapeHtml(markerData.description) + '</p>';
+        }
+        if (markerData.phone) {
+            popupHtml += '<p style="margin: 5px 0 0 0; font-size:11px; color:#555;"><span class="dashicons dashicons-phone" style="font-size:12px; width:auto; height:auto; vertical-align:middle; margin-right:4px;"></span><a href="tel:' + escapeHtml(markerData.phone) + '">' + escapeHtml(markerData.phone) + '</a></p>';
+        }
+        if (markerData.url) {
+            popupHtml += '<p style="margin: 5px 0 0 0; font-size:11px;"><a href="' + esc_url(markerData.url) + '" target="_blank">En savoir plus</a></p>';
+        }
+        if (markerData.gallery && markerData.gallery.length > 0) {
+            popupHtml += '<div class="eo-map-popup-gallery" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top:8px;">';
+            markerData.gallery.forEach(function(imgUrl) {
+                popupHtml += '<img src="' + esc_url(imgUrl) + '" style="width:100%; height:40px; object-fit:cover; border-radius:3px;" />';
+            });
+            popupHtml += '</div>';
+        }
+        popupHtml += '<div style="margin-top: 8px; border-top:1px solid #eee; padding-top:5px; text-align:right;">';
+        popupHtml += '<button type="button" class="eo-popup-edit-btn" data-id="' + markerData.id + '" style="background:none; border:none; cursor:pointer; color:#2271b1; font-size:11px; padding:0 5px;">Modifier</button>';
+        popupHtml += '<button type="button" class="eo-popup-delete-btn" data-id="' + markerData.id + '" style="background:none; border:none; cursor:pointer; color:#b32d2e; font-size:11px; padding:0 5px;">Supprimer</button>';
+        popupHtml += '</div>';
+        popupHtml += '</div>';
+
+        marker.bindPopup(popupHtml);
+
+        // Popup buttons click actions
+        marker.on('popupopen', function() {
+            $('.eo-popup-edit-btn').off('click').on('click', function() {
+                var id = $(this).data('id');
+                editMarkerForm(id);
+                leafletMap.closePopup();
+            });
+            $('.eo-popup-delete-btn').off('click').on('click', function() {
+                var id = $(this).data('id');
+                if (confirm('Supprimer ce marqueur ?')) {
+                    deleteMarker(id);
+                }
+                leafletMap.closePopup();
+            });
+        });
+
+        // Sync coordinates when dragging the marker
+        marker.on('dragend', function(e) {
+            var latlng = e.target.getLatLng();
+            markerData.lat = latlng.lat;
+            markerData.lng = latlng.lng;
+            updateMarkersListUI();
+            saveMap();
+
+            // If this marker is currently loaded in the editing form, update fields
+            if ($('#eo-marker-form-id').val() === markerData.id) {
+                $('#eo-marker-lat').val(latlng.lat.toFixed(6));
+                $('#eo-marker-lng').val(latlng.lng.toFixed(6));
+            }
+        });
+
+        leafletMarkersMap[markerData.id] = marker;
+    }
+
+    // Helper: Esc URL
+    function esc_url(url) {
+        return escapeHtml(url);
+    }
+
+    // Render all markers onto the map
+    function renderMarkersOnMap() {
+        // Clear old markers from map
+        Object.keys(leafletMarkersMap).forEach(function(id) {
+            leafletMap.removeLayer(leafletMarkersMap[id]);
+        });
+        leafletMarkersMap = {};
+
+        // Add each marker
+        markersList.forEach(function(markerData) {
+            addMarkerToLeafletMap(markerData);
+        });
+    }
+
+    // Initialize markers render
+    renderMarkersOnMap();
+
+    var tempMarker = null;
+
+    function setTempMarker(lat, lng) {
+        if (tempMarker) {
+            tempMarker.setLatLng([lat, lng]);
+        } else {
+            tempMarker = L.marker([lat, lng], {
+                icon: defaultIcon,
+                draggable: true
+            }).addTo(leafletMap);
+
+            tempMarker.on('dragend', function(e) {
+                var latlng = e.target.getLatLng();
+                $('#eo-marker-lat').val(latlng.lat.toFixed(6));
+                $('#eo-marker-lng').val(latlng.lng.toFixed(6));
+            });
+        }
+    }
+
+    function removeTempMarker() {
+        if (tempMarker) {
+            leafletMap.removeLayer(tempMarker);
+            tempMarker = null;
+        }
+    }
+
+    // 3. Click Map to place pin
+    leafletMap.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // If form section is not visible, trigger Add Marker mode
+        if ($('#eo-marker-form-section').is(':hidden')) {
+            // Trigger tab markers if not active
+            $('.eo-maps-tab-link[data-tab="tab-markers"]').trigger('click');
+            $('#eo-add-marker-trigger').trigger('click');
+        }
+
+        var editId = $('#eo-marker-form-id').val();
+        if (editId) {
+            var existingMarker = leafletMarkersMap[editId];
+            if (existingMarker) {
+                existingMarker.setLatLng([lat, lng]);
+            }
+        } else {
+            setTempMarker(lat, lng);
+        }
+
+        // Fill lat/lng in the form
+        $('#eo-marker-lat').val(lat.toFixed(6));
+        $('#eo-marker-lng').val(lng.toFixed(6));
+        $('#eo-marker-address-search').val('');
+    });
+
+    // 4. Update the Sidebar Markers List UI
+    function updateMarkersListUI() {
+        var $container = $('#eo-markers-list-container');
+        $container.empty();
+
+        if (markersList.length === 0) {
+            $container.html('<p style="color:#666; font-style:italic; text-align:center; padding:10px 0;">Aucun marqueur créé pour le moment.</p>');
+            return;
+        }
+
+        markersList.forEach(function(marker) {
+            var $item = $('<div class="eo-marker-item" data-id="' + marker.id + '">' +
+                '<div class="eo-marker-item-info">' +
+                    '<h4 class="eo-marker-item-title">' + escapeHtml(marker.title || 'Sans titre') + '</h4>' +
+                    '<p class="eo-marker-item-coords">' + marker.lat.toFixed(4) + ', ' + marker.lng.toFixed(4) + '</p>' +
+                '</div>' +
+                '<div class="eo-marker-item-actions">' +
+                    '<button type="button" class="eo-marker-center-btn" title="Centrer la carte"><span class="dashicons dashicons-location"></span></button>' +
+                    '<button type="button" class="eo-marker-edit-btn" title="Modifier"><span class="dashicons dashicons-edit"></span></button>' +
+                    '<button type="button" class="eo-marker-delete-btn" title="Supprimer"><span class="dashicons dashicons-trash"></span></button>' +
+                '</div>' +
+            '</div>');
+
+            // Hook item actions
+            $item.find('.eo-marker-center-btn').on('click', function() {
+                leafletMap.flyTo([marker.lat, marker.lng], 15);
+                leafletMarkersMap[marker.id].openPopup();
+            });
+
+            $item.find('.eo-marker-edit-btn').on('click', function() {
+                editMarkerForm(marker.id);
+            });
+
+            $item.find('.eo-marker-delete-btn').on('click', function() {
+                if (confirm('Supprimer ce marqueur ?')) {
+                    deleteMarker(marker.id);
+                }
+            });
+
+            $container.append($item);
+        });
+    }
+
+    updateMarkersListUI();
+
+    // 5. Marker CRUD & Form Operations
+    $('#eo-add-marker-trigger').on('click', function() {
+        // Clear form
+        $('#eo-marker-form-title').text('Créer un marqueur');
+        $('#eo-marker-form-id').val('');
+        $('#eo-marker-lat').val('');
+        $('#eo-marker-lng').val('');
+        $('#eo-marker-address-search').val('');
+        $('#eo-marker-title').val('');
+        $('#eo-marker-description').val('');
+        $('#eo-marker-url').val('');
+        $('#eo-marker-phone').val('');
+        $('#eo-marker-category').val('');
+        $('#eo-marker-icon-url').val('');
+        $('#eo-marker-icon-preview').html('<span class="dashicons dashicons-image-alt" style="font-size: 20px; width: auto; height: auto; color: #bbb;"></span>');
+        
+        currentGallery = [];
+        renderGalleryPreview();
+
+        // Switch panel views
+        $('#eo-markers-list-section').hide();
+        $('#eo-marker-form-section').fadeIn();
+    });
+
+    $('#eo-cancel-marker-btn').on('click', function() {
+        removeTempMarker();
+        $('#eo-marker-form-section').hide();
+        $('#eo-markers-list-section').fadeIn();
+    });
+
+    function editMarkerForm(id) {
+        var marker = markersList.find(function(m) { return m.id === id; });
+        if (!marker) return;
+
+        // Trigger Tab Markers
+        $('.eo-maps-tab-link[data-tab="tab-markers"]').trigger('click');
+
+        // Populate Form
+        $('#eo-marker-form-title').text('Modifier le marqueur');
+        $('#eo-marker-form-id').val(marker.id);
+        $('#eo-marker-lat').val(marker.lat.toFixed(6));
+        $('#eo-marker-lng').val(marker.lng.toFixed(6));
+        $('#eo-marker-address-search').val('');
+        $('#eo-marker-title').val(marker.title);
+        $('#eo-marker-description').val(marker.description);
+        $('#eo-marker-url').val(marker.url);
+        $('#eo-marker-phone').val(marker.phone || '');
+        $('#eo-marker-category').val(marker.category);
+        
+        if (marker.icon) {
+            $('#eo-marker-icon-url').val(marker.icon);
+            $('#eo-marker-icon-preview').html('<img src="' + marker.icon + '" style="max-width:100%; max-height:100%; object-fit:contain;" />');
+        } else {
+            $('#eo-marker-icon-url').val('');
+            $('#eo-marker-icon-preview').html('<span class="dashicons dashicons-image-alt" style="font-size: 20px; width: auto; height: auto; color: #bbb;"></span>');
+        }
+
+        currentGallery = marker.gallery ? [...marker.gallery] : [];
+        renderGalleryPreview();
+
+        // Switch panels
+        $('#eo-markers-list-section').hide();
+        $('#eo-marker-form-section').fadeIn();
+
+        // Center map on marker
+        leafletMap.panTo([marker.lat, marker.lng]);
+    }
+
+    function deleteMarker(id) {
+        markersList = markersList.filter(function(m) { return m.id !== id; });
+        if (leafletMarkersMap[id]) {
+            leafletMap.removeLayer(leafletMarkersMap[id]);
+            delete leafletMarkersMap[id];
+        }
+        updateMarkersListUI();
+        saveMap();
+    }
+
+    // Address Search (Nominatim Geocoding API)
+    function performAddressSearch() {
+        var query = $('#eo-marker-address-search').val().trim();
+        if (!query) return;
+
+        var $btn = $('#eo-marker-address-search-btn');
+        var originalText = $btn.text();
+        $btn.text('Recherche...').prop('disabled', true);
+
+        // Fetch using OSM Nominatim geocoder
+        $.getJSON('https://nominatim.openstreetmap.org/search', {
+            q: query,
+            format: 'json',
+            limit: 1
+        }, function(data) {
+            $btn.text(originalText).prop('disabled', false);
+            if (data && data.length > 0) {
+                var lat = parseFloat(data[0].lat);
+                var lon = parseFloat(data[0].lon);
+
+                $('#eo-marker-lat').val(lat.toFixed(6));
+                $('#eo-marker-lng').val(lon.toFixed(6));
+
+                var editId = $('#eo-marker-form-id').val();
+                if (editId) {
+                    var existingMarker = leafletMarkersMap[editId];
+                    if (existingMarker) {
+                        existingMarker.setLatLng([lat, lon]);
+                    }
+                } else {
+                    setTempMarker(lat, lon);
+                }
+
+                // Pan and zoom map
+                leafletMap.flyTo([lat, lon], 15);
+            } else {
+                alert('Adresse introuvable. Veuillez réessayer en précisant la ville ou le pays.');
+            }
+        }).fail(function() {
+            $btn.text(originalText).prop('disabled', false);
+            alert('Une erreur de connexion au service de géocodage est survenue.');
+        });
+    }
+
+    $('#eo-marker-address-search-btn').on('click', function(e) {
+        e.preventDefault();
+        performAddressSearch();
+    });
+
+    $('#eo-marker-address-search').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            performAddressSearch();
+        }
+    });
+
+    // WordPress Media Uploader for Custom Icon
+    var customIconUploader = null;
+    $('#eo-marker-icon-select-btn').on('click', function(e) {
+        e.preventDefault();
+
+        if (customIconUploader) {
+            customIconUploader.open();
+            return;
+        }
+
+        customIconUploader = wp.media({
+            title: 'Sélectionner l\'icône du marqueur',
+            button: {
+                text: 'Utiliser comme icône'
+            },
+            multiple: false
+        });
+
+        customIconUploader.on('select', function() {
+            var attachment = customIconUploader.state().get('selection').first().toJSON();
+            $('#eo-marker-icon-url').val(attachment.url);
+            $('#eo-marker-icon-preview').html('<img src="' + attachment.url + '" style="max-width:100%; max-height:100%; object-fit:contain;" />');
+        });
+
+        customIconUploader.open();
+    });
+
+    $('#eo-marker-icon-reset-btn').on('click', function(e) {
+        e.preventDefault();
+        $('#eo-marker-icon-url').val('');
+        $('#eo-marker-icon-preview').html('<span class="dashicons dashicons-image-alt" style="font-size: 20px; width: auto; height: auto; color: #bbb;"></span>');
+    });
+
+    // WordPress Media Uploader for Gallery Photos
+    var galleryUploader = null;
+    $('#eo-marker-gallery-select-btn').on('click', function(e) {
+        e.preventDefault();
+
+        if (galleryUploader) {
+            galleryUploader.open();
+            return;
+        }
+
+        galleryUploader = wp.media({
+            title: eoMapsAdmin.mediaTitle,
+            button: {
+                text: eoMapsAdmin.mediaButton
+            },
+            multiple: true
+        });
+
+        galleryUploader.on('select', function() {
+            var selection = galleryUploader.state().get('selection');
+            selection.map(function(attachment) {
+                attachment = attachment.toJSON();
+                // Add url if not already present
+                if (currentGallery.indexOf(attachment.url) === -1) {
+                    currentGallery.push(attachment.url);
+                }
+            });
+            renderGalleryPreview();
+        });
+
+        galleryUploader.open();
+    });
+
+    function renderGalleryPreview() {
+        var $preview = $('#eo-marker-gallery-preview');
+        $preview.empty();
+
+        currentGallery.forEach(function(imgUrl, index) {
+            var $wrapper = $('<div class="eo-gallery-image-wrapper">' +
+                '<img src="' + imgUrl + '" />' +
+                '<button type="button" class="eo-gallery-image-delete" data-index="' + index + '">&times;</button>' +
+            '</div>');
+
+            $wrapper.find('.eo-gallery-image-delete').on('click', function() {
+                var idx = parseInt($(this).data('index'));
+                currentGallery.splice(idx, 1);
+                renderGalleryPreview();
+            });
+
+            $preview.append($wrapper);
+        });
+    }
+
+    // Save Marker form action
+    $('#eo-save-marker-btn').on('click', function(e) {
+        e.preventDefault();
+        
+        var id = $('#eo-marker-form-id').val();
+        var lat = parseFloat($('#eo-marker-lat').val());
+        var lng = parseFloat($('#eo-marker-lng').val());
+        var title = $('#eo-marker-title').val().trim();
+        var desc = $('#eo-marker-description').val().trim();
+        var url = $('#eo-marker-url').val().trim();
+        var phone = $('#eo-marker-phone').val().trim();
+        var category = $('#eo-marker-category').val().trim();
+        var icon = $('#eo-marker-icon-url').val();
+
+        if (isNaN(lat) || isNaN(lng)) {
+            alert('Coordonnées de marqueur invalides. Cliquez sur la carte ou effectuez une recherche d\'adresse.');
+            return;
+        }
+
+        if (!title) {
+            alert('Veuillez renseigner le titre du marqueur.');
+            return;
+        }
+
+        var markerData = {
+            id: id || 'm_' + Math.random().toString(36).substr(2, 9),
+            lat: lat,
+            lng: lng,
+            title: title,
+            description: desc,
+            url: url,
+            phone: phone,
+            category: category,
+            icon: icon,
+            gallery: currentGallery
+        };
+
+        if (id) {
+            // Update existing
+            var idx = markersList.findIndex(function(m) { return m.id === id; });
+            if (idx !== -1) {
+                markersList[idx] = markerData;
+            }
+        } else {
+            // Insert new
+            markersList.push(markerData);
+        }
+
+        // Re-render markers on map and sidebar UI
+        removeTempMarker();
+        renderMarkersOnMap();
+        updateMarkersListUI();
+        saveMap();
+
+        // Switch screens back
+        $('#eo-marker-form-section').hide();
+        $('#eo-markers-list-section').fadeIn();
+    });
+
+    // 6. Save Map configuration (Map Options + Markers list)
+    $('#eo-save-map-btn').on('click', function(e) {
+        e.preventDefault();
+        saveMap();
+    });
+
+    // Set initial button state (saved since no changes yet) and flag map as ready
+    setSaveButtonState('saved');
+    isMapInitialized = true;
+
+});

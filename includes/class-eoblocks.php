@@ -36,10 +36,51 @@ class Eoblocks {
 	public function init_hooks() {
 		self::$initiated = true;
 
+		add_action( 'init', array( $this, 'register_post_types' ) );
+		add_action( 'init', array( $this, 'register_global_assets' ) );
 		add_filter( 'block_categories_all', array( $this, 'create_block_category' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'group_link_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_custom_block_hooks' ) );
+		add_shortcode( 'eo_map', array( $this, 'render_map_shortcode' ) );
+	}
+
+	/**
+	 * Register Custom Post Types.
+	 */
+	public function register_post_types() {
+		register_post_type( 'eo-map', array(
+			'labels' => array(
+				'name'               => __( 'Cartes', 'eo-blocks' ),
+				'singular_name'      => __( 'Carte', 'eo-blocks' ),
+				'add_new'            => __( 'Ajouter une carte', 'eo-blocks' ),
+				'add_new_item'       => __( 'Ajouter une nouvelle carte', 'eo-blocks' ),
+				'edit_item'          => __( 'Modifier la carte', 'eo-blocks' ),
+				'new_item'           => __( 'Nouvelle carte', 'eo-blocks' ),
+				'view_item'          => __( 'Voir la carte', 'eo-blocks' ),
+				'search_items'       => __( 'Rechercher des cartes', 'eo-blocks' ),
+				'not_found'          => __( 'Aucune carte trouvée', 'eo-blocks' ),
+				'not_found_in_trash' => __( 'Aucune carte trouvée dans la corbeille', 'eo-blocks' ),
+			),
+			'public'              => false,
+			'show_ui'             => true,
+			'show_in_menu'        => false,
+			'show_in_rest'        => true,
+			'supports'            => array( 'title' ),
+			'capability_type'     => 'post',
+			'map_meta_cap'        => true,
+			'hierarchical'        => false,
+			'query_var'           => true,
+			'rewrite'             => false,
+		) );
+	}
+
+	/**
+	 * Register global assets.
+	 */
+	public function register_global_assets() {
+		wp_register_style( 'leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
+		wp_register_script( 'leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
 	}
 
 	/**
@@ -142,4 +183,51 @@ class Eoblocks {
 
         return $block_content;
     }
+
+	/**
+	 * Shortcode to render maps.
+	 */
+	public function render_map_shortcode( $atts ) {
+		$atts = shortcode_atts( array(
+			'id' => 0,
+		), $atts, 'eo_map' );
+
+		$map_id = intval( $atts['id'] );
+		if ( ! $map_id ) {
+			return '';
+		}
+
+		$settings = get_post_meta( $map_id, '_eo_map_settings', true );
+		$markers  = get_post_meta( $map_id, '_eo_map_markers', true );
+
+		if ( ! is_array( $settings ) ) {
+			return '';
+		}
+
+		if ( ! is_array( $markers ) ) {
+			$markers = array();
+		}
+
+		$width  = esc_attr( $settings['width'] ?? '100%' );
+		$height = esc_attr( $settings['height'] ?? '600px' );
+
+		wp_enqueue_style( 'leaflet-css' );
+		wp_enqueue_style( 'dashicons' );
+		wp_enqueue_script( 'leaflet-js' );
+		wp_enqueue_script( 'eo-map-view-script', EO_BLOCKS_URL . 'blocks/build/eo-map/view.js', array( 'jquery', 'leaflet-js' ), '1.0.0', true );
+		wp_enqueue_style( 'eo-map-style', EO_BLOCKS_URL . 'blocks/build/eo-map/style-index.css', array( 'leaflet-css' ), '1.0.0' );
+
+		ob_start();
+		?>
+		<div class="wp-block-eo-blocks-map eo-map-block-wrapper">
+			<div class="eo-map-frontend-container"
+				id="eo-map-frontend-<?php echo esc_attr( $map_id ); ?>"
+				style="width: <?php echo $width; ?>; height: <?php echo $height; ?>;"
+				data-settings="<?php echo esc_attr( json_encode( $settings ) ); ?>"
+				data-markers="<?php echo esc_attr( json_encode( $markers ) ); ?>">
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
 }
