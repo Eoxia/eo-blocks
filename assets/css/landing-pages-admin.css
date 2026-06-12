@@ -51,10 +51,10 @@
 }
 
 /* Top border card highlights based on type */
-.eo-lp-card.eo-status-coming-soon.active::before { background: #3b82f6; }
+.eo-lp-card.eo-status-coming-soon.active::before { background: #f59e0b; }
 .eo-lp-card.eo-status-maintenance.active::before { background: #d63638; }
 .eo-lp-card.eo-status-login.active::before { background: #06b6d4; }
-.eo-lp-card.eo-status-404.active::before { background: #f59e0b; }
+.eo-lp-card.eo-status-404.active::before { background: #3b82f6; }
 
 /* Card Header */
 .eo-lp-card-header {
@@ -75,9 +75,10 @@
 	color: #3b82f6;
 }
 
+.eo-lp-card.eo-status-coming-soon.active .eo-lp-card-icon { color: #f59e0b; }
 .eo-lp-card.eo-status-maintenance.active .eo-lp-card-icon { color: #d63638; }
 .eo-lp-card.eo-status-login.active .eo-lp-card-icon { color: #06b6d4; }
-.eo-lp-card.eo-status-404.active .eo-lp-card-icon { color: #f59e0b; }
+.eo-lp-card.eo-status-404.active .eo-lp-card-icon { color: #3b82f6; }
 
 /* iOS Switch Slider */
 .eo-lp-toggle-wrapper {
@@ -128,10 +129,10 @@
 	background-color: #10b981;
 }
 
-.eo-lp-card.eo-status-coming-soon input:checked + .eo-lp-slider { background-color: #3b82f6; }
+.eo-lp-card.eo-status-coming-soon input:checked + .eo-lp-slider { background-color: #f59e0b; }
 .eo-lp-card.eo-status-maintenance input:checked + .eo-lp-slider { background-color: #d63638; }
 .eo-lp-card.eo-status-login input:checked + .eo-lp-slider { background-color: #06b6d4; }
-.eo-lp-card.eo-status-404 input:checked + .eo-lp-slider { background-color: #f59e0b; }
+.eo-lp-card.eo-status-404 input:checked + .eo-lp-slider { background-color: #3b82f6; }
 
 .eo-lp-switch input:checked + .eo-lp-slider:before {
 	transform: translateX(20px);
@@ -148,10 +149,10 @@
 .eo-lp-toggle-label.active {
 	color: #10b981;
 }
-.eo-lp-card.eo-status-coming-soon .eo-lp-toggle-label.active { color: #3b82f6; }
+.eo-lp-card.eo-status-coming-soon .eo-lp-toggle-label.active { color: #f59e0b; }
 .eo-lp-card.eo-status-maintenance .eo-lp-toggle-label.active { color: #d63638; }
 .eo-lp-card.eo-status-login .eo-lp-toggle-label.active { color: #06b6d4; }
-.eo-lp-card.eo-status-404 .eo-lp-toggle-label.active { color: #f59e0b; }
+.eo-lp-card.eo-status-404 .eo-lp-toggle-label.active { color: #3b82f6; }
 
 /* Card Content */
 .eo-lp-card-body {

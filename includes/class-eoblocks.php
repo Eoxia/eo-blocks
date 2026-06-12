@@ -325,7 +325,7 @@ class Eoblocks {
 				'style'       => 'minimalist',
 				'bg_color'    => '#0f172a',
 				'text_color'  => '#f8fafc',
-				'accent_color'=> '#3b82f6',
+				'accent_color'=> '#f59e0b',
 			),
 			'maintenance' => array(
 				'title'       => __( 'Site en maintenance', 'eo-blocks' ),
@@ -349,7 +349,7 @@ class Eoblocks {
 				'style'       => 'minimalist',
 				'bg_color'    => '#0f172a',
 				'text_color'  => '#f8fafc',
-				'accent_color'=> '#ef4444',
+				'accent_color'=> '#3b82f6',
 			),
 		);
 
@@ -378,7 +378,7 @@ class Eoblocks {
 				$badge_class .= ' eo-alert-red';
 			} elseif ( $coming_soon_active ) {
 				$label = __( 'Mode Prochainement actif', 'eo-blocks' );
-				$badge_class .= ' eo-alert-blue';
+				$badge_class .= ' eo-alert-orange';
 			} else {
 				$label = __( 'Mode Maintenance actif', 'eo-blocks' );
 				$badge_class .= ' eo-alert-red';
@@ -446,6 +446,13 @@ class Eoblocks {
 				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-red:hover > .ab-item {
 					background-color: #b32424 !important;
 				}
+				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-orange > .ab-item {
+					background-color: #f59e0b !important;
+					animation: eo-orange-pulse 2s infinite;
+				}
+				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-orange:hover > .ab-item {
+					background-color: #d97706 !important;
+				}
 				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-blue > .ab-item {
 					background-color: #3b82f6 !important;
 					animation: eo-blue-pulse 2s infinite;
@@ -457,6 +464,11 @@ class Eoblocks {
 					0% { box-shadow: 0 0 0 0 rgba(214, 54, 56, 0.7); }
 					70% { box-shadow: 0 0 0 6px rgba(214, 54, 56, 0); }
 					100% { box-shadow: 0 0 0 0 rgba(214, 54, 56, 0); }
+				}
+				@keyframes eo-orange-pulse {
+					0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+					70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+					100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 				}
 				@keyframes eo-blue-pulse {
 					0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }

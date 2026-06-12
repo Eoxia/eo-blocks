@@ -17,7 +17,7 @@ $defaults = array(
 		'style'       => 'minimalist',
 		'bg_color'    => '#0f172a',
 		'text_color'  => '#f8fafc',
-		'accent_color'=> '#3b82f6',
+		'accent_color'=> '#f59e0b',
 	),
 	'maintenance' => array(
 		'active'       => false,
@@ -44,7 +44,7 @@ $defaults = array(
 		'style'       => 'minimalist',
 		'bg_color'    => '#0f172a',
 		'text_color'  => '#f8fafc',
-		'accent_color'=> '#ef4444',
+		'accent_color'=> '#3b82f6',
 	),
 );
 
