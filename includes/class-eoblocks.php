@@ -50,6 +50,8 @@ class Eoblocks {
 		add_action( 'login_init', array( $this, 'intercept_login' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_badge' ), 999 );
 		add_action( 'wp_login_failed', array( $this, 'login_failed_redirect' ) );
+		add_action( 'admin_head', array( $this, 'enqueue_admin_bar_styles' ) );
+		add_action( 'wp_head', array( $this, 'enqueue_admin_bar_styles' ) );
 	}
 
 	/**
@@ -381,51 +383,12 @@ class Eoblocks {
 				$label = __( 'Mode Maintenance actif', 'eo-blocks' );
 			}
 
-			// Add custom styles for the red badge to the head
-			add_action( 'admin_head', function() {
-				echo '<style>
-					#wpadminbar #wp-admin-bar-eo-landing-pages-status > .ab-item {
-						background-color: #d63638 !important;
-						color: #ffffff !important;
-						font-weight: bold !important;
-						border-radius: 4px;
-						margin-top: 4px;
-						height: 22px;
-						line-height: 22px;
-						padding: 0 10px;
-					}
-					#wpadminbar #wp-admin-bar-eo-landing-pages-status:hover > .ab-item {
-						background-color: #b32424 !important;
-						color: #ffffff !important;
-					}
-				</style>';
-			} );
-
-			// Also for frontend admin bar
-			add_action( 'wp_head', function() {
-				echo '<style>
-					#wpadminbar #wp-admin-bar-eo-landing-pages-status > .ab-item {
-						background-color: #d63638 !important;
-						color: #ffffff !important;
-						font-weight: bold !important;
-						border-radius: 4px;
-						margin-top: 4px;
-						height: 22px;
-						line-height: 22px;
-						padding: 0 10px;
-					}
-					#wpadminbar #wp-admin-bar-eo-landing-pages-status:hover > .ab-item {
-						background-color: #b32424 !important;
-						color: #ffffff !important;
-					}
-				</style>';
-			} );
-
 			$wp_admin_bar->add_node( array(
-				'id'    => 'eo-landing-pages-status',
-				'title' => esc_html( $label ),
-				'href'  => admin_url( 'admin.php?page=eo-blocks-landing-pages' ),
-				'meta'  => array(
+				'id'     => 'eo-landing-pages-status',
+				'parent' => 'top-secondary',
+				'title'  => esc_html( $label ),
+				'href'   => admin_url( 'admin.php?page=eo-blocks-landing-pages' ),
+				'meta'   => array(
 					'title' => $label,
 				),
 			) );
@@ -446,6 +409,35 @@ class Eoblocks {
 				wp_redirect( add_query_arg( 'login_error', '1', $referrer ) );
 				exit;
 			}
+		}
+	}
+
+	/**
+	 * Output admin bar badge styles in head
+	 */
+	public function enqueue_admin_bar_styles() {
+		$settings = get_option( 'eo_landing_pages_settings', array() );
+		$coming_soon_active = !empty( $settings['coming_soon']['active'] );
+		$maintenance_active = !empty( $settings['maintenance']['active'] );
+
+		if ( $coming_soon_active || $maintenance_active ) {
+			echo '<style>
+				#wpadminbar #wp-admin-bar-eo-landing-pages-status > .ab-item {
+					background-color: #d63638 !important;
+					color: #ffffff !important;
+					font-weight: bold !important;
+					border-radius: 4px !important;
+					margin-top: 4px !important;
+					height: 24px !important;
+					line-height: 24px !important;
+					padding: 0 10px !important;
+					display: inline-block !important;
+				}
+				#wpadminbar #wp-admin-bar-eo-landing-pages-status:hover > .ab-item {
+					background-color: #b32424 !important;
+					color: #ffffff !important;
+				}
+			</style>';
 		}
 	}
 }
