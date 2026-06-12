@@ -418,12 +418,11 @@ class Eoblocks {
 	 * Output admin bar badge styles in head
 	 */
 	public function enqueue_admin_bar_styles() {
-		$settings = get_option( 'eo_landing_pages_settings', array() );
-		$coming_soon_active = !empty( $settings['coming_soon']['active'] );
-		$maintenance_active = !empty( $settings['maintenance']['active'] );
+		if ( ! is_admin_bar_showing() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
-		if ( $coming_soon_active || $maintenance_active ) {
-			echo '<style>
+		echo '<style>
 				#wpadminbar .eo-landing-pages-alert-badge > .ab-item {
 					color: #ffffff !important;
 					font-weight: bold !important;
@@ -476,6 +475,5 @@ class Eoblocks {
 					100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 				}
 			</style>';
-		}
 	}
 }

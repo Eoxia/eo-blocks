@@ -80,8 +80,14 @@ class Eoblocks_Menu {
 			wp_enqueue_script( 'eo-blocks-landing-pages-admin-js', EO_BLOCKS_URL . 'assets/js/landing-pages-admin.js', array( 'jquery' ), time(), true );
 
 			wp_localize_script( 'eo-blocks-landing-pages-admin-js', 'eoLandingPagesAdmin', array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'eo_landing_pages_admin_nonce' ),
+				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'eo_landing_pages_admin_nonce' ),
+				'adminUrl' => admin_url( 'admin.php?page=eo-blocks-landing-pages' ),
+				'labels'   => array(
+					'both'        => __( 'Modes Prochainement & Maintenance actifs', 'eo-blocks' ),
+					'coming_soon' => __( 'Mode Prochainement actif', 'eo-blocks' ),
+					'maintenance' => __( 'Mode Maintenance actif', 'eo-blocks' ),
+				),
 			) );
 			return;
 		}

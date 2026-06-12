@@ -7,6 +7,48 @@ jQuery(document).ready(function($) {
 	var config = window.eoLandingPagesConfig || {};
 	var activeType = '';
 
+	// Dynamically update the admin bar status badge
+	function updateAdminBarBadge(settings) {
+		if (typeof eoLandingPagesAdmin === 'undefined') {
+			return;
+		}
+
+		var csActive = settings.coming_soon && (settings.coming_soon.active === true || settings.coming_soon.active === 'true' || settings.coming_soon.active === 1 || settings.coming_soon.active === '1');
+		var mActive = settings.maintenance && (settings.maintenance.active === true || settings.maintenance.active === 'true' || settings.maintenance.active === 1 || settings.maintenance.active === '1');
+
+		var $adminBarSecondary = $('#wp-admin-bar-top-secondary');
+		var $badge = $('#wp-admin-bar-eo-landing-pages-status');
+
+		if (!csActive && !mActive) {
+			$badge.remove();
+			return;
+		}
+
+		var label = '';
+		var badgeClass = 'eo-landing-pages-alert-badge';
+
+		if (csActive && mActive) {
+			label = eoLandingPagesAdmin.labels.both;
+			badgeClass += ' eo-alert-red';
+		} else if (csActive) {
+			label = eoLandingPagesAdmin.labels.coming_soon;
+			badgeClass += ' eo-alert-orange';
+		} else {
+			label = eoLandingPagesAdmin.labels.maintenance;
+			badgeClass += ' eo-alert-red';
+		}
+
+		if ($badge.length === 0) {
+			var html = '<li id="wp-admin-bar-eo-landing-pages-status" class="' + badgeClass + '">' +
+				'<a class="ab-item" href="' + eoLandingPagesAdmin.adminUrl + '">' + label + '</a>' +
+				'</li>';
+			$adminBarSecondary.prepend(html);
+		} else {
+			$badge.attr('class', badgeClass);
+			$badge.find('> .ab-item').text(label);
+		}
+	}
+
 	// Sync color picker with text inputs
 	function bindColorPicker(pickerId, textId) {
 		$(pickerId).on('input', function() {
@@ -65,7 +107,7 @@ jQuery(document).ready(function($) {
 		var $card = $checkbox.closest('.eo-lp-card');
 		var type = $card.data('type');
 		var active = $checkbox.is(':checked');
-		var $label = $checkbox.siblings('.eo-lp-toggle-label');
+		var $label = $checkbox.closest('.eo-lp-toggle-wrapper').find('.eo-lp-toggle-label');
 
 		// Visual loading state
 		$checkbox.prop('disabled', true);
@@ -87,6 +129,9 @@ jQuery(document).ready(function($) {
 					// Update global config object
 					config = response.data.settings;
 					window.eoLandingPagesConfig = config;
+
+					// Dynamically update the admin bar status badge
+					updateAdminBarBadge(config);
 
 					// Visual state updates
 					if (active) {
@@ -251,6 +296,9 @@ jQuery(document).ready(function($) {
 					// Update global config object
 					config = response.data.settings;
 					window.eoLandingPagesConfig = config;
+
+					// Dynamically update the admin bar status badge
+					updateAdminBarBadge(config);
 
 					// Visual state updates
 					showFormSaved('Paramètres enregistrés avec succès !');
