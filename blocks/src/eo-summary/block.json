@@ -16,6 +16,18 @@
 		"justification": {
 			"type": "string",
 			"default": "left"
+		},
+		"displayMobile": {
+			"type": "boolean",
+			"default": true
+		},
+		"styleMobile": {
+			"type": "string",
+			"default": "standard"
+		},
+		"labelMenuMobile": {
+			"type": "string",
+			"default": "View summary"
 		}
 	},
 	"supports": {
