@@ -2,9 +2,9 @@
 /**
  * Plugin Name:       EO Blocks
  * Description:       A collection of Gutenberg blocks for WordPress made by Eoxia
- * Requires at least: 6.6.2
+ * Requires at least: 7.0.0
  * Requires PHP:      7.0
- * Version:           1.2.0
+ * Version:           2.0.0
  * Author:            Eoxia
  * Author URI:        https://www.eoxia.com
  * License:           GPL-3.0-or-later
