@@ -43,6 +43,16 @@ class Eoblocks_Menu {
 			[ $this, 'maps_page_view' ]
 		);
 
+		// Submenu pointing to Landing Pages manager
+		add_submenu_page(
+			'eo-blocks-maps',
+			__('Pages d\'atterrissage', 'eo-blocks'),
+			__('Pages d\'atterrissage', 'eo-blocks'),
+			'manage_options',
+			'eo-blocks-landing-pages',
+			[ $this, 'landing_pages_page_view' ]
+		);
+
 		// Submenu pointing to general settings
 		add_submenu_page(
 			'eo-blocks-maps',
@@ -65,6 +75,23 @@ class Eoblocks_Menu {
 	}
 
 	public function enqueue_admin_assets( $hook ) {
+		if ( strpos( $hook, 'eo-blocks-landing-pages' ) !== false ) {
+			wp_enqueue_style( 'eo-blocks-landing-pages-admin-css', EO_BLOCKS_URL . 'assets/css/landing-pages-admin.css', array(), time() );
+			wp_enqueue_script( 'eo-blocks-landing-pages-admin-js', EO_BLOCKS_URL . 'assets/js/landing-pages-admin.js', array( 'jquery' ), time(), true );
+
+			wp_localize_script( 'eo-blocks-landing-pages-admin-js', 'eoLandingPagesAdmin', array(
+				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'eo_landing_pages_admin_nonce' ),
+				'adminUrl' => admin_url( 'admin.php?page=eo-blocks-landing-pages' ),
+				'labels'   => array(
+					'both'        => __( 'Modes Prochainement & Maintenance actifs', 'eo-blocks' ),
+					'coming_soon' => __( 'Mode Prochainement actif', 'eo-blocks' ),
+					'maintenance' => __( 'Mode Maintenance actif', 'eo-blocks' ),
+				),
+			) );
+			return;
+		}
+
 		if ( 'toplevel_page_eo-blocks-maps' !== $hook ) {
 			return;
 		}
@@ -89,6 +116,10 @@ class Eoblocks_Menu {
 
 	public function maps_page_view() {
 		include EO_BLOCKS_PATH . '/includes/admin/views/html-admin-page-maps.php';
+	}
+
+	public function landing_pages_page_view() {
+		include EO_BLOCKS_PATH . '/includes/admin/views/html-admin-page-landing-pages.php';
 	}
 
 	public function settings_page_view() {
