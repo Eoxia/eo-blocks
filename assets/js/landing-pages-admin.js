@@ -135,6 +135,36 @@ jQuery(document).ready(function($) {
 		openEditor(type);
 	});
 
+	// Change labels dynamically based on selected style and type
+	function adjustFieldLabels() {
+		var style = $('#eo-lp-form-style').val();
+		var type = $('#eo-lp-form-type').val();
+		
+		var $accentGroup = $('#eo-lp-form-accent-color').closest('.eo-lp-form-group');
+		var $accentLabel = $accentGroup.find('label');
+
+		if (style === 'minimalist') {
+			// Minimalist style uses accent color for buttons (Login and 404 only)
+			if (type === 'coming_soon' || type === 'maintenance') {
+				// No buttons on Coming Soon / Maintenance in minimalist style
+				$accentGroup.hide();
+			} else {
+				$accentGroup.show();
+				$accentLabel.text('Couleur du bouton');
+			}
+		} else if (style === 'gradient') {
+			$accentGroup.show();
+			$accentLabel.text('Couleur de fin du dégradé');
+		} else if (style === 'glassmorphism') {
+			$accentGroup.show();
+			$accentLabel.text('Couleur secondaire (Effet verre)');
+		}
+	}
+
+	$('#eo-lp-form-style').on('change', function() {
+		adjustFieldLabels();
+	});
+
 	function openEditor(type) {
 		activeType = type;
 		var pageConfig = config[type] || {};
@@ -154,6 +184,9 @@ jQuery(document).ready(function($) {
 
 		$('#eo-lp-form-accent-color').val(pageConfig.accent_color || '#0066FF');
 		$('#eo-lp-form-accent-color-text').val((pageConfig.accent_color || '#0066FF').toUpperCase());
+
+		// Adjust fields display and labels
+		adjustFieldLabels();
 
 		// Toggle custom hints depending on type
 		$('.eo-lp-form-login-hint').toggle(type === 'login');

@@ -76,8 +76,8 @@ class Eoblocks_Menu {
 
 	public function enqueue_admin_assets( $hook ) {
 		if ( strpos( $hook, 'eo-blocks-landing-pages' ) !== false ) {
-			wp_enqueue_style( 'eo-blocks-landing-pages-admin-css', EO_BLOCKS_URL . 'assets/css/landing-pages-admin.css', array(), '1.0.0' );
-			wp_enqueue_script( 'eo-blocks-landing-pages-admin-js', EO_BLOCKS_URL . 'assets/js/landing-pages-admin.js', array( 'jquery' ), '1.0.0', true );
+			wp_enqueue_style( 'eo-blocks-landing-pages-admin-css', EO_BLOCKS_URL . 'assets/css/landing-pages-admin.css', array(), time() );
+			wp_enqueue_script( 'eo-blocks-landing-pages-admin-js', EO_BLOCKS_URL . 'assets/js/landing-pages-admin.js', array( 'jquery' ), time(), true );
 
 			wp_localize_script( 'eo-blocks-landing-pages-admin-js', 'eoLandingPagesAdmin', array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),

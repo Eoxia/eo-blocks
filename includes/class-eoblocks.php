@@ -360,10 +360,6 @@ class Eoblocks {
 
 		include EO_BLOCKS_PATH . '/includes/templates/landing-page-template.php';
 	}
-
-	/**
-	 * Add custom node to admin bar when Coming Soon or Maintenance mode is ON
-	 */
 	public function add_admin_bar_badge( $wp_admin_bar ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -375,12 +371,17 @@ class Eoblocks {
 
 		if ( $coming_soon_active || $maintenance_active ) {
 			$label = '';
+			$badge_class = 'eo-landing-pages-alert-badge';
+
 			if ( $coming_soon_active && $maintenance_active ) {
 				$label = __( 'Modes Prochainement & Maintenance actifs', 'eo-blocks' );
+				$badge_class .= ' eo-alert-red';
 			} elseif ( $coming_soon_active ) {
 				$label = __( 'Mode Prochainement actif', 'eo-blocks' );
+				$badge_class .= ' eo-alert-blue';
 			} else {
 				$label = __( 'Mode Maintenance actif', 'eo-blocks' );
+				$badge_class .= ' eo-alert-red';
 			}
 
 			$wp_admin_bar->add_node( array(
@@ -390,6 +391,7 @@ class Eoblocks {
 				'href'   => admin_url( 'admin.php?page=eo-blocks-landing-pages' ),
 				'meta'   => array(
 					'title' => $label,
+					'class' => $badge_class,
 				),
 			) );
 		}
@@ -422,8 +424,7 @@ class Eoblocks {
 
 		if ( $coming_soon_active || $maintenance_active ) {
 			echo '<style>
-				#wpadminbar #wp-admin-bar-eo-landing-pages-status > .ab-item {
-					background-color: #d63638 !important;
+				#wpadminbar .eo-landing-pages-alert-badge > .ab-item {
 					color: #ffffff !important;
 					font-weight: bold !important;
 					border-radius: 4px !important;
@@ -432,12 +433,37 @@ class Eoblocks {
 					line-height: 24px !important;
 					padding: 0 10px !important;
 					display: inline-block !important;
+					box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+					transition: background-color 0.25s ease, transform 0.15s ease !important;
 				}
-				#wpadminbar #wp-admin-bar-eo-landing-pages-status:hover > .ab-item {
+				#wpadminbar .eo-landing-pages-alert-badge:hover > .ab-item {
+					transform: scale(1.05);
+				}
+				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-red > .ab-item {
+					background-color: #d63638 !important;
+					animation: eo-red-pulse 2s infinite;
+				}
+				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-red:hover > .ab-item {
 					background-color: #b32424 !important;
-					color: #ffffff !important;
+				}
+				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-blue > .ab-item {
+					background-color: #3b82f6 !important;
+					animation: eo-blue-pulse 2s infinite;
+				}
+				#wpadminbar .eo-landing-pages-alert-badge.eo-alert-blue:hover > .ab-item {
+					background-color: #1d4ed8 !important;
+				}
+				@keyframes eo-red-pulse {
+					0% { box-shadow: 0 0 0 0 rgba(214, 54, 56, 0.7); }
+					70% { box-shadow: 0 0 0 6px rgba(214, 54, 56, 0); }
+					100% { box-shadow: 0 0 0 0 rgba(214, 54, 56, 0); }
+				}
+				@keyframes eo-blue-pulse {
+					0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+					70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+					100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 				}
 			</style>';
 		}
 	}
-}
+}
