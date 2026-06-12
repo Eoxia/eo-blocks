@@ -287,9 +287,10 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 				<?php endif; ?>
 
 				<?php
+				$redirect = !empty( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : admin_url();
 				wp_login_form( array(
 					'echo'           => true,
-					'redirect'       => home_url(),
+					'redirect'       => $redirect,
 					'form_id'        => 'eo-loginform',
 					'label_username' => __( 'Identifiant ou E-mail', 'eo-blocks' ),
 					'label_password' => __( 'Mot de passe', 'eo-blocks' ),

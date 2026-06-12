@@ -291,10 +291,11 @@ class Eoblocks {
 		}
 	}
 
-	/**
-	 * Intercept login page for customization
-	 */
 	public function intercept_login() {
+		if ( is_user_logged_in() || ! empty( $_REQUEST['interim-login'] ) ) {
+			return;
+		}
+
 		$settings = get_option( 'eo_landing_pages_settings', array() );
 		$login_active = !empty( $settings['login']['active'] );
 
