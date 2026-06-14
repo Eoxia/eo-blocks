@@ -78,6 +78,11 @@
 			if (!desc) return '';
 			var html = desc;
 
+			// Support headers: ### text -> <h6>text</h6>, ## text -> <h5>text</h5>, # text -> <h4>text</h4>
+			html = html.replace(/^### (.*?)$/gm, '<h6>$1</h6>');
+			html = html.replace(/^## (.*?)$/gm, '<h5>$1</h5>');
+			html = html.replace(/^# (.*?)$/gm, '<h4>$1</h4>');
+
 			// Support bold: **text** -> <strong>text</strong>
 			html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 			html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -119,6 +124,12 @@
 			html = html.replace(/<ul>\s*<br>/g, '<ul>');
 			html = html.replace(/<\/li>\s*<br>/g, '</li>');
 			html = html.replace(/<li>\s*<br>/g, '<li>');
+			html = html.replace(/<br>\s*<h4>/g, '<h4>');
+			html = html.replace(/<\/h4>\s*<br>/g, '</h4>');
+			html = html.replace(/<br>\s*<h5>/g, '<h5>');
+			html = html.replace(/<\/h5>\s*<br>/g, '</h5>');
+			html = html.replace(/<br>\s*<h6>/g, '<h6>');
+			html = html.replace(/<\/h6>\s*<br>/g, '</h6>');
 
 			return html;
 		}
