@@ -280,6 +280,59 @@ jQuery(document).ready(function($) {
 		$('.eo-lp-email-rules-group').toggle($(this).is(':checked'));
 	});
 
+	function isEmailAllowedJS(email, rulesStr) {
+		if (!rulesStr) return true;
+		email = email.trim().toLowerCase();
+		if (email.indexOf('@') === -1) {
+			return false;
+		}
+		var rules = rulesStr.split(',').map(function(r) { return r.trim().toLowerCase(); }).filter(Boolean);
+		for (var i = 0; i < rules.length; i++) {
+			var rule = rules[i];
+			if (rule.indexOf('@') > 0 && rule.indexOf('.') > 0 && (rule.match(/@/g) || []).length === 1) {
+				if (email === rule) return true;
+			}
+			if (rule.indexOf('@') === 0) {
+				if (email.slice(-rule.length) === rule) return true;
+				if (rule.indexOf('.') === -1) {
+					var parts = email.split('@');
+					var domainPart = parts[1] || '';
+					var ruleDomain = rule.substring(1);
+					if (domainPart === ruleDomain || domainPart.indexOf(ruleDomain + '.') === 0) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	function runEmailTest() {
+		var email = $.trim($('#eo-lp-email-test-input').val());
+		var rulesStr = $('#eo-lp-email-rules').val();
+		var $result = $('#eo-lp-email-test-result');
+
+		if (!email) {
+			$result.hide().text('').attr('style', '');
+			return;
+		}
+
+		var allowed = isEmailAllowedJS(email, rulesStr);
+		if (allowed) {
+			$result.show()
+				.text('OK')
+				.attr('style', 'font-size: 11px; font-weight: bold; border-radius: 4px; padding: 4px 10px; background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0;');
+		} else {
+			$result.show()
+				.text('KO')
+				.attr('style', 'font-size: 11px; font-weight: bold; border-radius: 4px; padding: 4px 10px; background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca;');
+		}
+	}
+
+	$(document).on('input keyup change', '#eo-lp-email-test-input, #eo-lp-email-rules', function() {
+		runEmailTest();
+	});
+
 	// Email filter card sub-toggle handler
 	$('.eo-lp-email-filter-toggle').on('change', function() {
 		var $checkbox = $(this);
@@ -442,6 +495,10 @@ jQuery(document).ready(function($) {
 			$('.eo-lp-email-rules-group').toggle(emailFiltering);
 			$('#eo-lp-email-rules').val(pageConfig.email_rules || '');
 			$('#eo-lp-log-limit').val(pageConfig.log_limit || 1000);
+
+			// Clear email test input & result
+			$('#eo-lp-email-test-input').val('');
+			$('#eo-lp-email-test-result').hide().text('');
 
 			// IP rules
 			localIpRules = Array.isArray(pageConfig.ip_rules) ? pageConfig.ip_rules : [];

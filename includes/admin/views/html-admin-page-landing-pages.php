@@ -204,6 +204,16 @@ $pages_data = array(
 								<p class="description">
 									<?php esc_html_e( 'Séparez les entrées par des virgules. Exemple : "@eoxia.com" ou "@eoxia" (autorise n\'importe quel TLD comme .com, .fr, .net).', 'eo-blocks' ); ?>
 								</p>
+
+								<div class="eo-lp-email-test-wrapper" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 10px;">
+									<span style="font-size: 12px; font-weight: 600; color: #475569; min-width: 120px;">
+										<?php esc_html_e( 'Tester une adresse :', 'eo-blocks' ); ?>
+									</span>
+									<div style="position: relative; flex: 1; display: flex; align-items: center; gap: 10px;">
+										<input type="text" id="eo-lp-email-test-input" placeholder="ex: user@eoxia.com" style="flex: 1; height: 32px; font-size: 12px;" />
+										<span id="eo-lp-email-test-result" style="font-size: 11px; font-weight: bold; border-radius: 4px; padding: 4px 10px; display: none;"></span>
+									</div>
+								</div>
 							</div>
 						</div>
 
