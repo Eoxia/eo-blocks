@@ -237,7 +237,7 @@ wp_reset_postdata();
 							<label for="eo-marker-description" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Description', 'eo-blocks' ); ?></label>
 							<textarea id="eo-marker-description" style="width: 100%; height: 60px;" placeholder="<?php esc_attr_e( 'Description courte...', 'eo-blocks' ); ?>"></textarea>
 							<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666; line-height: 1.3;">
-								<?php esc_html_e( 'Supporte les retours à la ligne et le Markdown de base : **gras**, *italique*, listes avec - ou *.', 'eo-blocks' ); ?>
+								<?php esc_html_e( 'Supporte les retours à la ligne et le Markdown de base : # pour les titres, **gras**, *italique*, listes avec - ou *.', 'eo-blocks' ); ?>
 							</p>
 						</div>
 
