@@ -7,6 +7,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! function_exists( 'eo_lp_format_description' ) ) {
+	function eo_lp_format_description( $text ) {
+		$text = wp_kses_post( $text );
+
+		// 1. Headings (###, ##, #)
+		$text = preg_replace( '/^\s*###\s+(.+)$/m', '<h3>$1</h3>', $text );
+		$text = preg_replace( '/^\s*##\s+(.+)$/m', '<h2>$1</h2>', $text );
+		$text = preg_replace( '/^\s*#\s+(.+)$/m', '<h1>$1</h1>', $text );
+
+		// 2. Bold (**text**)
+		$text = preg_replace( '/\*\*(.*?)\*\*/', '<strong>$1</strong>', $text );
+
+		// 3. Italic (*text*)
+		$text = preg_replace( '/\*(.*?)\*/', '<em>$1</em>', $text );
+
+		// 4. Bullet lists
+		$lines = explode( "\n", $text );
+		$in_list = false;
+		$formatted_lines = array();
+
+		foreach ( $lines as $line ) {
+			$trimmed = trim( $line );
+			if ( preg_match( '/^[-*]\s+(.+)$/', $trimmed, $matches ) ) {
+				if ( ! $in_list ) {
+					$formatted_lines[] = '<ul>';
+					$in_list = true;
+				}
+				$formatted_lines[] = '<li>' . $matches[1] . '</li>';
+			} else {
+				if ( $in_list ) {
+					$formatted_lines[] = '</ul>';
+					$in_list = false;
+				}
+				$formatted_lines[] = $line;
+			}
+		}
+		if ( $in_list ) {
+			$formatted_lines[] = '</ul>';
+		}
+		$text = implode( "\n", $formatted_lines );
+
+		// 5. Line breaks for paragraphs (double newline to paragraph, single to <br>)
+		$parts = explode( "\n\n", $text );
+		foreach ( $parts as &$part ) {
+			$trimmed_part = trim( $part );
+			if ( empty( $trimmed_part ) ) {
+				continue;
+			}
+			if ( ! preg_match( '/^<(h1|h2|h3|ul|li)/i', $trimmed_part ) ) {
+				$part = '<p>' . nl2br( $trimmed_part ) . '</p>';
+			}
+		}
+		$text = implode( "\n", $parts );
+
+		return $text;
+	}
+}
+
 $title        = $page_settings['title'] ?? '';
 $description  = $page_settings['description'] ?? '';
 $style        = $page_settings['style'] ?? 'minimalist';
@@ -32,6 +90,9 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+	
+	<!-- Load WordPress Dashicons -->
+	<link rel="stylesheet" href="<?php echo esc_url( includes_url( 'css/dashicons.min.css' ) ); ?>">
 	
 	<style>
 		/* Core Resets */
@@ -64,13 +125,23 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 			color: <?php echo $is_light_bg ? '#0f172a' : '#ffffff'; ?>;
 		}
 
-		p.description {
+		.description {
 			font-size: clamp(1rem, 2.5vw, 1.25rem);
 			color: <?php echo $is_light_bg ? '#475569' : '#94a3b8'; ?>;
 			margin-bottom: 2rem;
 			max-width: 600px;
 			margin-left: auto;
 			margin-right: auto;
+		}
+
+		.eo-lp-box ul {
+			text-align: left;
+			margin: 1rem 0;
+			padding-left: 1.5rem;
+		}
+
+		.eo-lp-box li {
+			margin-bottom: 0.5rem;
 		}
 
 		/* Base Card Container */
@@ -275,7 +346,7 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 	<div class="eo-lp-container">
 		<div class="eo-lp-box">
 			<h1><?php echo esc_html( $title ); ?></h1>
-			<p class="description"><?php echo wp_kses_post( nl2br( $description ) ); ?></p>
+			<div class="description"><?php echo eo_lp_format_description( $description ); ?></div>
 			
 			<?php if ( 'login' === $type ) : ?>
 				
@@ -308,6 +379,90 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 			<?php endif; ?>
 		</div>
 	</div>
+
+	<?php if ( 'login' === $type ) : ?>
+		<script type="text/javascript">
+			window.eoLpLoginSecurity = {
+				emailFilteringActive: <?php echo !empty( $page_settings['email_filtering_active'] ) ? 'true' : 'false'; ?>,
+				emailRules: <?php echo json_encode( $page_settings['email_rules'] ?? '' ); ?>
+			};
+
+			document.addEventListener('DOMContentLoaded', function() {
+				var form = document.getElementById('eo-loginform');
+				if (!form) return;
+
+				var usernameInput = document.getElementById('user_login');
+				if (!usernameInput) return;
+
+				var style = document.createElement('style');
+				style.innerHTML = `
+					@keyframes eoShake {
+						0%, 100% { transform: translateX(0); }
+						20%, 60% { transform: translateX(-8px); }
+						40%, 80% { transform: translateX(8px); }
+					}
+					.eo-shake {
+						animation: eoShake 0.4s ease-in-out;
+					}
+				`;
+				document.head.appendChild(style);
+
+				function isEmailAllowedJS(email, rulesStr) {
+					if (!rulesStr) return true;
+					email = email.trim().toLowerCase();
+					if (email.indexOf('@') === -1) {
+						return false;
+					}
+					var rules = rulesStr.split(',').map(function(r) { return r.trim().toLowerCase(); }).filter(Boolean);
+					for (var i = 0; i < rules.length; i++) {
+						var rule = rules[i];
+						if (rule.indexOf('@') > 0 && rule.indexOf('.') > 0 && (rule.match(/@/g) || []).length === 1) {
+							if (email === rule) return true;
+						}
+						if (rule.indexOf('@') === 0) {
+							if (email.slice(-rule.length) === rule) return true;
+							if (rule.indexOf('.') === -1) {
+								var parts = email.split('@');
+								var domainPart = parts[1] || '';
+								var ruleDomain = rule.substring(1);
+								if (domainPart === ruleDomain || domainPart.indexOf(ruleDomain + '.') === 0) {
+									return true;
+								}
+							}
+						}
+					}
+					return false;
+				}
+
+				form.addEventListener('submit', function(e) {
+					if (!window.eoLpLoginSecurity || !window.eoLpLoginSecurity.emailFilteringActive) {
+						return;
+					}
+
+					var username = usernameInput.value.trim();
+					if (!username) return;
+
+					if (!isEmailAllowedJS(username, window.eoLpLoginSecurity.emailRules)) {
+						e.preventDefault();
+
+						var errorDiv = document.querySelector('.eo-login-error');
+						if (!errorDiv) {
+							errorDiv = document.createElement('div');
+							errorDiv.className = 'eo-login-error';
+							form.parentNode.insertBefore(errorDiv, form);
+						}
+						errorDiv.innerHTML = '<span class="dashicons dashicons-warning" style="vertical-align: middle; margin-right: 4px;"></span> ' + 
+							<?php echo json_encode( __( 'Cette adresse e-mail n\'est pas autorisée à se connecter sur ce site.', 'eo-blocks' ) ); ?>;
+						
+						var container = document.querySelector('.eo-lp-box');
+						container.classList.remove('eo-shake');
+						void container.offsetWidth;
+						container.classList.add('eo-shake');
+					}
+				});
+			});
+		</script>
+	<?php endif; ?>
 
 </body>
 </html>

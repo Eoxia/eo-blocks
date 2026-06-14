@@ -38,6 +38,7 @@ class Eoblocks {
 
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_global_assets' ) );
+		add_action( 'init', array( $this, 'eo_blocks_create_tables' ) );
 		add_filter( 'block_categories_all', array( $this, 'create_block_category' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'group_link_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -50,6 +51,9 @@ class Eoblocks {
 		add_action( 'login_init', array( $this, 'intercept_login' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_badge' ), 999 );
 		add_action( 'wp_login_failed', array( $this, 'login_failed_redirect' ) );
+		add_action( 'wp_login_failed', array( $this, 'log_login_failed' ), 10, 2 );
+		add_action( 'wp_login', array( $this, 'log_login_success' ), 10, 2 );
+		add_filter( 'authenticate', array( $this, 'check_email_login_filter' ), 25, 3 );
 		add_action( 'admin_head', array( $this, 'enqueue_admin_bar_styles' ) );
 		add_action( 'wp_head', array( $this, 'enqueue_admin_bar_styles' ) );
 	}
@@ -301,11 +305,23 @@ class Eoblocks {
 		$settings = get_option( 'eo_landing_pages_settings', array() );
 		$login_active = !empty( $settings['login']['active'] );
 
-		if ( $login_active && isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' === $_SERVER['REQUEST_METHOD'] ) {
-			$action = isset( $_GET['action'] ) ? $_GET['action'] : 'login';
-			if ( 'login' === $action ) {
-				$this->render_landing_page( 'login' );
-				exit;
+		if ( $login_active ) {
+			// Check IP access restriction first
+			$ip_rules = $settings['login']['ip_rules'] ?? array();
+			if ( ! $this->check_ip_access( $ip_rules ) ) {
+				// Log the blocked IP attempt
+				$this->log_login_attempt( '', 'blocked_ip' );
+
+				status_header( 403 );
+				wp_die( __( 'Accès refusé. Votre adresse IP n\'est pas autorisée à se connecter.', 'eo-blocks' ), __( 'Accès Refusé', 'eo-blocks' ), array( 'response' => 403 ) );
+			}
+
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' === $_SERVER['REQUEST_METHOD'] ) {
+				$action = isset( $_GET['action'] ) ? $_GET['action'] : 'login';
+				if ( 'login' === $action ) {
+					$this->render_landing_page( 'login' );
+					exit;
+				}
 			}
 		}
 	}
@@ -475,5 +491,245 @@ class Eoblocks {
 					100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 				}
 			</style>';
+	}
+
+	/**
+	 * Create Custom Tables according to WordPress standards
+	 */
+	public function eo_blocks_create_tables() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'eo_login_attempts';
+		$db_version = get_option( 'eo_blocks_db_version', '0' );
+		
+		if ( $db_version !== '1.0.0' || $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) !== $table_name ) {
+			$charset_collate = $wpdb->get_charset_collate();
+			
+			$sql = "CREATE TABLE $table_name (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				ip varchar(100) NOT NULL,
+				username varchar(255) NOT NULL,
+				status varchar(50) NOT NULL,
+				user_agent text NOT NULL,
+				PRIMARY KEY  (id),
+				KEY ip (ip),
+				KEY time (time)
+			) $charset_collate;";
+			
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+			
+			update_option( 'eo_blocks_db_version', '1.0.0' );
+		}
+	}
+
+	/**
+	 * Log a login attempt in the database
+	 */
+	public function log_login_attempt( $username, $status ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'eo_login_attempts';
+		
+		// Ensure the table exists
+		$this->eo_blocks_create_tables();
+
+		$ip = $this->get_visitor_ip();
+		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : '';
+
+		$wpdb->insert(
+			$table_name,
+			array(
+				'ip'         => $ip ? $ip : '0.0.0.0',
+				'username'   => sanitize_text_field( $username ),
+				'status'     => sanitize_text_field( $status ),
+				'user_agent' => $user_agent,
+				'time'       => current_time( 'mysql' ),
+			)
+		);
+
+		$this->eo_blocks_purge_login_attempts();
+	}
+
+	/**
+	 * Purge oldest logs according to configured limit
+	 */
+	public function eo_blocks_purge_login_attempts() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'eo_login_attempts';
+		
+		$settings = get_option( 'eo_landing_pages_settings', array() );
+		$limit = isset( $settings['login']['log_limit'] ) ? intval( $settings['login']['log_limit'] ) : 1000;
+		
+		if ( $limit <= 0 ) {
+			return;
+		}
+
+		$count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+		if ( $count > $limit ) {
+			$offset = $count - $limit;
+			$boundary_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name ORDER BY id ASC LIMIT 1 OFFSET %d", $offset - 1 ) );
+			if ( $boundary_id ) {
+				$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id <= %d", $boundary_id ) );
+			}
+		}
+	}
+
+	/**
+	 * Get visitor IP address
+	 */
+	private function get_visitor_ip() {
+		$ip = '';
+		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			$ips = explode( ',', $ip );
+			$ip = trim( $ips[0] );
+		} elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return filter_var( $ip, FILTER_VALIDATE_IP );
+	}
+
+	/**
+	 * Check if IP matches CIDR block or single IP
+	 */
+	private function ip_matches_cidr( $ip, $cidr ) {
+		$cidr = trim( $cidr );
+		if ( strpos( $cidr, '/' ) === false ) {
+			return $ip === $cidr;
+		}
+
+		list( $subnet, $mask ) = explode( '/', $cidr );
+		$mask = intval( $mask );
+
+		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) && filter_var( $subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+			$ip_long = ip2long( $ip );
+			$subnet_long = ip2long( $subnet );
+			$mask_dec = ~ ( ( 1 << ( 32 - $mask ) ) - 1 );
+			return ( $ip_long & $mask_dec ) === ( $subnet_long & $mask_dec );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Verify if visitor IP is authorized
+	 */
+	private function check_ip_access( $ip_rules ) {
+		if ( empty( $ip_rules ) ) {
+			return true;
+		}
+
+		$visitor_ip = $this->get_visitor_ip();
+		if ( ! $visitor_ip ) {
+			return true;
+		}
+
+		$has_allow_rules = false;
+		$ip_allowed = false;
+
+		foreach ( $ip_rules as $rule ) {
+			$rule_ip = $rule['ip'];
+			$action = $rule['action'];
+
+			if ( 'allow' === $action ) {
+				$has_allow_rules = true;
+			}
+
+			if ( $this->ip_matches_cidr( $visitor_ip, $rule_ip ) ) {
+				if ( 'block' === $action ) {
+					return false;
+				} elseif ( 'allow' === $action ) {
+					$ip_allowed = true;
+				}
+			}
+		}
+
+		if ( $has_allow_rules ) {
+			return $ip_allowed;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Hook on authenticate filter to check if email is authorized
+	 */
+	public function check_email_login_filter( $user, $username, $password ) {
+		$settings = get_option( 'eo_landing_pages_settings', array() );
+		$login_active = !empty( $settings['login']['active'] );
+		$email_filtering_active = !empty( $settings['login']['email_filtering_active'] );
+
+		if ( $login_active && $email_filtering_active && ! empty( $username ) ) {
+			$email_rules = $settings['login']['email_rules'] ?? '';
+			if ( ! $this->is_email_allowed_php( $username, $email_rules ) ) {
+				$this->log_login_attempt( $username, 'blocked_email' );
+				return new \WP_Error( 'email_not_allowed', __( 'Cette adresse e-mail n\'est pas autorisée à se connecter sur ce site.', 'eo-blocks' ) );
+			}
+		}
+		return $user;
+	}
+
+	/**
+	 * Verify if email matches allowed domain rules in PHP
+	 */
+	private function is_email_allowed_php( $email, $rules_str ) {
+		if ( empty( $rules_str ) ) {
+			return true;
+		}
+
+		$email = strtolower( trim( $email ) );
+		if ( strpos( $email, '@' ) === false ) {
+			return false;
+		}
+
+		$rules = array_filter( array_map( 'trim', explode( ',', $rules_str ) ) );
+		foreach ( $rules as $rule ) {
+			$rule = strtolower( $rule );
+			if ( empty( $rule ) ) {
+				continue;
+			}
+
+			if ( strpos( $rule, '@' ) > 0 && strpos( $rule, '.' ) > 0 && substr_count( $rule, '@' ) === 1 ) {
+				if ( $email === $rule ) {
+					return true;
+				}
+			}
+
+			if ( strpos( $rule, '@' ) === 0 ) {
+				if ( substr( $email, -strlen( $rule ) ) === $rule ) {
+					return true;
+				}
+
+				if ( strpos( $rule, '.' ) === false ) {
+					$parts = explode( '@', $email );
+					$domain_part = $parts[1] ?? '';
+					$rule_domain = substr( $rule, 1 );
+					if ( $domain_part === $rule_domain || strpos( $domain_part, $rule_domain . '.' ) === 0 ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Log successful connection
+	 */
+	public function log_login_success( $user_login, $user ) {
+		$this->log_login_attempt( $user_login, 'success' );
+	}
+
+	/**
+	 * Log failed connection
+	 */
+	public function log_login_failed( $username, $error = null ) {
+		if ( is_wp_error( $error ) && 'email_not_allowed' === $error->get_error_code() ) {
+			return; // Avoid duplicate logging (already logged in authenticate)
+		}
+		$this->log_login_attempt( $username, 'failed' );
 	}
 }

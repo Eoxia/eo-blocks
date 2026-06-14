@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'wp_ajax_eo_save_landing_page_settings', 'eo_landing_pages_ajax_save_settings' );
+add_action( 'wp_ajax_eo_get_login_logs', 'eo_landing_pages_ajax_get_login_logs' );
+add_action( 'wp_ajax_eo_clear_login_logs', 'eo_landing_pages_ajax_clear_login_logs' );
 
 function eo_landing_pages_ajax_save_settings() {
 	check_ajax_referer( 'eo_landing_pages_admin_nonce', 'nonce' );
@@ -45,6 +47,18 @@ function eo_landing_pages_ajax_save_settings() {
 		) );
 	}
 
+	// Toggling email filtering state only (fast toggle from card)
+	if ( isset( $_POST['email_filter_toggle'] ) ) {
+		$active = !empty( $_POST['active'] ) && ( $_POST['active'] === 'true' || $_POST['active'] === '1' );
+		$settings['login']['email_filtering_active'] = $active;
+
+		update_option( 'eo_landing_pages_settings', $settings );
+		wp_send_json_success( array(
+			'message'  => __( 'Filtrage e-mails mis à jour.', 'eo-blocks' ),
+			'settings' => $settings,
+		) );
+	}
+
 	// Full details save
 	$title        = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
 	$description  = isset( $_POST['description'] ) ? wp_kses_post( wp_unslash( $_POST['description'] ) ) : '';
@@ -72,10 +86,97 @@ function eo_landing_pages_ajax_save_settings() {
 		'accent_color' => $accent_color,
 	);
 
+	if ( 'login' === $type ) {
+		$email_filtering_active = isset( $_POST['email_filtering_active'] ) && ( $_POST['email_filtering_active'] === 'true' || $_POST['email_filtering_active'] === '1' );
+		$email_rules            = isset( $_POST['email_rules'] ) ? sanitize_textarea_field( wp_unslash( $_POST['email_rules'] ) ) : '';
+		$log_limit              = isset( $_POST['log_limit'] ) ? intval( $_POST['log_limit'] ) : 1000;
+		if ( $log_limit <= 0 ) {
+			$log_limit = 1000;
+		}
+
+		$ip_rules = array();
+		if ( isset( $_POST['ip_rules'] ) ) {
+			$decoded = json_decode( wp_unslash( $_POST['ip_rules'] ), true );
+			if ( is_array( $decoded ) ) {
+				foreach ( $decoded as $rule ) {
+					if ( isset( $rule['ip'] ) && isset( $rule['action'] ) ) {
+						$ip_rules[] = array(
+							'ip'     => sanitize_text_field( $rule['ip'] ),
+							'action' => in_array( $rule['action'], array( 'allow', 'block' ) ) ? $rule['action'] : 'block',
+						);
+					}
+				}
+			}
+		}
+
+		$settings['login']['email_filtering_active'] = $email_filtering_active;
+		$settings['login']['email_rules']            = $email_rules;
+		$settings['login']['ip_rules']               = $ip_rules;
+		$settings['login']['log_limit']              = $log_limit;
+	}
+
 	update_option( 'eo_landing_pages_settings', $settings );
 
 	wp_send_json_success( array(
 		'message'  => __( 'Paramètres enregistrés avec succès.', 'eo-blocks' ),
 		'settings' => $settings,
 	) );
+}
+
+function eo_landing_pages_ajax_get_login_logs() {
+	check_ajax_referer( 'eo_landing_pages_admin_nonce', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Vous n\'avez pas la permission de faire cela.', 'eo-blocks' ) ), 403 );
+	}
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'eo_login_attempts';
+
+	// Check if table exists
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) !== $table_name ) {
+		wp_send_json_success( array( 'logs' => array() ) );
+	}
+
+	$logs = $wpdb->get_results( "SELECT id, time, ip, username, status, user_agent FROM $table_name ORDER BY id DESC LIMIT 100", ARRAY_A );
+
+	foreach ( $logs as &$log ) {
+		switch ( $log['status'] ) {
+			case 'success':
+				$log['status_label'] = __( 'Succès', 'eo-blocks' );
+				break;
+			case 'failed':
+				$log['status_label'] = __( 'Échec', 'eo-blocks' );
+				break;
+			case 'blocked_ip':
+				$log['status_label'] = __( 'IP Bloquée', 'eo-blocks' );
+				break;
+			case 'blocked_email':
+				$log['status_label'] = __( 'E-mail non autorisé', 'eo-blocks' );
+				break;
+			default:
+				$log['status_label'] = esc_html( $log['status'] );
+		}
+		$log['formatted_time'] = mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log['time'] );
+	}
+
+	wp_send_json_success( array( 'logs' => $logs ) );
+}
+
+function eo_landing_pages_ajax_clear_login_logs() {
+	check_ajax_referer( 'eo_landing_pages_admin_nonce', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Vous n\'avez pas la permission de faire cela.', 'eo-blocks' ) ), 403 );
+	}
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'eo_login_attempts';
+
+	$result = $wpdb->query( "TRUNCATE TABLE $table_name" );
+	if ( false === $result ) {
+		$wpdb->query( "DELETE FROM $table_name" );
+	}
+
+	wp_send_json_success( array( 'message' => __( 'Journal vidé avec succès.', 'eo-blocks' ) ) );
 }

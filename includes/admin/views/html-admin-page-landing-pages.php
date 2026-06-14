@@ -29,13 +29,17 @@ $defaults = array(
 		'accent_color'=> '#6366f1',
 	),
 	'login' => array(
-		'active'       => false,
-		'title'        => __( 'Connexion', 'eo-blocks' ),
-		'description' => __( 'Veuillez vous connecter pour accéder au site.', 'eo-blocks' ),
-		'style'       => 'glassmorphism',
-		'bg_color'    => '#0f172a',
-		'text_color'  => '#f8fafc',
-		'accent_color'=> '#06b6d4',
+		'active'                 => false,
+		'title'                  => __( 'Connexion', 'eo-blocks' ),
+		'description'            => __( 'Veuillez vous connecter pour accéder au site.', 'eo-blocks' ),
+		'style'                  => 'glassmorphism',
+		'bg_color'               => '#0f172a',
+		'text_color'             => '#f8fafc',
+		'accent_color'           => '#06b6d4',
+		'email_filtering_active' => false,
+		'email_rules'            => '',
+		'ip_rules'               => array(),
+		'log_limit'              => 1000,
 	),
 	'404' => array(
 		'active'       => false,
@@ -115,6 +119,17 @@ $pages_data = array(
 				<div class="eo-lp-card-body">
 					<h3 class="eo-lp-card-title"><?php echo esc_html( $page['title'] ); ?></h3>
 					<p class="eo-lp-card-desc"><?php echo esc_html( $page['desc'] ); ?></p>
+					<?php if ( 'login' === $key ) : ?>
+						<div class="eo-lp-card-sub-toggle" style="margin-top: 15px; display: flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
+							<label class="eo-lp-switch" style="width: 34px; height: 18px;">
+								<input type="checkbox" class="eo-lp-email-filter-toggle" <?php checked( !empty( $page['config']['email_filtering_active'] ) ); ?> style="width:0; height:0; opacity:0;" />
+								<span class="eo-lp-slider" style="border-radius: 18px;"></span>
+							</label>
+							<span style="font-size: 11px; font-weight: 600; color: #64748b;">
+								<?php esc_html_e( 'Filtrage e-mails', 'eo-blocks' ); ?>
+							</span>
+						</div>
+					<?php endif; ?>
 				</div>
 				<div class="eo-lp-card-footer">
 					<button type="button" class="button button-primary eo-lp-edit-btn" data-type="<?php echo esc_attr( $key ); ?>">
@@ -164,6 +179,124 @@ $pages_data = array(
 					<div class="eo-lp-form-group eo-lp-form-404-hint" style="display: none; background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 6px; border-left: 4px solid #ef4444;">
 						<span class="dashicons dashicons-info" style="vertical-align: middle; margin-right: 4px;"></span>
 						<?php esc_html_e( 'Un bouton "Retour à l\'accueil" redirigeant vers le site sera automatiquement affiché en dessous du texte.', 'eo-blocks' ); ?>
+					</div>
+
+					<div id="eo-lp-login-security-section" style="display: none; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+						<h3 style="margin-top: 0; font-size: 16px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+							<span class="dashicons dashicons-shield"></span>
+							<?php esc_html_e( 'Sécurité & Filtrage des Connexions', 'eo-blocks' ); ?>
+						</h3>
+						
+						<!-- Filtrage E-mails -->
+						<div class="eo-lp-security-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+							<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+								<span style="font-weight: 600; font-size: 13px; color: #334155;">
+									<?php esc_html_e( 'Activer le filtrage par adresse e-mail', 'eo-blocks' ); ?>
+								</span>
+								<label class="eo-lp-switch">
+									<input type="checkbox" id="eo-lp-email-filtering-active" name="email_filtering_active" value="1" />
+									<span class="eo-lp-slider"></span>
+								</label>
+							</div>
+							<div class="eo-lp-form-group eo-lp-email-rules-group" style="display: none;">
+								<label for="eo-lp-email-rules"><?php esc_html_e( 'Adresses e-mail ou domaines autorisés', 'eo-blocks' ); ?></label>
+								<textarea id="eo-lp-email-rules" name="email_rules" rows="3" style="width: 100%; font-family: monospace;" placeholder="@eoxia.com, admin@monsite.fr, @lenomdomaine"></textarea>
+								<p class="description">
+									<?php esc_html_e( 'Séparez les entrées par des virgules. Exemple : "@eoxia.com" ou "@eoxia" (autorise n\'importe quel TLD comme .com, .fr, .net).', 'eo-blocks' ); ?>
+								</p>
+							</div>
+						</div>
+
+						<!-- Filtrage IP -->
+						<div class="eo-lp-security-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+							<h4 style="margin-top: 0; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #334155;">
+								<?php esc_html_e( 'Contrôle d\'accès par adresses IP / CIDR', 'eo-blocks' ); ?>
+							</h4>
+							<p class="description" style="margin-bottom: 12px;">
+								<?php esc_html_e( 'Définissez des règles d\'autorisation ou de blocage d\'adresses IP. Si des règles d\'autorisation existent, seules ces IP pourront se connecter.', 'eo-blocks' ); ?>
+							</p>
+							
+							<div class="eo-lp-ip-rules-container">
+								<table class="wp-list-table widefat fixed striped eo-lp-ip-rules-table" style="margin-bottom: 12px; border-radius: 6px; overflow: hidden; border: 1px solid #cbd5e1;">
+									<thead>
+										<tr>
+											<th style="width: 50%; font-weight: 600; padding: 8px 10px;"><?php esc_html_e( 'Adresse IP / CIDR', 'eo-blocks' ); ?></th>
+											<th style="width: 30%; font-weight: 600; padding: 8px 10px;"><?php esc_html_e( 'Action', 'eo-blocks' ); ?></th>
+											<th style="width: 20%; text-align: right; font-weight: 600; padding: 8px 10px;"><?php esc_html_e( 'Actions', 'eo-blocks' ); ?></th>
+										</tr>
+									</thead>
+									<tbody id="eo-lp-ip-rules-tbody">
+										<!-- IP rules will be loaded dynamically here -->
+									</tbody>
+								</table>
+								
+								<div class="eo-lp-ip-add-controls" style="display: flex; gap: 10px; align-items: flex-end;">
+									<div style="flex: 2; display: flex; flex-direction: column;">
+										<label for="eo-lp-new-ip-val" style="font-size: 11px; font-weight: 600; margin-bottom: 4px;"><?php esc_html_e( 'IP ou CIDR (ex: 192.168.1.0/24)', 'eo-blocks' ); ?></label>
+										<input type="text" id="eo-lp-new-ip-val" placeholder="192.168.1.1" style="height: 32px; font-size: 12px;" />
+									</div>
+									<div style="flex: 1.5; display: flex; flex-direction: column;">
+										<label for="eo-lp-new-ip-action" style="font-size: 11px; font-weight: 600; margin-bottom: 4px;"><?php esc_html_e( 'Règle', 'eo-blocks' ); ?></label>
+										<select id="eo-lp-new-ip-action" style="height: 32px; font-size: 12px; padding: 0 6px;">
+											<option value="allow"><?php esc_html_e( 'Autoriser (Allow)', 'eo-blocks' ); ?></option>
+											<option value="block"><?php esc_html_e( 'Bloquer (Block)', 'eo-blocks' ); ?></option>
+										</select>
+									</div>
+									<button type="button" id="eo-lp-add-ip-rule-btn" class="button button-secondary" style="height: 32px; line-height: 30px;">
+										<?php esc_html_e( 'Ajouter', 'eo-blocks' ); ?>
+									</button>
+								</div>
+								
+								<input type="hidden" id="eo-lp-ip-rules-hidden" name="ip_rules" value="[]" />
+							</div>
+						</div>
+
+						<!-- Limite des logs -->
+						<div class="eo-lp-security-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+							<div style="display: flex; align-items: center; justify-content: space-between;">
+								<span style="font-weight: 600; font-size: 13px; color: #334155;">
+									<?php esc_html_e( 'Seuil de purge automatique des logs', 'eo-blocks' ); ?>
+								</span>
+								<input type="number" id="eo-lp-log-limit" name="log_limit" min="1" max="100000" style="width: 100px; height: 32px;" value="1000" />
+							</div>
+							<p class="description" style="margin-top: 8px; margin-bottom: 0;">
+								<?php esc_html_e( 'Nombre maximum de tentatives de connexions à conserver dans le journal (par défaut 1000).', 'eo-blocks' ); ?>
+							</p>
+						</div>
+
+						<!-- Journal de connexion -->
+						<div class="eo-lp-security-box" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px;">
+							<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+								<h4 style="margin: 0; font-size: 14px; font-weight: 600; color: #1e293b;">
+									<?php esc_html_e( 'Journal des tentatives de connexion', 'eo-blocks' ); ?>
+								</h4>
+								<button type="button" id="eo-lp-clear-logs-btn" class="button button-link-delete" style="color: #d63638; text-decoration: none;">
+									<span class="dashicons dashicons-trash" style="vertical-align: middle; font-size: 16px;"></span>
+									<?php esc_html_e( 'Vider le journal', 'eo-blocks' ); ?>
+								</button>
+							</div>
+							
+							<div class="eo-lp-logs-table-wrapper" style="max-height: 300px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
+								<table class="wp-list-table widefat fixed striped eo-lp-logs-table" style="border: none;">
+									<thead>
+										<tr>
+											<th style="font-weight: 600; font-size: 11px; padding: 8px;"><?php esc_html_e( 'Date', 'eo-blocks' ); ?></th>
+											<th style="font-weight: 600; font-size: 11px; padding: 8px;"><?php esc_html_e( 'IP', 'eo-blocks' ); ?></th>
+											<th style="font-weight: 600; font-size: 11px; padding: 8px;"><?php esc_html_e( 'Identifiant', 'eo-blocks' ); ?></th>
+											<th style="font-weight: 600; font-size: 11px; padding: 8px;"><?php esc_html_e( 'Statut', 'eo-blocks' ); ?></th>
+											<th style="font-weight: 600; font-size: 11px; padding: 8px;"><?php esc_html_e( 'Navigateur', 'eo-blocks' ); ?></th>
+										</tr>
+									</thead>
+									<tbody id="eo-lp-logs-tbody">
+										<tr>
+											<td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">
+												<?php esc_html_e( 'Chargement des données...', 'eo-blocks' ); ?>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 
