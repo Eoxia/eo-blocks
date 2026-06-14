@@ -48,15 +48,66 @@
 			attribution: attrib
 		}).addTo(map);
 
-		// Default Leaflet Marker Configuration
-		var defaultIcon = L.icon({
-			iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-			shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-			iconSize: [25, 41],
-			iconAnchor: [12, 41],
-			popupAnchor: [1, -34],
-			className: 'eo-marker-bounce-animation'
-		});
+		// Create custom marker icon according to its type, color and animation
+		function createMarkerIcon(markerData) {
+			var markerType = markerData.marker_type || 'default';
+			var color = markerData.color || '#0066FF';
+			var animation = markerData.animation || 'bounce';
+			
+			// Build animation class
+			var animClass = '';
+			if (animation === 'bounce') {
+				animClass = 'eo-marker-bounce-animation';
+			} else if (animation === 'pulse') {
+				animClass = 'eo-marker-pulse-animation';
+			} else if (animation === 'float') {
+				animClass = 'eo-marker-float-animation';
+			}
+			
+			if (markerType === 'svg_pin') {
+				var svgHtml = '<svg viewBox="0 0 24 30" width="30" height="38" xmlns="http://www.w3.org/2000/svg" style="display: block; filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.3));">' +
+					'<path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 18 12 18s12-9 12-18c0-6.63-5.37-12-12-12zm0 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="' + escapeHtml(color) + '" stroke="#ffffff" stroke-width="1.5"/>' +
+					'</svg>';
+				return L.divIcon({
+					html: svgHtml,
+					iconSize: [30, 38],
+					iconAnchor: [15, 38],
+					popupAnchor: [0, -38],
+					className: 'eo-map-custom-svg-icon ' + animClass,
+					bgPos: [0, 0]
+				});
+			} else if (markerType === 'svg_circle') {
+				var svgHtml = '<svg viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg" style="display: block; filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.3));">' +
+					'<circle cx="15" cy="15" r="11" fill="' + escapeHtml(color) + '" stroke="#ffffff" stroke-width="2.5"/>' +
+					'</svg>';
+				return L.divIcon({
+					html: svgHtml,
+					iconSize: [30, 30],
+					iconAnchor: [15, 15],
+					popupAnchor: [0, -15],
+					className: 'eo-map-custom-svg-icon ' + animClass,
+					bgPos: [0, 0]
+				});
+			} else {
+				// Default image marker
+				var iconUrl = markerData.icon || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
+				var shadowUrl = markerData.icon ? '' : 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
+				var iconSize = markerData.icon ? [32, 32] : [25, 41];
+				var iconAnchor = markerData.icon ? [16, 32] : [12, 41];
+				var popupAnchor = markerData.icon ? [0, -32] : [1, -34];
+				
+				return L.icon({
+					iconUrl: iconUrl,
+					shadowUrl: shadowUrl,
+					iconSize: iconSize,
+					iconAnchor: iconAnchor,
+					popupAnchor: popupAnchor,
+					className: animClass
+				});
+			}
+		}
+
+		var defaultIcon = createMarkerIcon({ marker_type: 'default' });
 
 		// Helper to escape HTML safely
 		function escapeHtml(str) {
@@ -137,16 +188,7 @@
 		// Draw each Marker
 		if ( Array.isArray(markers) ) {
 			markers.forEach(function(markerData) {
-				var customIcon = defaultIcon;
-				if (markerData.icon) {
-					customIcon = L.icon({
-						iconUrl: markerData.icon,
-						iconSize: [32, 32],
-						iconAnchor: [16, 32],
-						popupAnchor: [0, -32],
-						className: 'eo-marker-bounce-animation'
-					});
-				}
+				var customIcon = createMarkerIcon(markerData);
 
 				var marker = L.marker([markerData.lat, markerData.lng], {
 					icon: customIcon

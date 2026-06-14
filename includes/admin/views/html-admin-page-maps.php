@@ -261,8 +261,38 @@ wp_reset_postdata();
 							<input type="text" id="eo-marker-category" style="width: 100%;" placeholder="<?php esc_attr_e( 'ex: Hôtel, Monument', 'eo-blocks' ); ?>" />
 						</div>
 
-						<!-- Icône personnalisée -->
+						<!-- Type de marqueur -->
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
+							<label for="eo-marker-type" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Type de marqueur', 'eo-blocks' ); ?></label>
+							<select id="eo-marker-type" style="width: 100%;">
+								<option value="default"><?php esc_html_e( 'Par défaut / Image personnalisée', 'eo-blocks' ); ?></option>
+								<option value="svg_pin"><?php esc_html_e( 'Épingle vectorielle SVG', 'eo-blocks' ); ?></option>
+								<option value="svg_circle"><?php esc_html_e( 'Cercle vectoriel SVG', 'eo-blocks' ); ?></option>
+							</select>
+						</div>
+
+						<!-- Couleur du marqueur (conditionnel) -->
+						<div class="eo-map-form-group" id="eo-marker-color-group" style="margin-bottom: 12px; display: none;">
+							<label for="eo-marker-color" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Couleur du marqueur', 'eo-blocks' ); ?></label>
+							<div style="display: flex; align-items: center; gap: 8px;">
+								<input type="color" id="eo-marker-color" value="#0066FF" style="width: 50px; height: 30px; padding: 0; border: 1px solid #ccd0d4; border-radius: 4px; cursor: pointer;" />
+								<span id="eo-marker-color-value" style="font-family: monospace; font-size: 13px; color: #555;">#0066FF</span>
+							</div>
+						</div>
+
+						<!-- Animation du marqueur -->
+						<div class="eo-map-form-group" style="margin-bottom: 12px;">
+							<label for="eo-marker-animation" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Animation', 'eo-blocks' ); ?></label>
+							<select id="eo-marker-animation" style="width: 100%;">
+								<option value="bounce"><?php esc_html_e( 'Rebond (À l\'entrée)', 'eo-blocks' ); ?></option>
+								<option value="pulse"><?php esc_html_e( 'Clignotement (Continu)', 'eo-blocks' ); ?></option>
+								<option value="float"><?php esc_html_e( 'Flottement (Continu)', 'eo-blocks' ); ?></option>
+								<option value="none"><?php esc_html_e( 'Aucune', 'eo-blocks' ); ?></option>
+							</select>
+						</div>
+
+						<!-- Icône personnalisée -->
+						<div class="eo-map-form-group" id="eo-marker-custom-icon-group" style="margin-bottom: 12px;">
 							<label style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Icône de marqueur', 'eo-blocks' ); ?></label>
 							<div style="display: flex; align-items: center; gap: 10px;">
 								<div id="eo-marker-icon-preview" style="width: 32px; height: 32px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; background: #fff;">

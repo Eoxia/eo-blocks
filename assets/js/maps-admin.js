@@ -225,14 +225,66 @@ jQuery(document).ready(function($) {
         }
     });
 
-    // Default icon config
-    var defaultIcon = L.icon({
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34]
-    });
+    // Create custom marker icon according to its type, color and animation
+    function createMarkerIcon(markerData) {
+        var markerType = markerData.marker_type || 'default';
+        var color = markerData.color || '#0066FF';
+        var animation = markerData.animation || 'bounce';
+        
+        // Build animation class
+        var animClass = '';
+        if (animation === 'bounce') {
+            animClass = 'eo-marker-bounce-animation';
+        } else if (animation === 'pulse') {
+            animClass = 'eo-marker-pulse-animation';
+        } else if (animation === 'float') {
+            animClass = 'eo-marker-float-animation';
+        }
+        
+        if (markerType === 'svg_pin') {
+            var svgHtml = '<svg viewBox="0 0 24 30" width="30" height="38" xmlns="http://www.w3.org/2000/svg" style="display: block; filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.3));">' +
+                '<path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 18 12 18s12-9 12-18c0-6.63-5.37-12-12-12zm0 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="' + escapeHtml(color) + '" stroke="#ffffff" stroke-width="1.5"/>' +
+                '</svg>';
+            return L.divIcon({
+                html: svgHtml,
+                iconSize: [30, 38],
+                iconAnchor: [15, 38],
+                popupAnchor: [0, -38],
+                className: 'eo-map-custom-svg-icon ' + animClass,
+                bgPos: [0, 0]
+            });
+        } else if (markerType === 'svg_circle') {
+            var svgHtml = '<svg viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg" style="display: block; filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.3));">' +
+                '<circle cx="15" cy="15" r="11" fill="' + escapeHtml(color) + '" stroke="#ffffff" stroke-width="2.5"/>' +
+                '</svg>';
+            return L.divIcon({
+                html: svgHtml,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -15],
+                className: 'eo-map-custom-svg-icon ' + animClass,
+                bgPos: [0, 0]
+            });
+        } else {
+            // Default image marker
+            var iconUrl = markerData.icon || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
+            var shadowUrl = markerData.icon ? '' : 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
+            var iconSize = markerData.icon ? [32, 32] : [25, 41];
+            var iconAnchor = markerData.icon ? [16, 32] : [12, 41];
+            var popupAnchor = markerData.icon ? [0, -32] : [1, -34];
+            
+            return L.icon({
+                iconUrl: iconUrl,
+                shadowUrl: shadowUrl,
+                iconSize: iconSize,
+                iconAnchor: iconAnchor,
+                popupAnchor: popupAnchor,
+                className: animClass
+            });
+        }
+    }
+
+    var defaultIcon = createMarkerIcon({ marker_type: 'default' });
 
     // 1. Initialize Tabs
     $('.eo-maps-tab-link').on('click', function() {
@@ -308,25 +360,7 @@ jQuery(document).ready(function($) {
 
     // Add marker helper
     function addMarkerToLeafletMap(markerData) {
-        var customIcon = defaultIcon;
-        if (markerData.icon) {
-            customIcon = L.icon({
-                iconUrl: markerData.icon,
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-                popupAnchor: [0, -32],
-                className: 'eo-marker-bounce-animation'
-            });
-        } else {
-            customIcon = L.icon({
-                iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                className: 'eo-marker-bounce-animation'
-            });
-        }
+        var customIcon = createMarkerIcon(markerData);
 
         var marker = L.marker([markerData.lat, markerData.lng], {
             icon: customIcon,
@@ -423,18 +457,25 @@ jQuery(document).ready(function($) {
     var tempMarker = null;
 
     function setTempMarker(lat, lng) {
+        var markerType = $('#eo-marker-type').val();
+        var color = $('#eo-marker-color').val();
+        var animation = $('#eo-marker-animation').val();
+        var icon = $('#eo-marker-icon-url').val();
+        
+        var dummyData = {
+            marker_type: markerType,
+            color: color,
+            animation: animation,
+            icon: icon
+        };
+        var currentIcon = createMarkerIcon(dummyData);
+
         if (tempMarker) {
             tempMarker.setLatLng([lat, lng]);
+            tempMarker.setIcon(currentIcon);
         } else {
             tempMarker = L.marker([lat, lng], {
-                icon: L.icon({
-                    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-                    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    className: 'eo-marker-bounce-animation'
-                }),
+                icon: currentIcon,
                 draggable: true
             }).addTo(leafletMap);
 
@@ -540,6 +581,10 @@ jQuery(document).ready(function($) {
         $('#eo-marker-link-label').val('');
         $('#eo-marker-phone').val('');
         $('#eo-marker-category').val('');
+        $('#eo-marker-type').val('default').trigger('change');
+        $('#eo-marker-color').val('#0066ff');
+        $('#eo-marker-color-value').text('#0066FF');
+        $('#eo-marker-animation').val('bounce');
         $('#eo-marker-icon-url').val('');
         $('#eo-marker-icon-preview').html('<span class="dashicons dashicons-image-alt" style="font-size: 20px; width: auto; height: auto; color: #bbb;"></span>');
         
@@ -576,6 +621,10 @@ jQuery(document).ready(function($) {
         $('#eo-marker-link-label').val(marker.link_label || '');
         $('#eo-marker-phone').val(marker.phone || '');
         $('#eo-marker-category').val(marker.category);
+        $('#eo-marker-type').val(marker.marker_type || 'default').trigger('change');
+        $('#eo-marker-color').val(marker.color || '#0066ff');
+        $('#eo-marker-color-value').text((marker.color || '#0066ff').toUpperCase());
+        $('#eo-marker-animation').val(marker.animation || 'bounce');
         
         if (marker.icon) {
             $('#eo-marker-icon-url').val(marker.icon);
@@ -684,6 +733,7 @@ jQuery(document).ready(function($) {
             var attachment = customIconUploader.state().get('selection').first().toJSON();
             $('#eo-marker-icon-url').val(attachment.url);
             $('#eo-marker-icon-preview').html('<img src="' + attachment.url + '" style="max-width:100%; max-height:100%; object-fit:contain;" />');
+            updateActiveMarkerIcon();
         });
 
         customIconUploader.open();
@@ -693,6 +743,52 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $('#eo-marker-icon-url').val('');
         $('#eo-marker-icon-preview').html('<span class="dashicons dashicons-image-alt" style="font-size: 20px; width: auto; height: auto; color: #bbb;"></span>');
+        updateActiveMarkerIcon();
+    });
+
+    // Helper: Update icon in real-time for active editing marker
+    function updateActiveMarkerIcon() {
+        var id = $('#eo-marker-form-id').val();
+        var markerType = $('#eo-marker-type').val();
+        var color = $('#eo-marker-color').val();
+        var animation = $('#eo-marker-animation').val();
+        var icon = $('#eo-marker-icon-url').val();
+        
+        var dummyData = {
+            marker_type: markerType,
+            color: color,
+            animation: animation,
+            icon: icon
+        };
+        var iconObject = createMarkerIcon(dummyData);
+        
+        if (id && leafletMarkersMap[id]) {
+            leafletMarkersMap[id].setIcon(iconObject);
+        } else if (tempMarker) {
+            tempMarker.setIcon(iconObject);
+        }
+    }
+
+    // Bind real-time form event updates
+    $('#eo-marker-type').on('change', function() {
+        var markerType = $(this).val();
+        if (markerType === 'svg_pin' || markerType === 'svg_circle') {
+            $('#eo-marker-color-group').show();
+            $('#eo-marker-custom-icon-group').hide();
+        } else {
+            $('#eo-marker-color-group').hide();
+            $('#eo-marker-custom-icon-group').show();
+        }
+        updateActiveMarkerIcon();
+    });
+
+    $('#eo-marker-color').on('input change', function() {
+        $('#eo-marker-color-value').text($(this).val().toUpperCase());
+        updateActiveMarkerIcon();
+    });
+
+    $('#eo-marker-animation').on('change', function() {
+        updateActiveMarkerIcon();
     });
 
     // WordPress Media Uploader for Gallery Photos
@@ -762,6 +858,9 @@ jQuery(document).ready(function($) {
         var phone = $('#eo-marker-phone').val().trim();
         var category = $('#eo-marker-category').val().trim();
         var icon = $('#eo-marker-icon-url').val();
+        var markerType = $('#eo-marker-type').val();
+        var color = $('#eo-marker-color').val();
+        var animation = $('#eo-marker-animation').val();
 
         if (isNaN(lat) || isNaN(lng)) {
             alert('Coordonnées de marqueur invalides. Cliquez sur la carte ou effectuez une recherche d\'adresse.');
@@ -784,6 +883,9 @@ jQuery(document).ready(function($) {
             phone: phone,
             category: category,
             icon: icon,
+            marker_type: markerType,
+            color: color,
+            animation: animation,
             gallery: currentGallery
         };
 
