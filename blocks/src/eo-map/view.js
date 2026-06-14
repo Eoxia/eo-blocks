@@ -54,7 +54,8 @@
 			shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
-			popupAnchor: [1, -34]
+			popupAnchor: [1, -34],
+			className: 'eo-marker-bounce-animation'
 		});
 
 		// Helper to escape HTML safely
@@ -72,6 +73,56 @@
 			});
 		}
 
+		// Helper to format description supporting line breaks and basic markdown
+		function formatMarkerDescription(desc) {
+			if (!desc) return '';
+			var html = desc;
+
+			// Support bold: **text** -> <strong>text</strong>
+			html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+			html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+			// Support simple bullet lists:
+			var lines = html.split('\n');
+			var inList = false;
+			var processedLines = [];
+
+			lines.forEach(function(line) {
+				var trimmed = line.trim();
+				if (trimmed.indexOf('- ') === 0 || trimmed.indexOf('* ') === 0) {
+					if (!inList) {
+						processedLines.push('<ul>');
+						inList = true;
+					}
+					var itemContent = trimmed.substring(2);
+					processedLines.push('<li>' + itemContent + '</li>');
+				} else {
+					if (inList) {
+						processedLines.push('</ul>');
+						inList = false;
+					}
+					processedLines.push(line);
+				}
+			});
+			if (inList) {
+				processedLines.push('</ul>');
+			}
+
+			html = processedLines.join('\n');
+
+			// Replace remaining newlines with <br>
+			html = html.replace(/\r?\n/g, '<br>');
+			
+			// Cleanup double spacings
+			html = html.replace(/<br>\s*<ul>/g, '<ul>');
+			html = html.replace(/<\/ul>\s*<br>/g, '</ul>');
+			html = html.replace(/<ul>\s*<br>/g, '<ul>');
+			html = html.replace(/<\/li>\s*<br>/g, '</li>');
+			html = html.replace(/<li>\s*<br>/g, '<li>');
+
+			return html;
+		}
+
 		// Draw each Marker
 		if ( Array.isArray(markers) ) {
 			markers.forEach(function(markerData) {
@@ -81,7 +132,8 @@
 						iconUrl: markerData.icon,
 						iconSize: [32, 32],
 						iconAnchor: [16, 32],
-						popupAnchor: [0, -32]
+						popupAnchor: [0, -32],
+						className: 'eo-marker-bounce-animation'
 					});
 				}
 
@@ -98,7 +150,7 @@
 				}
 
 				if (markerData.description) {
-					popupHtml += '<p style="margin: 0 0 8px 0; font-size: 12px; line-height: 1.4; color: #555;">' + escapeHtml(markerData.description) + '</p>';
+					popupHtml += '<div style="margin: 0 0 8px 0; font-size: 12px; line-height: 1.4; color: #555;">' + formatMarkerDescription(markerData.description) + '</div>';
 				}
 
 				if (markerData.phone) {
@@ -106,7 +158,11 @@
 				}
 
 				if (markerData.url) {
-					popupHtml += '<p style="margin: 0 0 8px 0; font-size: 11px;"><a href="' + escapeHtml(markerData.url) + '" target="_blank" style="color: #0066FF; font-weight: 600; text-decoration: none;">Visiter le lien →</a></p>';
+					var linkLabel = markerData.link_label || 'Visiter le lien';
+					if (!linkLabel.match(/(→|->|=>|&rarr;)$/)) {
+						linkLabel += ' →';
+					}
+					popupHtml += '<p style="margin: 0 0 8px 0; font-size: 11px;"><a href="' + escapeHtml(markerData.url) + '" target="_blank" style="color: #0066FF; font-weight: 600; text-decoration: none;">' + escapeHtml(linkLabel) + '</a></p>';
 				}
 
 				if (markerData.gallery && markerData.gallery.length > 0) {

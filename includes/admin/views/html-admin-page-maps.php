@@ -236,11 +236,19 @@ wp_reset_postdata();
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
 							<label for="eo-marker-description" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Description', 'eo-blocks' ); ?></label>
 							<textarea id="eo-marker-description" style="width: 100%; height: 60px;" placeholder="<?php esc_attr_e( 'Description courte...', 'eo-blocks' ); ?>"></textarea>
+							<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666; line-height: 1.3;">
+								<?php esc_html_e( 'Supporte les retours à la ligne et le Markdown de base : **gras**, *italique*, listes avec - ou *.', 'eo-blocks' ); ?>
+							</p>
 						</div>
 
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
 							<label for="eo-marker-url" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Lien URL', 'eo-blocks' ); ?></label>
 							<input type="url" id="eo-marker-url" style="width: 100%;" placeholder="https://..." />
+						</div>
+
+						<div class="eo-map-form-group" style="margin-bottom: 12px;">
+							<label for="eo-marker-link-label" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Texte du lien', 'eo-blocks' ); ?></label>
+							<input type="text" id="eo-marker-link-label" style="width: 100%;" placeholder="<?php esc_attr_e( 'Visiter le lien →', 'eo-blocks' ); ?>" />
 						</div>
 
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">

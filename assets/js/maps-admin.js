@@ -17,6 +17,56 @@ jQuery(document).ready(function($) {
         });
     }
 
+    // Helper: Format marker description supporting line breaks & basic markdown
+    function formatMarkerDescription(desc) {
+        if (!desc) return '';
+        var html = desc;
+
+        // Support bold: **text** -> <strong>text</strong>
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+        // Support simple bullet lists:
+        var lines = html.split('\n');
+        var inList = false;
+        var processedLines = [];
+
+        lines.forEach(function(line) {
+            var trimmed = line.trim();
+            if (trimmed.indexOf('- ') === 0 || trimmed.indexOf('* ') === 0) {
+                if (!inList) {
+                    processedLines.push('<ul>');
+                    inList = true;
+                }
+                var itemContent = trimmed.substring(2);
+                processedLines.push('<li>' + itemContent + '</li>');
+            } else {
+                if (inList) {
+                    processedLines.push('</ul>');
+                    inList = false;
+                }
+                processedLines.push(line);
+            }
+        });
+        if (inList) {
+            processedLines.push('</ul>');
+        }
+
+        html = processedLines.join('\n');
+
+        // Replace remaining newlines with <br>
+        html = html.replace(/\r?\n/g, '<br>');
+        
+        // Cleanup double spacings
+        html = html.replace(/<br>\s*<ul>/g, '<ul>');
+        html = html.replace(/<\/ul>\s*<br>/g, '</ul>');
+        html = html.replace(/<ul>\s*<br>/g, '<ul>');
+        html = html.replace(/<\/li>\s*<br>/g, '</li>');
+        html = html.replace(/<li>\s*<br>/g, '<li>');
+
+        return html;
+    }
+
     // ==========================================
     // STATE 1: MAP LIST PAGE
     // ==========================================
@@ -253,7 +303,17 @@ jQuery(document).ready(function($) {
                 iconUrl: markerData.icon,
                 iconSize: [32, 32],
                 iconAnchor: [16, 32],
-                popupAnchor: [0, -32]
+                popupAnchor: [0, -32],
+                className: 'eo-marker-bounce-animation'
+            });
+        } else {
+            customIcon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                className: 'eo-marker-bounce-animation'
             });
         }
 
@@ -263,16 +323,20 @@ jQuery(document).ready(function($) {
         }).addTo(leafletMap);
 
         // Build popup content
-        var popupHtml = '<div style="min-width: 150px;">';
+        var popupHtml = '<div style="min-width: 150px; max-width: 250px;">';
         popupHtml += '<strong>' + escapeHtml(markerData.title || 'Marqueur') + '</strong>';
         if (markerData.description) {
-            popupHtml += '<p style="margin: 5px 0 0 0; font-size:12px; color:#555;">' + escapeHtml(markerData.description) + '</p>';
+            popupHtml += '<div style="margin: 5px 0 0 0; font-size:12px; line-height: 1.4; color:#555;">' + formatMarkerDescription(markerData.description) + '</div>';
         }
         if (markerData.phone) {
             popupHtml += '<p style="margin: 5px 0 0 0; font-size:11px; color:#555;"><span class="dashicons dashicons-phone" style="font-size:12px; width:auto; height:auto; vertical-align:middle; margin-right:4px;"></span><a href="tel:' + escapeHtml(markerData.phone) + '">' + escapeHtml(markerData.phone) + '</a></p>';
         }
         if (markerData.url) {
-            popupHtml += '<p style="margin: 5px 0 0 0; font-size:11px;"><a href="' + esc_url(markerData.url) + '" target="_blank">En savoir plus</a></p>';
+            var linkLabel = markerData.link_label || 'En savoir plus';
+            if (!linkLabel.match(/(→|->|=>|&rarr;)$/)) {
+                linkLabel += ' →';
+            }
+            popupHtml += '<p style="margin: 5px 0 0 0; font-size:11px;"><a href="' + esc_url(markerData.url) + '" target="_blank">' + escapeHtml(linkLabel) + '</a></p>';
         }
         if (markerData.gallery && markerData.gallery.length > 0) {
             popupHtml += '<div class="eo-map-popup-gallery" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top:8px;">';
@@ -352,7 +416,14 @@ jQuery(document).ready(function($) {
             tempMarker.setLatLng([lat, lng]);
         } else {
             tempMarker = L.marker([lat, lng], {
-                icon: defaultIcon,
+                icon: L.icon({
+                    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    className: 'eo-marker-bounce-animation'
+                }),
                 draggable: true
             }).addTo(leafletMap);
 
@@ -455,6 +526,7 @@ jQuery(document).ready(function($) {
         $('#eo-marker-title').val('');
         $('#eo-marker-description').val('');
         $('#eo-marker-url').val('');
+        $('#eo-marker-link-label').val('');
         $('#eo-marker-phone').val('');
         $('#eo-marker-category').val('');
         $('#eo-marker-icon-url').val('');
@@ -490,6 +562,7 @@ jQuery(document).ready(function($) {
         $('#eo-marker-title').val(marker.title);
         $('#eo-marker-description').val(marker.description);
         $('#eo-marker-url').val(marker.url);
+        $('#eo-marker-link-label').val(marker.link_label || '');
         $('#eo-marker-phone').val(marker.phone || '');
         $('#eo-marker-category').val(marker.category);
         
@@ -674,6 +747,7 @@ jQuery(document).ready(function($) {
         var title = $('#eo-marker-title').val().trim();
         var desc = $('#eo-marker-description').val().trim();
         var url = $('#eo-marker-url').val().trim();
+        var linkLabel = $('#eo-marker-link-label').val().trim();
         var phone = $('#eo-marker-phone').val().trim();
         var category = $('#eo-marker-category').val().trim();
         var icon = $('#eo-marker-icon-url').val();
@@ -695,6 +769,7 @@ jQuery(document).ready(function($) {
             title: title,
             description: desc,
             url: url,
+            link_label: linkLabel,
             phone: phone,
             category: category,
             icon: icon,

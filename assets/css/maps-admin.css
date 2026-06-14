@@ -207,3 +207,25 @@
     border-radius: 3px;
     border: 1px solid #ddd;
 }
+
+/* Marker entrance bounce animation */
+@keyframes eo-marker-bounce {
+    0% {
+        opacity: 0;
+        top: -100px;
+    }
+    60% {
+        opacity: 1;
+        top: 10px;
+    }
+    80% {
+        top: -5px;
+    }
+    100% {
+        top: 0px;
+    }
+}
+
+.eo-marker-bounce-animation {
+    animation: eo-marker-bounce 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
