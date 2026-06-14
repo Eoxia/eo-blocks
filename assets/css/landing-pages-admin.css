@@ -327,7 +327,7 @@
 	border: none;
 	width: 22px;
 	height: 22px;
-	border-radius: 50%;
+	border-radius: 4px;
 	cursor: pointer;
 	padding: 0;
 	background: none;
@@ -339,8 +339,8 @@
 }
 
 .eo-lp-color-picker-wrapper input[type="color"]::-webkit-color-swatch {
-	border: none;
-	border-radius: 50%;
+	border: 1px solid #cbd5e1;
+	border-radius: 4px;
 }
 
 .eo-lp-color-picker-wrapper input[type="text"] {

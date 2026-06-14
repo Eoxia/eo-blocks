@@ -324,24 +324,24 @@ $pages_data = array(
 					<div class="eo-lp-form-group">
 						<label for="eo-lp-form-bg-color"><?php esc_html_e( 'Couleur d\'arrière-plan', 'eo-blocks' ); ?></label>
 						<div class="eo-lp-color-picker-wrapper">
-							<input type="color" id="eo-lp-form-bg-color" name="bg_color" style="height: 35px; width: 60px; padding: 0; cursor: pointer; border: 1px solid #ccd0d4;" />
-							<input type="text" id="eo-lp-form-bg-color-text" class="small-text" style="height: 35px; width: 100px; margin-left: 10px; font-family: monospace; text-transform: uppercase;" />
+							<input type="color" id="eo-lp-form-bg-color" name="bg_color" />
+							<input type="text" id="eo-lp-form-bg-color-text" class="small-text" />
 						</div>
 					</div>
 
 					<div class="eo-lp-form-group">
 						<label for="eo-lp-form-text-color"><?php esc_html_e( 'Couleur du texte', 'eo-blocks' ); ?></label>
 						<div class="eo-lp-color-picker-wrapper">
-							<input type="color" id="eo-lp-form-text-color" name="text_color" style="height: 35px; width: 60px; padding: 0; cursor: pointer; border: 1px solid #ccd0d4;" />
-							<input type="text" id="eo-lp-form-text-color-text" class="small-text" style="height: 35px; width: 100px; margin-left: 10px; font-family: monospace; text-transform: uppercase;" />
+							<input type="color" id="eo-lp-form-text-color" name="text_color" />
+							<input type="text" id="eo-lp-form-text-color-text" class="small-text" />
 						</div>
 					</div>
 
 					<div class="eo-lp-form-group">
 						<label for="eo-lp-form-accent-color"><?php esc_html_e( 'Couleur d\'accentuation (Boutons / Détails)', 'eo-blocks' ); ?></label>
 						<div class="eo-lp-color-picker-wrapper">
-							<input type="color" id="eo-lp-form-accent-color" name="accent_color" style="height: 35px; width: 60px; padding: 0; cursor: pointer; border: 1px solid #ccd0d4;" />
-							<input type="text" id="eo-lp-form-accent-color-text" class="small-text" style="height: 35px; width: 100px; margin-left: 10px; font-family: monospace; text-transform: uppercase;" />
+							<input type="color" id="eo-lp-form-accent-color" name="accent_color" />
+							<input type="text" id="eo-lp-form-accent-color-text" class="small-text" />
 						</div>
 					</div>
 				</div>
