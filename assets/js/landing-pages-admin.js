@@ -367,7 +367,25 @@ jQuery(document).ready(function($) {
 		}
 	}
 
-	$(document).on('input keyup change', '#eo-lp-email-test-input, #eo-lp-email-rules', function() {
+	function syncEmailRules() {
+		var blocked = $('#eo-lp-email-rules-blocked').val().split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+		var allowed = $('#eo-lp-email-rules-allowed').val().split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+		var finalRules = [];
+		for (var i = 0; i < blocked.length; i++) {
+			finalRules.push('!' + blocked[i].replace(/^!/, ''));
+		}
+		for (var j = 0; j < allowed.length; j++) {
+			finalRules.push(allowed[j]);
+		}
+		$('#eo-lp-email-rules').val(finalRules.join(', '));
+		runEmailTest();
+	}
+
+	$(document).on('input keyup change', '#eo-lp-email-rules-blocked, #eo-lp-email-rules-allowed', function() {
+		syncEmailRules();
+	});
+
+	$(document).on('input keyup change', '#eo-lp-email-test-input', function() {
 		runEmailTest();
 	});
 
@@ -531,7 +549,21 @@ jQuery(document).ready(function($) {
 			var emailFiltering = pageConfig.email_filtering_active === true || pageConfig.email_filtering_active === 'true' || pageConfig.email_filtering_active === 1 || pageConfig.email_filtering_active === '1';
 			$('#eo-lp-email-filtering-active').prop('checked', emailFiltering);
 			$('.eo-lp-email-rules-group').toggle(emailFiltering);
-			$('#eo-lp-email-rules').val(pageConfig.email_rules || '');
+
+			var fullRules = pageConfig.email_rules || '';
+			$('#eo-lp-email-rules').val(fullRules);
+			var blockedRules = [];
+			var allowedRules = [];
+			var rulesArr = fullRules.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+			for (var i = 0; i < rulesArr.length; i++) {
+				if (rulesArr[i].indexOf('!') === 0) {
+					blockedRules.push(rulesArr[i].substring(1));
+				} else {
+					allowedRules.push(rulesArr[i]);
+				}
+			}
+			$('#eo-lp-email-rules-blocked').val(blockedRules.join(', '));
+			$('#eo-lp-email-rules-allowed').val(allowedRules.join(', '));
 			$('#eo-lp-log-limit').val(pageConfig.log_limit || 1000);
 
 			// Clear email test input & result

@@ -199,11 +199,23 @@ $pages_data = array(
 								</label>
 							</div>
 							<div class="eo-lp-form-group eo-lp-email-rules-group" style="display: none;">
-								<label for="eo-lp-email-rules"><?php esc_html_e( 'Adresses e-mail ou domaines autorisés', 'eo-blocks' ); ?></label>
-								<textarea id="eo-lp-email-rules" name="email_rules" rows="3" style="width: 100%; font-family: monospace;" placeholder="@eoxia.com, admin@monsite.fr, @lenomdomaine"></textarea>
-								<p class="description">
-									<?php esc_html_e( 'Séparez les entrées par des virgules. Exemple : "@eoxia.com" (autorisé), "@eoxia" (autorise tout TLD), ou "!*.ru", "!*.ovh" (interdit ces domaines/extensions). Si des règles d\'autorisation existent, seuls ces e-mails pourront se connecter.', 'eo-blocks' ); ?>
-								</p>
+								<div style="display:flex; gap:15px;">
+									<div style="flex:1;">
+										<label for="eo-lp-email-rules-blocked" style="font-weight:600; color:#b91c1c; display:block; margin-bottom:4px;"><?php esc_html_e( 'Interdits', 'eo-blocks' ); ?></label>
+										<textarea id="eo-lp-email-rules-blocked" rows="3" style="width: 100%; font-family: monospace; border-color: #fecaca; background-color: #fef2f2;" placeholder="*.ru, *.ovh, spammer@gmail.com"></textarea>
+										<p class="description" style="font-size:11px; line-height: 1.3;">
+											<?php esc_html_e( 'Séparez par des virgules. Ces correspondances seront bloquées (inutile d\'ajouter "!").', 'eo-blocks' ); ?>
+										</p>
+									</div>
+									<div style="flex:1;">
+										<label for="eo-lp-email-rules-allowed" style="font-weight:600; color:#15803d; display:block; margin-bottom:4px;"><?php esc_html_e( 'Autorisés uniquement', 'eo-blocks' ); ?></label>
+										<textarea id="eo-lp-email-rules-allowed" rows="3" style="width: 100%; font-family: monospace; border-color: #bbf7d0; background-color: #f0fdf4;" placeholder="@eoxia.com, admin@monsite.fr, @lenomdomaine"></textarea>
+										<p class="description" style="font-size:11px; line-height: 1.3;">
+											<?php esc_html_e( 'Séparez par des virgules. Si rempli, seuls ces e-mails/domaines pourront se connecter.', 'eo-blocks' ); ?>
+										</p>
+									</div>
+								</div>
+								<input type="hidden" id="eo-lp-email-rules" name="email_rules" value="" />
 
 								<div class="eo-lp-email-test-wrapper" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 10px;">
 									<span style="font-size: 12px; font-weight: 600; color: #475569; min-width: 120px;">
