@@ -407,31 +407,69 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 				`;
 				document.head.appendChild(style);
 
+				function ruleToRegexJS(rule) {
+					if (rule.indexOf('!') === 0) {
+						rule = rule.substring(1);
+					}
+					rule = rule.trim();
+
+					var escaped = rule.replace(/[-\/\\^$*+?.()|[\]{}]/g, function(match) {
+						if (match === '*') return '*';
+						return '\\' + match;
+					});
+
+					if (rule.indexOf('*') !== -1) {
+						var pattern = escaped.replace(/\*/g, '.*');
+						return new RegExp('^' + pattern + '$', 'i');
+					}
+
+					if (rule.indexOf('@') === 0) {
+						var domainRule = rule.substring(1);
+						var escapedDomain = domainRule.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+						if (domainRule.indexOf('.') !== -1) {
+							return new RegExp('@' + escapedDomain + '$', 'i');
+						} else {
+							return new RegExp('@' + escapedDomain + '(\\..+)?$', 'i');
+						}
+					}
+
+					var escapedExact = rule.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+					return new RegExp('^' + escapedExact + '$', 'i');
+				}
+
 				function isEmailAllowedJS(email, rulesStr) {
 					if (!rulesStr) return true;
 					email = email.trim().toLowerCase();
 					if (email.indexOf('@') === -1) {
 						return false;
 					}
-					var rules = rulesStr.split(',').map(function(r) { return r.trim().toLowerCase(); }).filter(Boolean);
+					var rules = rulesStr.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+					
+					var hasAllowRules = false;
+					var emailAllowed = false;
+
 					for (var i = 0; i < rules.length; i++) {
 						var rule = rules[i];
-						if (rule.indexOf('@') > 0 && rule.indexOf('.') > 0 && (rule.match(/@/g) || []).length === 1) {
-							if (email === rule) return true;
+						var isBlockRule = (rule.indexOf('!') === 0);
+						if (!isBlockRule) {
+							hasAllowRules = true;
 						}
-						if (rule.indexOf('@') === 0) {
-							if (email.slice(-rule.length) === rule) return true;
-							if (rule.indexOf('.') === -1) {
-								var parts = email.split('@');
-								var domainPart = parts[1] || '';
-								var ruleDomain = rule.substring(1);
-								if (domainPart === ruleDomain || domainPart.indexOf(ruleDomain + '.') === 0) {
-									return true;
-								}
+
+						var regex = ruleToRegexJS(rule);
+						if (regex.test(email)) {
+							if (isBlockRule) {
+								return false;
+							} else {
+								emailAllowed = true;
 							}
 						}
 					}
-					return false;
+
+					if (hasAllowRules) {
+						return emailAllowed;
+					}
+
+					return true;
 				}
 
 				form.addEventListener('submit', function(e) {

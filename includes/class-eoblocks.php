@@ -672,6 +672,33 @@ class Eoblocks {
 	}
 
 	/**
+	 * Convert wildcard/domain rule to regular expression in PHP
+	 */
+	private function rule_to_regex( $rule ) {
+		if ( strpos( $rule, '!' ) === 0 ) {
+			$rule = substr( $rule, 1 );
+		}
+		$rule = trim( $rule );
+
+		if ( strpos( $rule, '*' ) !== false ) {
+			$escaped = preg_quote( $rule, '/' );
+			$pattern = str_replace( '\\*', '.*', $escaped );
+			return '/^' . $pattern . '$/i';
+		}
+
+		if ( strpos( $rule, '@' ) === 0 ) {
+			$domain_rule = substr( $rule, 1 );
+			if ( strpos( $domain_rule, '.' ) !== false ) {
+				return '/@' . preg_quote( $domain_rule, '/' ) . '$/i';
+			} else {
+				return '/@' . preg_quote( $domain_rule, '/' ) . '(\..+)?$/i';
+			}
+		}
+
+		return '/^' . preg_quote( $rule, '/' ) . '$/i';
+	}
+
+	/**
 	 * Verify if email matches allowed domain rules in PHP
 	 */
 	private function is_email_allowed_php( $email, $rules_str ) {
@@ -685,35 +712,35 @@ class Eoblocks {
 		}
 
 		$rules = array_filter( array_map( 'trim', explode( ',', $rules_str ) ) );
+		
+		$has_allow_rules = false;
+		$email_allowed = false;
+
 		foreach ( $rules as $rule ) {
-			$rule = strtolower( $rule );
 			if ( empty( $rule ) ) {
 				continue;
 			}
 
-			if ( strpos( $rule, '@' ) > 0 && strpos( $rule, '.' ) > 0 && substr_count( $rule, '@' ) === 1 ) {
-				if ( $email === $rule ) {
-					return true;
-				}
+			$is_block_rule = ( strpos( $rule, '!' ) === 0 );
+			if ( ! $is_block_rule ) {
+				$has_allow_rules = true;
 			}
 
-			if ( strpos( $rule, '@' ) === 0 ) {
-				if ( substr( $email, -strlen( $rule ) ) === $rule ) {
-					return true;
-				}
-
-				if ( strpos( $rule, '.' ) === false ) {
-					$parts = explode( '@', $email );
-					$domain_part = $parts[1] ?? '';
-					$rule_domain = substr( $rule, 1 );
-					if ( $domain_part === $rule_domain || strpos( $domain_part, $rule_domain . '.' ) === 0 ) {
-						return true;
-					}
+			$regex = $this->rule_to_regex( $rule );
+			if ( preg_match( $regex, $email ) ) {
+				if ( $is_block_rule ) {
+					return false;
+				} else {
+					$email_allowed = true;
 				}
 			}
 		}
 
-		return false;
+		if ( $has_allow_rules ) {
+			return $email_allowed;
+		}
+
+		return true;
 	}
 
 	/**

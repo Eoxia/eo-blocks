@@ -202,7 +202,7 @@ $pages_data = array(
 								<label for="eo-lp-email-rules"><?php esc_html_e( 'Adresses e-mail ou domaines autorisés', 'eo-blocks' ); ?></label>
 								<textarea id="eo-lp-email-rules" name="email_rules" rows="3" style="width: 100%; font-family: monospace;" placeholder="@eoxia.com, admin@monsite.fr, @lenomdomaine"></textarea>
 								<p class="description">
-									<?php esc_html_e( 'Séparez les entrées par des virgules. Exemple : "@eoxia.com" ou "@eoxia" (autorise n\'importe quel TLD comme .com, .fr, .net).', 'eo-blocks' ); ?>
+									<?php esc_html_e( 'Séparez les entrées par des virgules. Exemple : "@eoxia.com" (autorisé), "@eoxia" (autorise tout TLD), ou "!*.ru", "!*.ovh" (interdit ces domaines/extensions). Si des règles d\'autorisation existent, seuls ces e-mails pourront se connecter.', 'eo-blocks' ); ?>
 								</p>
 
 								<div class="eo-lp-email-test-wrapper" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 10px;">
