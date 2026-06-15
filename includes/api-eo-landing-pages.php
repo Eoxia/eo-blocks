@@ -19,7 +19,7 @@ function eo_landing_pages_ajax_save_settings() {
 	}
 
 	$type = isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : '';
-	if ( ! in_array( $type, array( 'coming_soon', 'maintenance', 'login', '404' ) ) ) {
+	if ( ! in_array( $type, array( 'coming_soon', 'maintenance', 'login', 'register', '404' ) ) ) {
 		wp_send_json_error( array( 'message' => __( 'Type de page invalide.', 'eo-blocks' ) ) );
 	}
 
@@ -50,7 +50,9 @@ function eo_landing_pages_ajax_save_settings() {
 	// Toggling email filtering state only (fast toggle from card)
 	if ( isset( $_POST['email_filter_toggle'] ) ) {
 		$active = !empty( $_POST['active'] ) && ( $_POST['active'] === 'true' || $_POST['active'] === '1' );
-		$settings['login']['email_filtering_active'] = $active;
+		if ( 'login' === $type || 'register' === $type ) {
+			$settings[$type]['email_filtering_active'] = $active;
+		}
 
 		update_option( 'eo_landing_pages_settings', $settings );
 		wp_send_json_success( array(
@@ -86,13 +88,9 @@ function eo_landing_pages_ajax_save_settings() {
 		'accent_color' => $accent_color,
 	);
 
-	if ( 'login' === $type ) {
+	if ( 'login' === $type || 'register' === $type ) {
 		$email_filtering_active = isset( $_POST['email_filtering_active'] ) && ( $_POST['email_filtering_active'] === 'true' || $_POST['email_filtering_active'] === '1' );
 		$email_rules            = isset( $_POST['email_rules'] ) ? sanitize_textarea_field( wp_unslash( $_POST['email_rules'] ) ) : '';
-		$log_limit              = isset( $_POST['log_limit'] ) ? intval( $_POST['log_limit'] ) : 1000;
-		if ( $log_limit <= 0 ) {
-			$log_limit = 1000;
-		}
 
 		$ip_rules = array();
 		if ( isset( $_POST['ip_rules'] ) ) {
@@ -109,10 +107,26 @@ function eo_landing_pages_ajax_save_settings() {
 			}
 		}
 
-		$settings['login']['email_filtering_active'] = $email_filtering_active;
-		$settings['login']['email_rules']            = $email_rules;
-		$settings['login']['ip_rules']               = $ip_rules;
-		$settings['login']['log_limit']              = $log_limit;
+		$settings[$type]['email_filtering_active'] = $email_filtering_active;
+		$settings[$type]['email_rules']            = $email_rules;
+		$settings[$type]['ip_rules']               = $ip_rules;
+
+		if ( 'login' === $type ) {
+			$log_limit = isset( $_POST['log_limit'] ) ? intval( $_POST['log_limit'] ) : 1000;
+			if ( $log_limit <= 0 ) {
+				$log_limit = 1000;
+			}
+			$settings['login']['log_limit'] = $log_limit;
+		} elseif ( 'register' === $type ) {
+			$inherit_login_rules = isset( $_POST['inherit_login_rules'] ) && ( $_POST['inherit_login_rules'] === 'true' || $_POST['inherit_login_rules'] === '1' );
+			$settings['register']['inherit_login_rules'] = $inherit_login_rules;
+			
+			$success_action = isset( $_POST['success_action'] ) ? sanitize_text_field( $_POST['success_action'] ) : 'none';
+			if ( ! in_array( $success_action, array( 'none', 'timer', 'tictactoe', 'flappybird' ) ) ) {
+				$success_action = 'none';
+			}
+			$settings['register']['success_action'] = $success_action;
+		}
 	}
 
 	update_option( 'eo_landing_pages_settings', $settings );

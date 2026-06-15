@@ -251,7 +251,7 @@ class Eoblocks {
 		// Admin bar preview check first
 		if ( current_user_can( 'manage_options' ) && isset( $_GET['eo_preview_landing_page'] ) ) {
 			$type = sanitize_text_field( $_GET['eo_preview_landing_page'] );
-			if ( in_array( $type, array( 'coming_soon', 'maintenance', 'login', '404' ) ) ) {
+			if ( in_array( $type, array( 'coming_soon', 'maintenance', 'login', 'register', '404' ) ) ) {
 				$this->render_landing_page( $type );
 				exit;
 			}
@@ -304,26 +304,95 @@ class Eoblocks {
 
 		$settings = get_option( 'eo_landing_pages_settings', array() );
 		$login_active = !empty( $settings['login']['active'] );
+		$register_active = !empty( $settings['register']['active'] );
 
-		if ( $login_active ) {
+		$action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : 'login';
+
+		if ( 'login' === $action && $login_active ) {
 			// Check IP access restriction first
 			$ip_rules = $settings['login']['ip_rules'] ?? array();
 			if ( ! $this->check_ip_access( $ip_rules ) ) {
-				// Log the blocked IP attempt
 				$this->log_login_attempt( '', 'blocked_ip' );
-
 				status_header( 403 );
 				wp_die( __( 'Accès refusé. Votre adresse IP n\'est pas autorisée à se connecter.', 'eo-blocks' ), __( 'Accès Refusé', 'eo-blocks' ), array( 'response' => 403 ) );
 			}
 
 			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' === $_SERVER['REQUEST_METHOD'] ) {
-				$action = isset( $_GET['action'] ) ? $_GET['action'] : 'login';
-				if ( 'login' === $action ) {
-					$this->render_landing_page( 'login' );
-					exit;
-				}
+				$this->render_landing_page( 'login' );
+				exit;
 			}
 		}
+
+		if ( 'register' === $action && $register_active ) {
+			// Check IP access restriction for register
+			$inherit = !empty( $settings['register']['inherit_login_rules'] );
+			$ip_rules = $inherit ? ( $settings['login']['ip_rules'] ?? array() ) : ( $settings['register']['ip_rules'] ?? array() );
+			
+			if ( ! $this->check_ip_access( $ip_rules ) ) {
+				status_header( 403 );
+				wp_die( __( 'Accès refusé. Votre adresse IP n\'est pas autorisée à s\'inscrire.', 'eo-blocks' ), __( 'Accès Refusé', 'eo-blocks' ), array( 'response' => 403 ) );
+			}
+
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' === $_SERVER['REQUEST_METHOD'] ) {
+				$this->render_landing_page( 'register' );
+				exit;
+			}
+			
+			if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['user_email'] ) ) {
+				$this->process_custom_registration( $settings );
+				exit;
+			}
+		}
+	}
+
+	private function process_custom_registration( $settings ) {
+		$email = sanitize_email( wp_unslash( $_POST['user_email'] ) );
+
+		if ( empty( $email ) || ! is_email( $email ) ) {
+			wp_redirect( add_query_arg( 'register_error', 'invalid_email', wp_login_url() . '?action=register' ) );
+			exit;
+		}
+
+		// Email filtering check
+		$inherit = !empty( $settings['register']['inherit_login_rules'] );
+		$email_filtering_active = $inherit ? !empty( $settings['login']['email_filtering_active'] ) : !empty( $settings['register']['email_filtering_active'] );
+		$email_rules = $inherit ? ( $settings['login']['email_rules'] ?? '' ) : ( $settings['register']['email_rules'] ?? '' );
+
+		if ( $email_filtering_active ) {
+			if ( ! $this->is_email_allowed_php( $email, $email_rules ) ) {
+				wp_redirect( add_query_arg( 'register_error', 'email_not_allowed', wp_login_url() . '?action=register' ) );
+				exit;
+			}
+		}
+
+		if ( email_exists( $email ) ) {
+			wp_redirect( add_query_arg( 'register_error', 'email_exists', wp_login_url() . '?action=register' ) );
+			exit;
+		}
+
+		// Generate username from email
+		$parts = explode( '@', $email );
+		$base_username = sanitize_user( current( $parts ), true );
+		if ( empty( $base_username ) ) {
+			$base_username = 'user';
+		}
+
+		$username = $base_username;
+		$i = 1;
+		while ( username_exists( $username ) ) {
+			$username = $base_username . $i;
+			$i++;
+		}
+
+		$errors = register_new_user( $username, $email );
+
+		if ( is_wp_error( $errors ) ) {
+			wp_redirect( add_query_arg( 'register_error', 'registration_failed', wp_login_url() . '?action=register' ) );
+			exit;
+		}
+
+		wp_redirect( add_query_arg( 'checkemail', 'registered', wp_login_url() ) );
+		exit;
 	}
 
 	/**
@@ -358,6 +427,14 @@ class Eoblocks {
 				'bg_color'    => '#0f172a',
 				'text_color'  => '#f8fafc',
 				'accent_color'=> '#06b6d4',
+			),
+			'register' => array(
+				'title'       => __( 'Inscription', 'eo-blocks' ),
+				'description' => __( 'Créez votre compte pour accéder à nos services.', 'eo-blocks' ),
+				'style'       => 'glassmorphism',
+				'bg_color'    => '#0f172a',
+				'text_color'  => '#f8fafc',
+				'accent_color'=> '#10b981',
 			),
 			'404' => array(
 				'title'       => __( 'Page non trouvée', 'eo-blocks' ),
