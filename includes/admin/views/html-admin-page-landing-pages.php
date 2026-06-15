@@ -41,6 +41,19 @@ $defaults = array(
 		'ip_rules'               => array(),
 		'log_limit'              => 1000,
 	),
+	'register' => array(
+		'active'                 => false,
+		'title'                  => __( 'Inscription', 'eo-blocks' ),
+		'description'            => __( 'Créez votre compte pour accéder à nos services.', 'eo-blocks' ),
+		'style'                  => 'glassmorphism',
+		'bg_color'               => '#0f172a',
+		'text_color'             => '#f8fafc',
+		'accent_color'           => '#10b981',
+		'inherit_login_rules'    => true,
+		'email_filtering_active' => false,
+		'email_rules'            => '',
+		'ip_rules'               => array(),
+	),
 	'404' => array(
 		'active'       => false,
 		'title'        => __( 'Page non trouvée', 'eo-blocks' ),
@@ -55,6 +68,7 @@ $defaults = array(
 $coming_soon = isset( $settings['coming_soon'] ) ? array_merge( $defaults['coming_soon'], $settings['coming_soon'] ) : $defaults['coming_soon'];
 $maintenance = isset( $settings['maintenance'] ) ? array_merge( $defaults['maintenance'], $settings['maintenance'] ) : $defaults['maintenance'];
 $login       = isset( $settings['login'] ) ? array_merge( $defaults['login'], $settings['login'] ) : $defaults['login'];
+$register    = isset( $settings['register'] ) ? array_merge( $defaults['register'], $settings['register'] ) : $defaults['register'];
 $status_404  = isset( $settings['404'] ) ? array_merge( $defaults['404'], $settings['404'] ) : $defaults['404'];
 
 $pages_data = array(
@@ -78,6 +92,13 @@ $pages_data = array(
 		'icon'        => 'dashicons-lock',
 		'config'      => $login,
 		'color_class' => 'eo-status-login',
+	),
+	'register' => array(
+		'title'       => __( 'Page d\'inscription', 'eo-blocks' ),
+		'desc'        => __( 'Remplacez la page d\'inscription par défaut par un formulaire simplifié (sans identifiant, e-mail uniquement).', 'eo-blocks' ),
+		'icon'        => 'dashicons-admin-users',
+		'config'      => $register,
+		'color_class' => 'eo-status-register',
 	),
 	'404' => array(
 		'title'       => __( 'Page 404', 'eo-blocks' ),
@@ -119,7 +140,7 @@ $pages_data = array(
 				<div class="eo-lp-card-body">
 					<h3 class="eo-lp-card-title"><?php echo esc_html( $page['title'] ); ?></h3>
 					<p class="eo-lp-card-desc"><?php echo esc_html( $page['desc'] ); ?></p>
-					<?php if ( 'login' === $key ) : ?>
+					<?php if ( 'login' === $key || 'register' === $key ) : ?>
 						<div class="eo-lp-card-sub-toggle" style="margin-top: 15px; display: flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
 							<label class="eo-lp-switch" style="width: 34px; height: 18px;">
 								<input type="checkbox" class="eo-lp-email-filter-toggle" <?php checked( !empty( $page['config']['email_filtering_active'] ) ); ?> style="width:0; height:0; opacity:0;" />
@@ -181,23 +202,65 @@ $pages_data = array(
 						<?php esc_html_e( 'Un bouton "Retour à l\'accueil" redirigeant vers le site sera automatiquement affiché en dessous du texte.', 'eo-blocks' ); ?>
 					</div>
 
+					<div class="eo-lp-form-group eo-lp-form-register-hint" style="display: none; background: #dcfce7; color: #166534; padding: 12px; border-radius: 6px; border-left: 4px solid #22c55e;">
+						<span class="dashicons dashicons-info" style="vertical-align: middle; margin-right: 4px;"></span>
+						<?php esc_html_e( 'Un formulaire d\'inscription simplifié (E-mail uniquement) sera automatiquement affiché. L\'identifiant sera généré à partir de l\'e-mail.', 'eo-blocks' ); ?>
+					</div>
+
+					<div id="eo-lp-register-success-action-group" style="display: none; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+						<div class="eo-lp-form-group">
+							<label for="eo-lp-form-success-action" style="font-weight: 600; display: block; margin-bottom: 8px;"><?php esc_html_e( 'Action après l\'inscription (Page d\'attente)', 'eo-blocks' ); ?></label>
+							<select id="eo-lp-form-success-action" name="success_action" style="width: 100%; max-width: 400px; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
+								<option value="none"><?php esc_html_e( 'Formulaire de connexion (Classique)', 'eo-blocks' ); ?></option>
+								<option value="timer"><?php esc_html_e( 'Minuteur simple', 'eo-blocks' ); ?></option>
+								<option value="tictactoe"><?php esc_html_e( 'Mini-jeu : Morpion (Tic-Tac-Toe)', 'eo-blocks' ); ?></option>
+								<option value="flappybird"><?php esc_html_e( 'Mini-jeu : Flappy Bird', 'eo-blocks' ); ?></option>
+							</select>
+							<p class="description" style="margin-top: 6px;"><?php esc_html_e( 'Détermine ce qui est affiché à l\'utilisateur juste après son inscription, pendant qu\'il attend son e-mail de confirmation.', 'eo-blocks' ); ?></p>
+						</div>
+					</div>
+
 					<div id="eo-lp-login-security-section" style="display: none; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
 						<h3 style="margin-top: 0; font-size: 16px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
 							<span class="dashicons dashicons-shield"></span>
-							<?php esc_html_e( 'Sécurité & Filtrage des Connexions', 'eo-blocks' ); ?>
+							<?php esc_html_e( 'Sécurité & Filtrage', 'eo-blocks' ); ?>
 						</h3>
 						
-						<!-- Filtrage E-mails -->
-						<div class="eo-lp-security-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
-							<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-								<span style="font-weight: 600; font-size: 13px; color: #334155;">
-									<?php esc_html_e( 'Activer le filtrage par adresse e-mail', 'eo-blocks' ); ?>
-								</span>
-								<label class="eo-lp-switch">
-									<input type="checkbox" id="eo-lp-email-filtering-active" name="email_filtering_active" value="1" />
+						<div id="eo-lp-register-inherit-group" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+							<div style="display: flex; align-items: center; justify-content: space-between;">
+								<div style="flex: 1;">
+									<span style="font-weight: 600; font-size: 13px; color: #92400e;">
+										<?php esc_html_e( 'Hériter des règles de sécurité de la Connexion', 'eo-blocks' ); ?>
+									</span>
+									<p class="description" style="margin-top: 4px; margin-bottom: 0; color: #b45309;">
+										<?php esc_html_e( 'Si activé, l\'inscription utilisera exactement les mêmes règles d\'e-mail et d\'IP configurées pour la page de connexion. Désactivez pour personnaliser.', 'eo-blocks' ); ?>
+									</p>
+								</div>
+								<label class="eo-lp-switch" style="margin-left: 15px;">
+									<input type="checkbox" id="eo-lp-inherit-login-rules" name="inherit_login_rules" value="1" />
 									<span class="eo-lp-slider"></span>
 								</label>
 							</div>
+						</div>
+
+						<div id="eo-lp-security-settings-wrapper">
+							<div id="eo-lp-register-inherit-banner" style="display: none; background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #0369a1; font-size: 13px;">
+								<span class="dashicons dashicons-lock" style="vertical-align: middle; margin-right: 4px;"></span>
+								Paramètres en mode lecture seule (hérités). 
+								<a href="#" id="eo-lp-link-to-login" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Modifier les paramètres de la Connexion</a>
+							</div>
+							
+							<!-- Filtrage E-mails -->
+							<div class="eo-lp-security-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+								<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+									<span style="font-weight: 600; font-size: 13px; color: #334155;">
+										<?php esc_html_e( 'Activer le filtrage par adresse e-mail', 'eo-blocks' ); ?>
+									</span>
+									<label class="eo-lp-switch">
+										<input type="checkbox" id="eo-lp-email-filtering-active" name="email_filtering_active" value="1" />
+										<span class="eo-lp-slider"></span>
+									</label>
+								</div>
 							<div class="eo-lp-form-group eo-lp-email-rules-group" style="display: none;">
 								<div style="display:flex; gap:15px;">
 									<div style="flex:1;">
@@ -272,9 +335,10 @@ $pages_data = array(
 								<input type="hidden" id="eo-lp-ip-rules-hidden" name="ip_rules" value="[]" />
 							</div>
 						</div>
+						</div> <!-- End security settings wrapper -->
 
 						<!-- Limite des logs -->
-						<div class="eo-lp-security-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+						<div class="eo-lp-security-box eo-lp-logs-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
 							<div style="display: flex; align-items: center; justify-content: space-between;">
 								<span style="font-weight: 600; font-size: 13px; color: #334155;">
 									<?php esc_html_e( 'Seuil de purge automatique des logs', 'eo-blocks' ); ?>
@@ -287,7 +351,7 @@ $pages_data = array(
 						</div>
 
 						<!-- Journal de connexion -->
-						<div class="eo-lp-security-box" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px;">
+						<div class="eo-lp-security-box eo-lp-logs-box" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px;">
 							<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
 								<h4 style="margin: 0; font-size: 14px; font-weight: 600; color: #1e293b;">
 									<?php esc_html_e( 'Journal des tentatives de connexion', 'eo-blocks' ); ?>
@@ -379,6 +443,7 @@ $pages_data = array(
 		'coming_soon' => $coming_soon,
 		'maintenance' => $maintenance,
 		'login'       => $login,
+		'register'    => $register,
 		'404'         => $status_404,
 		'homeUrl'     => home_url(),
 	) ); ?>;

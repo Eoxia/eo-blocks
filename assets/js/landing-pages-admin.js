@@ -414,8 +414,8 @@ jQuery(document).ready(function($) {
 					config = response.data.settings;
 					window.eoLandingPagesConfig = config;
 					
-					// Sync form toggle if editing the login page
-					if (activeType === 'login') {
+					// Sync form toggle if editing the same page
+					if (activeType === type) {
 						$('#eo-lp-email-filtering-active').prop('checked', active).trigger('change');
 						showFormSaved('Filtrage e-mails mis à jour');
 					}
@@ -430,6 +430,64 @@ jQuery(document).ready(function($) {
 				alert('Impossible de contacter le serveur.');
 			}
 		});
+	});
+
+	// Toggle security wrapper when inherit checkbox changes
+	$('#eo-lp-inherit-login-rules').on('change', function() {
+		var inherited = $(this).is(':checked');
+		if (inherited) {
+			$('#eo-lp-register-inherit-banner').show();
+			$('#eo-lp-security-settings-wrapper input, #eo-lp-security-settings-wrapper textarea, #eo-lp-security-settings-wrapper select, #eo-lp-security-settings-wrapper button').prop('disabled', true);
+			
+			// Load login settings for display
+			var loginConfig = config['login'] || {};
+			var emailFiltering = loginConfig.email_filtering_active === true || loginConfig.email_filtering_active === 'true' || loginConfig.email_filtering_active === 1 || loginConfig.email_filtering_active === '1';
+			$('#eo-lp-email-filtering-active').prop('checked', emailFiltering);
+			$('.eo-lp-email-rules-group').toggle(emailFiltering);
+			var fullRules = loginConfig.email_rules || '';
+			$('#eo-lp-email-rules').val(fullRules);
+			var rulesArr = fullRules.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+			var blockedRules = [], allowedRules = [];
+			for (var i = 0; i < rulesArr.length; i++) {
+				if (rulesArr[i].indexOf('!') === 0) blockedRules.push(rulesArr[i].substring(1));
+				else allowedRules.push(rulesArr[i]);
+			}
+			$('#eo-lp-email-rules-blocked').val(blockedRules.join(', '));
+			$('#eo-lp-email-rules-allowed').val(allowedRules.join(', '));
+			var localIpRules = Array.isArray(loginConfig.ip_rules) ? loginConfig.ip_rules : [];
+			$('#eo-lp-ip-rules-hidden').val(JSON.stringify(localIpRules));
+			renderIpRules(localIpRules);
+			// Ensure dynamically created elements are disabled
+			$('#eo-lp-security-settings-wrapper input, #eo-lp-security-settings-wrapper textarea, #eo-lp-security-settings-wrapper select, #eo-lp-security-settings-wrapper button').prop('disabled', true);
+		} else {
+			$('#eo-lp-register-inherit-banner').hide();
+			$('#eo-lp-security-settings-wrapper input, #eo-lp-security-settings-wrapper textarea, #eo-lp-security-settings-wrapper select, #eo-lp-security-settings-wrapper button').prop('disabled', false);
+			
+			// Load local register settings
+			var pageConfig = config[activeType] || {};
+			var emailFiltering = pageConfig.email_filtering_active === true || pageConfig.email_filtering_active === 'true' || pageConfig.email_filtering_active === 1 || pageConfig.email_filtering_active === '1';
+			$('#eo-lp-email-filtering-active').prop('checked', emailFiltering);
+			$('.eo-lp-email-rules-group').toggle(emailFiltering);
+			var fullRules = pageConfig.email_rules || '';
+			$('#eo-lp-email-rules').val(fullRules);
+			var rulesArr = fullRules.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+			var blockedRules = [], allowedRules = [];
+			for (var i = 0; i < rulesArr.length; i++) {
+				if (rulesArr[i].indexOf('!') === 0) blockedRules.push(rulesArr[i].substring(1));
+				else allowedRules.push(rulesArr[i]);
+			}
+			$('#eo-lp-email-rules-blocked').val(blockedRules.join(', '));
+			$('#eo-lp-email-rules-allowed').val(allowedRules.join(', '));
+			var localIpRules = Array.isArray(pageConfig.ip_rules) ? pageConfig.ip_rules : [];
+			$('#eo-lp-ip-rules-hidden').val(JSON.stringify(localIpRules));
+			renderIpRules(localIpRules);
+		}
+	});
+
+	// Link from banner to login settings
+	$('#eo-lp-link-to-login').on('click', function(e) {
+		e.preventDefault();
+		openEditor('login');
 	});
 
 	function fetchLoginLogs() {
@@ -544,39 +602,54 @@ jQuery(document).ready(function($) {
 		$('.eo-lp-form-login-hint').toggle(type === 'login');
 		$('.eo-lp-form-404-hint').toggle(type === '404');
 
-		if (type === 'login') {
+		if (type === 'login' || type === 'register') {
 			$('#eo-lp-login-security-section').show();
-			var emailFiltering = pageConfig.email_filtering_active === true || pageConfig.email_filtering_active === 'true' || pageConfig.email_filtering_active === 1 || pageConfig.email_filtering_active === '1';
-			$('#eo-lp-email-filtering-active').prop('checked', emailFiltering);
-			$('.eo-lp-email-rules-group').toggle(emailFiltering);
 
-			var fullRules = pageConfig.email_rules || '';
-			$('#eo-lp-email-rules').val(fullRules);
-			var blockedRules = [];
-			var allowedRules = [];
-			var rulesArr = fullRules.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
-			for (var i = 0; i < rulesArr.length; i++) {
-				if (rulesArr[i].indexOf('!') === 0) {
-					blockedRules.push(rulesArr[i].substring(1));
-				} else {
-					allowedRules.push(rulesArr[i]);
+			if (type === 'register') {
+				$('#eo-lp-register-inherit-group').show();
+				$('#eo-lp-register-success-action-group').show();
+				$('#eo-lp-form-success-action').val(pageConfig.success_action || 'none');
+				var inheritRules = pageConfig.inherit_login_rules === true || pageConfig.inherit_login_rules === 'true' || pageConfig.inherit_login_rules === 1 || pageConfig.inherit_login_rules === '1';
+				$('#eo-lp-inherit-login-rules').prop('checked', inheritRules).trigger('change');
+				$('.eo-lp-logs-box').hide();
+			} else {
+				$('#eo-lp-register-inherit-group').hide();
+				$('#eo-lp-register-success-action-group').hide();
+				$('#eo-lp-register-inherit-banner').hide();
+				$('#eo-lp-security-settings-wrapper input, #eo-lp-security-settings-wrapper textarea, #eo-lp-security-settings-wrapper select, #eo-lp-security-settings-wrapper button').prop('disabled', false);
+
+				var emailFiltering = pageConfig.email_filtering_active === true || pageConfig.email_filtering_active === 'true' || pageConfig.email_filtering_active === 1 || pageConfig.email_filtering_active === '1';
+				$('#eo-lp-email-filtering-active').prop('checked', emailFiltering);
+				$('.eo-lp-email-rules-group').toggle(emailFiltering);
+
+				var fullRules = pageConfig.email_rules || '';
+				$('#eo-lp-email-rules').val(fullRules);
+				var blockedRules = [];
+				var allowedRules = [];
+				var rulesArr = fullRules.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+				for (var i = 0; i < rulesArr.length; i++) {
+					if (rulesArr[i].indexOf('!') === 0) {
+						blockedRules.push(rulesArr[i].substring(1));
+					} else {
+						allowedRules.push(rulesArr[i]);
+					}
 				}
+				$('#eo-lp-email-rules-blocked').val(blockedRules.join(', '));
+				$('#eo-lp-email-rules-allowed').val(allowedRules.join(', '));
+				$('#eo-lp-log-limit').val(pageConfig.log_limit || 1000);
+
+				// Clear email test input & result
+				$('#eo-lp-email-test-input').val('');
+				$('#eo-lp-email-test-result').hide().text('');
+
+				// IP rules
+				localIpRules = Array.isArray(pageConfig.ip_rules) ? pageConfig.ip_rules : [];
+				$('#eo-lp-ip-rules-hidden').val(JSON.stringify(localIpRules));
+				renderIpRules(localIpRules);
+
+				$('.eo-lp-logs-box').show();
+				fetchLoginLogs();
 			}
-			$('#eo-lp-email-rules-blocked').val(blockedRules.join(', '));
-			$('#eo-lp-email-rules-allowed').val(allowedRules.join(', '));
-			$('#eo-lp-log-limit').val(pageConfig.log_limit || 1000);
-
-			// Clear email test input & result
-			$('#eo-lp-email-test-input').val('');
-			$('#eo-lp-email-test-result').hide().text('');
-
-			// IP rules
-			localIpRules = Array.isArray(pageConfig.ip_rules) ? pageConfig.ip_rules : [];
-			$('#eo-lp-ip-rules-hidden').val(JSON.stringify(localIpRules));
-			renderIpRules(localIpRules);
-
-			// Load logs
-			fetchLoginLogs();
 		} else {
 			$('#eo-lp-login-security-section').hide();
 		}
@@ -631,11 +704,23 @@ jQuery(document).ready(function($) {
 			active: $('.eo-lp-card[data-type="' + activeType + '"] .eo-lp-toggle-checkbox').is(':checked') ? 'true' : 'false'
 		};
 
-		if (activeType === 'login') {
+		if (activeType === 'login' || activeType === 'register') {
+			var wasDisabled = $('#eo-lp-email-filtering-active').prop('disabled');
+			if (wasDisabled) {
+				// if fields are disabled due to inheritance, we still save the disabled fields? 
+				// No, if inheriting, we just save the local ones as they were or empty. Wait, jQuery doesn't care about disabled for .val()!
+				// But we do care for is(':checked') which works on disabled checkboxes too.
+			}
 			formData.email_filtering_active = $('#eo-lp-email-filtering-active').is(':checked') ? 'true' : 'false';
 			formData.email_rules = $('#eo-lp-email-rules').val();
 			formData.ip_rules = $('#eo-lp-ip-rules-hidden').val();
-			formData.log_limit = $('#eo-lp-log-limit').val();
+			
+			if (activeType === 'login') {
+				formData.log_limit = $('#eo-lp-log-limit').val();
+			} else if (activeType === 'register') {
+				formData.inherit_login_rules = $('#eo-lp-inherit-login-rules').is(':checked') ? 'true' : 'false';
+				formData.success_action = $('#eo-lp-form-success-action').val();
+			}
 		}
 
 		$.ajax({

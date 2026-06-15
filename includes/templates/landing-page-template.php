@@ -263,14 +263,14 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 		}
 
 		/* WordPress Login Form Styling customization */
-		#eo-loginform {
+		#eo-loginform, #eo-registerform {
 			text-align: left;
 			margin-top: 1.5rem;
 		}
-		#eo-loginform p {
+		#eo-loginform p, #eo-registerform p.eo-lp-form-row {
 			margin-bottom: 1.25rem;
 		}
-		#eo-loginform label {
+		#eo-loginform label, #eo-registerform label {
 			display: block;
 			font-size: 13px;
 			font-weight: 600;
@@ -278,7 +278,8 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 			color: <?php echo $is_light_bg ? '#475569' : '#cbd5e1'; ?>;
 		}
 		#eo-loginform input[type="text"],
-		#eo-loginform input[type="password"] {
+		#eo-loginform input[type="password"],
+		#eo-registerform input[type="email"] {
 			width: 100%;
 			padding: 0.75rem 1rem;
 			font-size: 14px;
@@ -289,7 +290,8 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 			transition: border-color 0.2s, box-shadow 0.2s;
 		}
 		#eo-loginform input[type="text"]:focus,
-		#eo-loginform input[type="password"]:focus {
+		#eo-loginform input[type="password"]:focus,
+		#eo-registerform input[type="email"]:focus {
 			border-color: <?php echo esc_html( $accent_color ); ?>;
 			box-shadow: 0 0 0 3px <?php echo esc_html( $accent_color ); ?>25;
 			outline: none;
@@ -311,11 +313,13 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 			height: 16px;
 			cursor: pointer;
 		}
-		#eo-loginform .login-submit {
+		#eo-loginform .login-submit,
+		#eo-registerform .login-submit {
 			margin-bottom: 0;
 			margin-top: 1.5rem;
 		}
-		#eo-loginform input[type="submit"] {
+		#eo-loginform input[type="submit"],
+		#eo-registerform input[type="submit"] {
 			width: 100%;
 			background-color: <?php echo esc_html( $accent_color ); ?>;
 			color: #ffffff;
@@ -328,10 +332,12 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 			transition: filter 0.2s, transform 0.1s;
 			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 		}
-		#eo-loginform input[type="submit"]:hover {
+		#eo-loginform input[type="submit"]:hover,
+		#eo-registerform input[type="submit"]:hover {
 			filter: brightness(1.1);
 		}
-		#eo-loginform input[type="submit"]:active {
+		#eo-loginform input[type="submit"]:active,
+		#eo-registerform input[type="submit"]:active {
 			transform: scale(0.98);
 		}
 	</style>
@@ -347,9 +353,26 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 		<div class="eo-lp-box">
 			<h1><?php echo esc_html( $title ); ?></h1>
 			<div class="description"><?php echo eo_lp_format_description( $description ); ?></div>
+			<?php
+			$success_action = 'none';
+			$show_wait_screen = false;
+			if ( 'login' === $type && isset( $_GET['checkemail'] ) && 'registered' === $_GET['checkemail'] ) {
+				$success_action = $settings_all['register']['success_action'] ?? 'none';
+				if ( 'none' !== $success_action ) {
+					$show_wait_screen = true;
+				}
+			}
+			?>
 			
 			<?php if ( 'login' === $type ) : ?>
 				
+				<?php if ( isset( $_GET['checkemail'] ) && 'registered' === $_GET['checkemail'] ) : ?>
+					<div class="eo-login-error" id="eo-lp-register-success-msg" style="background-color: rgba(34, 197, 94, 0.1); color: #16a34a; border-color: rgba(34, 197, 94, 0.2); <?php echo $show_wait_screen ? 'display: none;' : ''; ?>">
+						<span class="dashicons dashicons-yes" style="vertical-align: middle; margin-right: 4px;"></span>
+						<?php esc_html_e( 'Inscription réussie. Veuillez consulter votre boîte de réception pour définir votre mot de passe.', 'eo-blocks' ); ?>
+					</div>
+				<?php endif; ?>
+
 				<?php if ( isset( $_GET['login_error'] ) ) : ?>
 					<div class="eo-login-error">
 						<span class="dashicons dashicons-warning" style="vertical-align: middle; margin-right: 4px;"></span>
@@ -357,20 +380,73 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 					</div>
 				<?php endif; ?>
 
-				<?php
-				$redirect = !empty( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : admin_url();
-				wp_login_form( array(
-					'echo'           => true,
-					'redirect'       => $redirect,
-					'form_id'        => 'eo-loginform',
-					'label_username' => __( 'Identifiant ou E-mail', 'eo-blocks' ),
-					'label_password' => __( 'Mot de passe', 'eo-blocks' ),
-					'label_remember' => __( 'Se souvenir de moi', 'eo-blocks' ),
-					'label_log_in'   => __( 'Se connecter', 'eo-blocks' ),
-					'remember'       => true,
-					'value_remember' => true,
-				) );
-				?>
+				<?php if ( $show_wait_screen ) {
+					require_once plugin_dir_path( __FILE__ ) . 'wait-screen-template.php';
+				} ?>
+
+				<div id="eo-lp-login-form-wrapper" style="<?php echo $show_wait_screen ? 'display: none;' : ''; ?>">
+					<?php
+					$redirect = !empty( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : admin_url();
+					wp_login_form( array(
+						'echo'           => true,
+						'redirect'       => $redirect,
+						'form_id'        => 'eo-loginform',
+						'label_username' => __( 'Identifiant ou E-mail', 'eo-blocks' ),
+						'label_password' => __( 'Mot de passe', 'eo-blocks' ),
+						'label_remember' => __( 'Se souvenir de moi', 'eo-blocks' ),
+						'label_log_in'   => __( 'Se connecter', 'eo-blocks' ),
+						'remember'       => true,
+						'value_remember' => true,
+					) );
+					?>
+
+					<?php 
+					$register_active = !empty( $settings_all['register']['active'] );
+					if ( get_option( 'users_can_register' ) || $register_active ) : ?>
+						<p style="margin-top: 20px; font-size: 14px; text-align: center;">
+							<a href="<?php echo esc_url( wp_registration_url() ); ?>" style="color: <?php echo esc_attr( $accent_color ); ?>; text-decoration: none; font-weight: 500;">
+								<?php esc_html_e( 'Pas encore de compte ? S\'inscrire', 'eo-blocks' ); ?>
+							</a>
+						</p>
+					<?php endif; ?>
+				</div>
+
+			<?php elseif ( 'register' === $type ) : ?>
+				
+				<?php if ( isset( $_GET['register_error'] ) ) : ?>
+					<div class="eo-login-error">
+						<span class="dashicons dashicons-warning" style="vertical-align: middle; margin-right: 4px;"></span>
+						<?php
+						if ( 'invalid_email' === $_GET['register_error'] ) {
+							esc_html_e( 'Adresse e-mail invalide.', 'eo-blocks' );
+						} elseif ( 'email_exists' === $_GET['register_error'] ) {
+							esc_html_e( 'Cette adresse e-mail est déjà utilisée.', 'eo-blocks' );
+						} elseif ( 'email_not_allowed' === $_GET['register_error'] ) {
+							esc_html_e( 'Cette adresse e-mail n\'est pas autorisée à s\'inscrire sur ce site.', 'eo-blocks' );
+						} else {
+							esc_html_e( 'Erreur lors de l\'inscription. Veuillez réessayer.', 'eo-blocks' );
+						}
+						?>
+					</div>
+				<?php endif; ?>
+
+				<form name="registerform" id="eo-registerform" action="<?php echo esc_url( wp_login_url() . '?action=register' ); ?>" method="post">
+					<p class="eo-lp-form-row">
+						<label for="user_email"><?php esc_html_e( 'Adresse E-mail', 'eo-blocks' ); ?></label>
+						<input type="email" name="user_email" id="user_email" class="input" value="" size="25" required />
+					</p>
+					<p id="reg_passmail" style="font-size: 13px; color: <?php echo $is_light_bg ? '#64748b' : '#94a3b8'; ?>; margin-bottom: 15px;">
+						<?php esc_html_e( 'La confirmation d\'inscription vous sera envoyée par e-mail.', 'eo-blocks' ); ?>
+					</p>
+					<p class="submit login-submit">
+						<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'S\'inscrire', 'eo-blocks' ); ?>" />
+					</p>
+				</form>
+				<p style="margin-top: 20px; font-size: 14px;">
+					<a href="<?php echo esc_url( wp_login_url() ); ?>" style="color: <?php echo esc_attr( $accent_color ); ?>; text-decoration: none; font-weight: 500;">
+						<?php esc_html_e( 'Déjà un compte ? Se connecter', 'eo-blocks' ); ?>
+					</a>
+				</p>
 
 			<?php elseif ( '404' === $type ) : ?>
 				<a href="<?php echo esc_url( home_url() ); ?>" class="eo-lp-btn">
@@ -380,18 +456,30 @@ $input_border= $is_light_bg ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)
 		</div>
 	</div>
 
-	<?php if ( 'login' === $type ) : ?>
+	<?php if ( 'login' === $type || 'register' === $type ) : ?>
+		<?php
+			$email_filtering_active = false;
+			$email_rules = '';
+			if ( 'login' === $type ) {
+				$email_filtering_active = !empty( $page_settings['email_filtering_active'] );
+				$email_rules = $page_settings['email_rules'] ?? '';
+			} elseif ( 'register' === $type ) {
+				$inherit = !empty( $page_settings['inherit_login_rules'] );
+				$email_filtering_active = $inherit ? !empty( $settings_all['login']['email_filtering_active'] ) : !empty( $page_settings['email_filtering_active'] );
+				$email_rules = $inherit ? ( $settings_all['login']['email_rules'] ?? '' ) : ( $page_settings['email_rules'] ?? '' );
+			}
+		?>
 		<script type="text/javascript">
 			window.eoLpLoginSecurity = {
-				emailFilteringActive: <?php echo !empty( $page_settings['email_filtering_active'] ) ? 'true' : 'false'; ?>,
-				emailRules: <?php echo json_encode( $page_settings['email_rules'] ?? '' ); ?>
+				emailFilteringActive: <?php echo $email_filtering_active ? 'true' : 'false'; ?>,
+				emailRules: <?php echo json_encode( $email_rules ); ?>
 			};
 
 			document.addEventListener('DOMContentLoaded', function() {
-				var form = document.getElementById('eo-loginform');
+				var form = document.getElementById('eo-loginform') || document.getElementById('eo-registerform');
 				if (!form) return;
 
-				var usernameInput = document.getElementById('user_login');
+				var usernameInput = document.getElementById('user_login') || document.getElementById('user_email');
 				if (!usernameInput) return;
 
 				var style = document.createElement('style');
