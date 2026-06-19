@@ -24,6 +24,10 @@
     "useApi": {
       "type": "boolean",
       "default": true
+    },
+    "addLink": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {

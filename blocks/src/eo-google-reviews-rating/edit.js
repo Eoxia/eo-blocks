@@ -5,7 +5,7 @@ import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { rating, maxRating, showStars, useApi } = attributes;
+	const { rating, maxRating, showStars, useApi, addLink } = attributes;
 	const [ apiData, setApiData ] = useState( null );
 
 	useEffect( () => {
@@ -23,7 +23,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		
 		const stars = [];
 		const r = parseFloat( displayRating ) || 0;
-		const max = parseInt( maxRating ) || 5;
+		const max = 5;
 
 		for ( let i = 1; i <= max; i++ ) {
 			if ( r >= i ) {
@@ -36,6 +36,13 @@ export default function Edit( { attributes, setAttributes } ) {
 		}
 		return <div className="eo-grr-stars">{ stars }</div>;
 	};
+
+	const innerContent = (
+		<div className="eo-google-reviews-rating-wrapper">
+			<span className="eo-grr-score">{ Number(displayRating).toFixed(1) }</span>
+			{ renderStars() }
+		</div>
+	);
 
 	return (
 		<div { ...useBlockProps() }>
@@ -67,23 +74,24 @@ export default function Edit( { attributes, setAttributes } ) {
 						disabled={ !!(useApi && apiData) }
 						help={ (useApi && apiData) ? __( 'Récupéré automatiquement depuis l\'API.', 'eo-blocks' ) : '' }
 					/>
-					<TextControl
-						label={ __( 'Note maximale', 'eo-blocks' ) }
-						type="number"
-						value={ maxRating }
-						onChange={ ( val ) => setAttributes( { maxRating: parseInt( val ) || 5 } ) }
-					/>
 					<ToggleControl
 						label={ __( 'Afficher les étoiles', 'eo-blocks' ) }
 						checked={ showStars }
 						onChange={ ( val ) => setAttributes( { showStars: val } ) }
 					/>
+					<ToggleControl
+						label={ __( 'Ajouter un lien vers la fiche Google', 'eo-blocks' ) }
+						checked={ addLink }
+						onChange={ ( val ) => setAttributes( { addLink: val } ) }
+						help={ __( 'Le bloc entier deviendra cliquable.', 'eo-blocks' ) }
+					/>
 				</PanelBody>
 			</InspectorControls>
-			<div className="eo-google-reviews-rating-wrapper">
-				<span className="eo-grr-score">{ Number(displayRating).toFixed(1) }</span>
-				{ renderStars() }
-			</div>
+			{ addLink ? (
+				<a href={ apiData && apiData.url ? apiData.url : '#' } onClick={ (e) => e.preventDefault() } style={ { textDecoration: 'none', color: 'inherit' } }>
+					{ innerContent }
+				</a>
+			) : innerContent }
 		</div>
 	);
 }

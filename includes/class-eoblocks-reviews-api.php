@@ -129,6 +129,7 @@ class Eoblocks_Reviews_API {
 		$cached = get_transient( $transient_key );
 
 		if ( false !== $cached ) {
+			$cached['url'] = isset( $options['google_url'] ) ? $options['google_url'] : '';
 			return $cached;
 		}
 
@@ -153,6 +154,8 @@ class Eoblocks_Reviews_API {
 				'count'  => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
 			);
 			set_transient( $transient_key, $result, DAY_IN_SECONDS );
+			
+			$result['url'] = isset( $options['google_url'] ) ? $options['google_url'] : '';
 			return $result;
 		}
 
