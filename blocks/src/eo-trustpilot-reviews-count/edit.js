@@ -1,11 +1,11 @@
-﻿import { __ } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextControl, Notice } from '@wordpress/components';
+import { PanelBody, TextControl, ToggleControl, Notice } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { count, prefix, suffix } = attributes;
+	const { count, prefix, suffix, useApi } = attributes;
 	const [ apiData, setApiData ] = useState( null );
 
 	useEffect( () => {
@@ -16,23 +16,31 @@ export default function Edit( { attributes, setAttributes } ) {
 		} ).catch( () => {} );
 	}, [] );
 
-	const displayCount = apiData && apiData.count ? apiData.count : count;
+	const displayCount = (useApi && apiData && apiData.count) ? apiData.count : count;
 
 	return (
 		<div { ...useBlockProps() }>
 			<InspectorControls>
-				<PanelBody title={ __( 'RÃ©glages des Avis', 'eo-blocks' ) }>
+				<PanelBody title={ __( 'Réglages des Avis', 'eo-blocks' ) }>
 					{ apiData ? (
 						<Notice status="success" isDismissible={ false }>
-							{ __( 'âœ… API ConnectÃ©e. Mise Ã  jour 1 fois / jour.', 'eo-blocks' ) }
+							{ __( '✅ API Connectée. Mise à jour 1 fois / jour.', 'eo-blocks' ) }
 						</Notice>
 					) : (
 						<Notice status="warning" isDismissible={ false }>
-							{ __( 'âŒ API non configurÃ©e. Saisie manuelle.', 'eo-blocks' ) }
+							{ __( '❌ API non configurée (ou désactivée).', 'eo-blocks' ) }
 						</Notice>
 					) }
+					
+					<ToggleControl
+						label={ __( 'Utiliser les données de l\'API', 'eo-blocks' ) }
+						checked={ useApi }
+						onChange={ ( val ) => setAttributes( { useApi: val } ) }
+						help={ __( 'Si désactivé, vous pouvez forcer la valeur manuellement.', 'eo-blocks' ) }
+					/>
+
 					<TextControl
-						label={ __( 'PrÃ©fixe', 'eo-blocks' ) }
+						label={ __( 'Préfixe', 'eo-blocks' ) }
 						value={ prefix }
 						onChange={ ( val ) => setAttributes( { prefix: val } ) }
 					/>
@@ -41,8 +49,8 @@ export default function Edit( { attributes, setAttributes } ) {
 						type="number"
 						value={ displayCount }
 						onChange={ ( val ) => setAttributes( { count: Number( val ) } ) }
-						disabled={ !!apiData }
-						help={ !!apiData ? __( 'RÃ©cupÃ©rÃ© automatiquement depuis l\'API.', 'eo-blocks' ) : '' }
+						disabled={ !!(useApi && apiData) }
+						help={ (useApi && apiData) ? __( 'Récupéré automatiquement depuis l\'API.', 'eo-blocks' ) : '' }
 					/>
 					<TextControl
 						label={ __( 'Suffixe', 'eo-blocks' ) }
@@ -51,10 +59,10 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<div className="eo-trustpilot-reviews-count-wrapper">
-				{ prefix && <span className="eo-grc-prefix">{ prefix }</span> }
-				<span className="eo-grc-count">{ displayCount }</span>
-				{ suffix && <span className="eo-grc-suffix">{ suffix }</span> }
+			<div class="eo-trustpilot-reviews-count-wrapper">
+				{ prefix && <span class="eo-grc-prefix">{ prefix }</span> }
+				<span class="eo-grc-count">{ displayCount }</span>
+				{ suffix && <span class="eo-grc-suffix">{ suffix }</span> }
 			</div>
 		</div>
 	);

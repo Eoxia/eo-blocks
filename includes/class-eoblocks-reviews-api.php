@@ -53,7 +53,7 @@ class Eoblocks_Reviews_API {
 	 */
 	public static function get_google_data( $place_id = '' ) {
 		$options = get_option('eoblocks_reviews_settings', array());
-		if ( empty( $options['google_active'] ) ) {
+		if ( empty( $options['google_active'] ) || empty( $options['google_auto_sync'] ) ) {
 			return false;
 		}
 
@@ -109,7 +109,7 @@ class Eoblocks_Reviews_API {
 	public static function get_trustpilot_data( $business_unit_id = '' ) {
 		// Scaffold for Trustpilot API
 		$options = get_option('eoblocks_reviews_settings', array());
-		if ( empty( $options['trustpilot_active'] ) ) {
+		if ( empty( $options['trustpilot_active'] ) || empty( $options['trustpilot_auto_sync'] ) ) {
 			return false;
 		}
 		
@@ -129,7 +129,7 @@ class Eoblocks_Reviews_API {
 	public static function get_tripadvisor_data( $location_id = '' ) {
 		// Scaffold for TripAdvisor API
 		$options = get_option('eoblocks_reviews_settings', array());
-		if ( empty( $options['tripadvisor_active'] ) ) {
+		if ( empty( $options['tripadvisor_active'] ) || empty( $options['tripadvisor_auto_sync'] ) ) {
 			return false;
 		}
 
@@ -137,6 +137,26 @@ class Eoblocks_Reviews_API {
 		return array(
 			'rating' => 4.0,
 			'count'  => 300,
+		);
+	}
+
+	/**
+	 * Get TheFork Reviews data.
+	 *
+	 * @param string $restaurant_id Override default restaurant ID.
+	 * @return array|false
+	 */
+	public static function get_thefork_data( $restaurant_id = '' ) {
+		// Scaffold for TheFork API
+		$options = get_option('eoblocks_reviews_settings', array());
+		if ( empty( $options['thefork_active'] ) || empty( $options['thefork_auto_sync'] ) ) {
+			return false;
+		}
+
+		// Return dummy data or false until API is fully implemented
+		return array(
+			'rating' => 4.8,
+			'count'  => 450,
 		);
 	}
 }

@@ -20,6 +20,10 @@
     "suffix": {
       "type": "string",
       "default": "Avis Trustpilot"
+    },
+    "useApi": {
+      "type": "boolean",
+      "default": true
     }
   },
   "supports": {

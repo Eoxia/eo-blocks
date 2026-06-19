@@ -8,20 +8,24 @@
 	"icon": "star-filled",
 	"description": "Display the average Trustpilot Reviews rating",
 	"example": {},
-  	"attributes": {
+	"attributes": {
 		"rating": {
-		  "type": "number",
-		  "default": 5.0
+			"type": "number",
+			"default": 5
 		},
 		"maxRating": {
 			"type": "number",
 			"default": 5
 		},
-	  	"showStars": {
-		  "type": "boolean",
-		  "default": true
+		"showStars": {
+			"type": "boolean",
+			"default": true
+		},
+		"useApi": {
+			"type": "boolean",
+			"default": true
 		}
-  	},
+	},
 	"supports": {
 		"html": false,
 		"color": {
@@ -36,7 +40,6 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-  	"render": "file:./render.php",
+	"render": "file:./render.php",
 	"viewScript": "file:./view.js"
 }
-

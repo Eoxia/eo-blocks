@@ -19,6 +19,8 @@ $providers = array(
 		'fields' => array(
 			'api_key' => 'Clé API Google Places',
 			'place_id' => 'Place ID par défaut',
+			'url' => 'Lien vers la fiche',
+			'review_url' => 'Lien vers déposer un avis',
 		),
 	),
 	'trustpilot' => array(
@@ -28,6 +30,8 @@ $providers = array(
 		'fields' => array(
 			'business_unit_id' => 'Business Unit ID',
 			'api_key' => 'Clé API Trustpilot',
+			'url' => 'Lien vers la fiche',
+			'review_url' => 'Lien vers déposer un avis',
 		),
 	),
 	'tripadvisor' => array(
@@ -37,6 +41,8 @@ $providers = array(
 		'fields' => array(
 			'api_key' => 'Clé API TripAdvisor',
 			'location_id' => 'Location ID',
+			'url' => 'Lien vers la fiche',
+			'review_url' => 'Lien vers déposer un avis',
 		),
 	),
 	'thefork' => array(
@@ -46,6 +52,8 @@ $providers = array(
 		'fields' => array(
 			'restaurant_id' => 'Restaurant ID',
 			'api_key' => 'Clé API TheFork',
+			'url' => 'Lien vers la fiche',
+			'review_url' => 'Lien vers déposer un avis',
 		),
 	),
 );
@@ -83,6 +91,17 @@ $providers = array(
 					<div class="eo-card-body">
 						<h2><?php echo esc_html( $provider_data['title'] ); ?></h2>
 						<p><?php echo esc_html( $provider_data['desc'] ); ?></p>
+
+						<?php 
+							$auto_sync_name = $provider_key . '_auto_sync';
+							$auto_sync_value = isset( $options[ $auto_sync_name ] ) ? $options[ $auto_sync_name ] : false;
+						?>
+						<div class="eo-auto-sync-wrapper">
+							<label>
+								<input type="checkbox" name="eoblocks_reviews_settings[<?php echo esc_attr( $auto_sync_name ); ?>]" value="1" <?php checked( 1, $auto_sync_value ); ?>>
+								<strong>Activer la connexion automatique</strong>
+							</label>
+						</div>
 
 						<div class="eo-card-settings">
 							<?php foreach ( $provider_data['fields'] as $field_key => $field_label ) : 

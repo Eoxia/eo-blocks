@@ -20,6 +20,10 @@
     "suffix": {
       "type": "string",
       "default": "Avis TheFork"
+    },
+    "useApi": {
+      "type": "boolean",
+      "default": true
     }
   },
   "supports": {

@@ -29,7 +29,7 @@ class Eoblocks_Menu {
 			'manage_options',
 			'eo-blocks-maps',
 			[ $this, 'maps_page_view' ],
-			'dashicons-location-alt',
+			EO_BLOCKS_URL . 'assets/images/eoblocks-favicon-16x16.png',
 			80
 		);
 
