@@ -97,6 +97,10 @@ class Eoblocks_Menu {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === 'eo-blocks-reviews' ) {
 			wp_enqueue_style( 'eo-blocks-reviews-admin-css', EO_BLOCKS_URL . 'assets/css/reviews-admin.css', array(), '1.0.0' );
 			wp_enqueue_script( 'eo-blocks-reviews-admin-js', EO_BLOCKS_URL . 'assets/js/reviews-admin.js', array('jquery'), '1.0.0', true );
+			
+			wp_localize_script( 'eo-blocks-reviews-admin-js', 'eoReviewsAdmin', array(
+				'nonce' => wp_create_nonce( 'eo_reviews_admin_nonce' ),
+			) );
 		}
 	}
 

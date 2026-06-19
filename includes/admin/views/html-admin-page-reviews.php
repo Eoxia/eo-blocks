@@ -16,20 +16,25 @@ $providers = array(
 		'title' => 'Google',
 		'desc' => 'Récupérez automatiquement les avis depuis Google Places API.',
 		'icon' => 'dashicons-google',
-		'fields' => array(
+		'api_fields' => array(
 			'api_key' => 'Clé API Google Places',
 			'place_id' => 'Place ID par défaut',
+		),
+		'manual_fields' => array(
 			'url' => 'Lien vers la fiche',
 			'review_url' => 'Lien vers déposer un avis',
 		),
+		'place_id_link' => 'https://developers.google.com/maps/documentation/places/web-service/place-id',
 	),
 	'trustpilot' => array(
 		'title' => 'Trustpilot',
 		'desc' => 'Affichez votre score Trustpilot.',
 		'icon' => 'dashicons-star-filled',
-		'fields' => array(
+		'api_fields' => array(
 			'business_unit_id' => 'Business Unit ID',
 			'api_key' => 'Clé API Trustpilot',
+		),
+		'manual_fields' => array(
 			'url' => 'Lien vers la fiche',
 			'review_url' => 'Lien vers déposer un avis',
 		),
@@ -38,9 +43,11 @@ $providers = array(
 		'title' => 'TripAdvisor',
 		'desc' => 'Vos notes de TripAdvisor.',
 		'icon' => 'dashicons-palmtree',
-		'fields' => array(
+		'api_fields' => array(
 			'api_key' => 'Clé API TripAdvisor',
 			'location_id' => 'Location ID',
+		),
+		'manual_fields' => array(
 			'url' => 'Lien vers la fiche',
 			'review_url' => 'Lien vers déposer un avis',
 		),
@@ -49,9 +56,11 @@ $providers = array(
 		'title' => 'TheFork',
 		'desc' => 'Récupérez vos avis TheFork.',
 		'icon' => 'dashicons-food',
-		'fields' => array(
+		'api_fields' => array(
 			'restaurant_id' => 'Restaurant ID',
 			'api_key' => 'Clé API TheFork',
+		),
+		'manual_fields' => array(
 			'url' => 'Lien vers la fiche',
 			'review_url' => 'Lien vers déposer un avis',
 		),
@@ -98,13 +107,35 @@ $providers = array(
 						?>
 						<div class="eo-auto-sync-wrapper">
 							<label>
-								<input type="checkbox" name="eoblocks_reviews_settings[<?php echo esc_attr( $auto_sync_name ); ?>]" value="1" <?php checked( 1, $auto_sync_value ); ?>>
+								<input type="checkbox" class="eo-auto-sync-checkbox" name="eoblocks_reviews_settings[<?php echo esc_attr( $auto_sync_name ); ?>]" value="1" <?php checked( 1, $auto_sync_value ); ?>>
 								<strong>Activer la connexion automatique</strong>
 							</label>
 						</div>
 
+						<div class="eo-api-credentials" style="<?php echo $auto_sync_value ? '' : 'display: none;'; ?>">
+							<?php foreach ( $provider_data['api_fields'] as $field_key => $field_label ) : 
+								$field_name = $provider_key . '_' . $field_key;
+								$field_value = isset( $options[ $field_name ] ) ? $options[ $field_name ] : '';
+								$input_type = ( strpos( $field_key, 'api_key' ) !== false ) ? 'password' : 'text';
+							?>
+								<div class="eo-setting-field">
+									<label><?php echo esc_html( $field_label ); ?></label>
+									<input type="<?php echo esc_attr( $input_type ); ?>" class="eo-api-input" data-key="<?php echo esc_attr( $field_key ); ?>" name="eoblocks_reviews_settings[<?php echo esc_attr( $field_name ); ?>]" value="<?php echo esc_attr( $field_value ); ?>" />
+									<?php if ( $field_key === 'place_id' && ! empty( $provider_data['place_id_link'] ) ) : ?>
+										<p class="description"><a href="<?php echo esc_url( $provider_data['place_id_link'] ); ?>" target="_blank">Trouver mon Place ID</a></p>
+									<?php endif; ?>
+								</div>
+							<?php endforeach; ?>
+							
+							<div class="eo-test-connection-wrapper">
+								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>">Tester la connexion</button>
+								<span class="eo-test-result"></span>
+							</div>
+							<hr>
+						</div>
+
 						<div class="eo-card-settings">
-							<?php foreach ( $provider_data['fields'] as $field_key => $field_label ) : 
+							<?php foreach ( $provider_data['manual_fields'] as $field_key => $field_label ) : 
 								$field_name = $provider_key . '_' . $field_key;
 								$field_value = isset( $options[ $field_name ] ) ? $options[ $field_name ] : '';
 							?>

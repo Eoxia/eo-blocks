@@ -18,6 +18,7 @@ class Eoblocks_Reviews_API {
 	 */
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
+		add_action( 'wp_ajax_eo_test_api_connection', array( __CLASS__, 'test_api_connection' ) );
 	}
 
 	/**
@@ -43,6 +44,64 @@ class Eoblocks_Reviews_API {
 			'tripadvisor' => self::get_tripadvisor_data(),
 			'thefork' => self::get_thefork_data(),
 		) );
+	}
+
+	/**
+	 * AJAX endpoint to test connection directly with provided credentials
+	 */
+	public static function test_api_connection() {
+		check_ajax_referer( 'eo_reviews_admin_nonce', 'security' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => 'Non autorisé.' ) );
+		}
+
+		$provider = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
+
+		if ( 'google' === $provider ) {
+			$api_key = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
+			$place_id = isset( $_POST['place_id'] ) ? sanitize_text_field( wp_unslash( $_POST['place_id'] ) ) : '';
+			
+			if ( empty( $api_key ) || empty( $place_id ) ) {
+				wp_send_json_error( array( 'message' => 'Clé API ou Place ID manquant.' ) );
+			}
+
+			$url = add_query_arg( array(
+				'place_id' => $place_id,
+				'fields'   => 'rating,user_ratings_total',
+				'key'      => $api_key,
+			), 'https://maps.googleapis.com/maps/api/place/details/json' );
+
+			$response = wp_remote_get( $url );
+
+			if ( is_wp_error( $response ) ) {
+				wp_send_json_error( array( 'message' => 'Erreur réseau lors de la requête.' ) );
+			}
+
+			$body = wp_remote_retrieve_body( $response );
+			$data = json_decode( $body, true );
+
+			if ( isset( $data['status'] ) ) {
+				if ( $data['status'] === 'OK' && isset( $data['result'] ) ) {
+					$result = array(
+						'rating' => isset( $data['result']['rating'] ) ? (float) $data['result']['rating'] : 0,
+						'count'  => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
+					);
+					wp_send_json_success( $result );
+				} else {
+					$err_msg = isset( $data['error_message'] ) ? $data['error_message'] : $data['status'];
+					wp_send_json_error( array( 'message' => 'Erreur API: ' . $err_msg ) );
+				}
+			}
+			wp_send_json_error( array( 'message' => 'Réponse inattendue de l\'API.' ) );
+		}
+
+		// Fallback/Mock for other providers
+		if ( in_array( $provider, array( 'trustpilot', 'tripadvisor', 'thefork' ) ) ) {
+			wp_send_json_error( array( 'message' => 'L\'API de ce prestataire n\'est pas encore complètement implémentée en backend.' ) );
+		}
+
+		wp_send_json_error( array( 'message' => 'Prestataire inconnu.' ) );
 	}
 
 	/**
