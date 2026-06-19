@@ -136,8 +136,9 @@ class Eoblocks_Reviews_API {
 
 		$url = add_query_arg( array(
 			'place_id' => $place_id,
-			'fields'   => 'rating,user_ratings_total',
+			'fields'   => 'rating,user_ratings_total,reviews',
 			'key'      => $api_key,
+			'language' => get_locale(), // Fetch reviews in the current language if possible
 		), 'https://maps.googleapis.com/maps/api/place/details/json' );
 
 		$response = wp_remote_get( $url );
@@ -151,8 +152,9 @@ class Eoblocks_Reviews_API {
 
 		if ( isset( $data['status'] ) && $data['status'] === 'OK' && isset( $data['result'] ) ) {
 			$result = array(
-				'rating' => isset( $data['result']['rating'] ) ? (float) $data['result']['rating'] : 0,
-				'count'  => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
+				'rating'  => isset( $data['result']['rating'] ) ? (float) $data['result']['rating'] : 0,
+				'count'   => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
+				'reviews' => isset( $data['result']['reviews'] ) ? $data['result']['reviews'] : array(),
 			);
 			set_transient( $transient_key, $result, DAY_IN_SECONDS );
 			
