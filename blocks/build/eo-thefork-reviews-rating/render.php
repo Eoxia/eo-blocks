@@ -12,18 +12,20 @@ if ( $use_api && class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
 	}
 }
 
-function render_eo_stars( $rating, $maxRating ) {
-	$stars = '';
-	for ( $i = 1; $i <= $maxRating; $i++ ) {
-		if ( $rating >= $i ) {
-			$stars .= '<span class="eo-star eo-star-full">★</span>';
-		} elseif ( $rating >= $i - 0.5 ) {
-			$stars .= '<span class="eo-star eo-star-half">★</span>';
-		} else {
-			$stars .= '<span class="eo-star eo-star-empty">☆</span>';
+if ( ! function_exists( 'render_eo_stars' ) ) {
+	function render_eo_stars( $rating, $maxRating ) {
+		$stars = '';
+		for ( $i = 1; $i <= $maxRating; $i++ ) {
+			if ( $rating >= $i ) {
+				$stars .= '<span class="eo-star eo-star-full">★</span>';
+			} elseif ( $rating >= $i - 0.5 ) {
+				$stars .= '<span class="eo-star eo-star-half">★</span>';
+			} else {
+				$stars .= '<span class="eo-star eo-star-empty">☆</span>';
+			}
 		}
+		return '<div class="eo-grr-stars">' . $stars . '</div>';
 	}
-	return '<div class="eo-grr-stars">' . $stars . '</div>';
 }
 ?>
 <div <?php echo $wrapper_attributes; ?>>
