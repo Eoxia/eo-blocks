@@ -25,6 +25,7 @@ $providers = array(
 			'review_url' => 'Lien vers déposer un avis',
 		),
 		'place_id_link' => 'https://developers.google.com/maps/documentation/places/web-service/place-id',
+		'help_text' => "<strong>Pour récupérer de simples avis publics, Google utilise un système beaucoup plus basique : une Clé API.</strong><br><br>Voici la marche à suivre exacte pas-à-pas pour la générer (ça prend 1 minute) :<br><br><strong>1. Créer la Clé API</strong><br>Sur Google Cloud, regarde le menu de navigation à gauche (les 3 traits horizontaux) et va dans <em>API et services > Identifiants</em> (Credentials en anglais).<br>En haut de l'écran, clique sur le bouton <strong>+ CRÉER DES IDENTIFIANTS</strong> (+ CREATE CREDENTIALS).<br>Dans le menu déroulant qui s'ouvre, choisis le tout premier choix : <strong>Clé API</strong> (API key).<br>Une petite fenêtre va s'ouvrir avec ta nouvelle clé API. Elle ressemble à une longue suite de lettres et de chiffres qui commence généralement par <code>AIzaSy...</code> (et il n'y a pas de \"code secret\").<br>Copie cette clé, c'est celle-ci qu'il faut coller dans la case Clé API Google Places de notre plugin !<br><br><strong>2. Activer l'API (Très important !)</strong><br>Pour que cette clé ait le droit de lire les avis, il faut lui en donner la permission :<br><br>Toujours dans le menu de gauche, va dans <em>API et services > Bibliothèque</em> (Library).<br>Dans la barre de recherche, tape <strong>Places API</strong> (ou Places API (New)).<br>Clique dessus, et clique sur le bouton bleu <strong>Activer</strong> (Enable).<br><br>Et voilà ! Tu as maintenant la bonne Clé API. Pour le Place ID, tu peux utiliser le petit lien \"Trouver mon Place ID\" que je t'ai ajouté juste en dessous du champ dans tes réglages WordPress.",
 	),
 	'trustpilot' => array(
 		'title' => 'Trustpilot',
@@ -88,6 +89,14 @@ $providers = array(
 					<div class="eo-card-header">
 						<div class="eo-card-icon">
 							<span class="dashicons <?php echo esc_attr( $provider_data['icon'] ); ?>"></span>
+							<?php if ( ! empty( $provider_data['help_text'] ) ) : ?>
+								<div class="eo-help-tooltip-container">
+									<span class="dashicons dashicons-editor-help eo-help-icon"></span>
+									<div class="eo-help-tooltip">
+										<?php echo wp_kses_post( $provider_data['help_text'] ); ?>
+									</div>
+								</div>
+							<?php endif; ?>
 						</div>
 						<div class="eo-card-toggle">
 							<label class="eo-switch">

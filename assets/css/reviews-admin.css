@@ -172,3 +172,42 @@ input:checked + .eo-slider:before {
 .eo-submit-wrapper {
     margin-top: 30px;
 }
+
+.eo-card-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.eo-help-tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.eo-help-icon {
+    color: #cc0000;
+    cursor: help;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+.eo-help-tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    width: 400px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.4;
+}
+.eo-help-tooltip-container:hover .eo-help-tooltip {
+    display: block;
+}
+
