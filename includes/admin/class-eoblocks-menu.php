@@ -75,18 +75,14 @@ class Eoblocks_Menu {
 	}
 
 	public function enqueue_admin_assets( $hook ) {
-		if ( 'toplevel_page_eo-blocks-maps' !== $hook ) {
-			return;
-		}
-
-		wp_enqueue_media();
-
-		// Enqueue Leaflet from CDN
-		wp_enqueue_style( 'leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
-		wp_enqueue_script( 'leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
-
 		// Enqueue custom admin styles and script for maps
 		if ( 'toplevel_page_eo-blocks-maps' === $hook ) {
+			wp_enqueue_media();
+
+			// Enqueue Leaflet from CDN
+			wp_enqueue_style( 'leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
+			wp_enqueue_script( 'leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
+
 			wp_enqueue_style( 'eo-blocks-maps-admin-css', EO_BLOCKS_URL . 'assets/css/maps-admin.css', array( 'leaflet-css' ), '1.0.0' );
 			wp_enqueue_script( 'eo-blocks-maps-admin-js', EO_BLOCKS_URL . 'assets/js/maps-admin.js', array( 'jquery', 'leaflet-js' ), '1.0.0', true );
 
