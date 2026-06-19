@@ -14,6 +14,38 @@ if (!defined('ABSPATH')) {
 class Eoblocks_Reviews_API {
 
 	/**
+	 * Initialize hooks
+	 */
+	public static function init() {
+		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
+	}
+
+	/**
+	 * Register REST API routes for Gutenberg editor
+	 */
+	public static function register_rest_routes() {
+		register_rest_route( 'eo-blocks/v1', '/reviews-data', array(
+			'methods'  => 'GET',
+			'callback' => array( __CLASS__, 'get_all_reviews_data' ),
+			'permission_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		) );
+	}
+
+	/**
+	 * Get all reviews data for the REST API
+	 */
+	public static function get_all_reviews_data() {
+		return rest_ensure_response( array(
+			'google' => self::get_google_data(),
+			'trustpilot' => self::get_trustpilot_data(),
+			'tripadvisor' => self::get_tripadvisor_data(),
+			'thefork' => self::get_thefork_data(),
+		) );
+	}
+
+	/**
 	 * Get Google Reviews data (Rating and Count).
 	 *
 	 * @param string $place_id Override default place ID.

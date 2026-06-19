@@ -30,6 +30,11 @@ require_once EO_BLOCKS_PATH . '/includes/autoload.php';
 
 // Load AJAX API endpoints
 require_once EO_BLOCKS_PATH . '/includes/api-eo-search.php';
+
+// Initialize Reviews API
+if ( class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
+	\EoBlocks\Includes\Eoblocks_Reviews_API::init();
+}
 require_once EO_BLOCKS_PATH . '/includes/api-eo-maps.php';
 
 use EoBlocks\Includes\Eoblocks;
