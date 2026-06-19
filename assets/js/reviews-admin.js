@@ -59,4 +59,23 @@ jQuery(document).ready(function($) {
             $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> Erreur serveur.').addClass('error');
         });
     });
+
+    // Auto-fill Google URLs when Place ID changes
+    $('.eo-card-body').on('input', '.eo-api-input[data-key="place_id"]', function() {
+        var placeId = $(this).val().trim();
+        var $card = $(this).closest('.eo-card-body');
+        
+        var $urlInput = $card.find('input[name="eoblocks_reviews_settings[google_url]"]');
+        var $reviewUrlInput = $card.find('input[name="eoblocks_reviews_settings[google_review_url]"]');
+        
+        if (placeId) {
+            // Only auto-fill if empty or previously auto-filled to avoid overwriting custom URLs
+            if (!$urlInput.val() || $urlInput.val().startsWith('https://www.google.com/maps/place/?q=place_id:')) {
+                $urlInput.val('https://www.google.com/maps/place/?q=place_id:' + placeId);
+            }
+            if (!$reviewUrlInput.val() || $reviewUrlInput.val().startsWith('https://search.google.com/local/writereview?placeid=')) {
+                $reviewUrlInput.val('https://search.google.com/local/writereview?placeid=' + placeId);
+            }
+        }
+    });
 });
