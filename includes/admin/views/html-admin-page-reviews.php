@@ -39,6 +39,15 @@ $providers = array(
 			'location_id' => 'Location ID',
 		),
 	),
+	'thefork' => array(
+		'title' => 'TheFork',
+		'desc' => 'Récupérez vos avis TheFork.',
+		'icon' => 'dashicons-food',
+		'fields' => array(
+			'restaurant_id' => 'Restaurant ID',
+			'api_key' => 'Clé API TheFork',
+		),
+	),
 );
 ?>
 <div class="wrap eo-admin-wrap">

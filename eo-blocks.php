@@ -64,6 +64,9 @@ function eo_blocks_block_init() {
 				if ( strpos( $url, 'eo-tripadvisor-reviews-' ) !== false && empty( $options['tripadvisor_active'] ) ) {
 					$skip = true;
 				}
+				if ( strpos( $url, 'eo-thefork-reviews-' ) !== false && empty( $options['thefork_active'] ) ) {
+					$skip = true;
+				}
 
 				if ( ! $skip ) {
 					register_block_type( $block_dir );

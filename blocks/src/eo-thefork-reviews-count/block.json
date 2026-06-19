@@ -1,0 +1,43 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo-blocks/google-reviews-count",
+	"version": "1.0.0",
+	"title": "TheFork Reviews Count",
+	"category": "eo-blocks",
+	"icon": "food",
+	"description": "Display the number of TheFork Reviews",
+	"example": {},
+  	"attributes": {
+		"count": {
+		  "type": "number",
+		  "default": 80
+		},
+	  	"prefix": {
+		  "type": "string",
+		  "default": ""
+		},
+		"suffix": {
+			"type": "string",
+			"default": "Avis TheFork"
+		}
+  	},
+	"supports": {
+		"html": false,
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true
+		}
+	},
+	"textdomain": "eo-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+  	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
+
+
