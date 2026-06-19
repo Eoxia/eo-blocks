@@ -1,0 +1,45 @@
+.wp-block-eo-blocks-google-reviews-rating {
+	.eo-trustpilot-reviews-rating-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		font-family: inherit;
+
+		.eo-grr-score {
+			font-weight: bold;
+			font-size: 1.2em;
+		}
+
+		.eo-grr-stars {
+			display: flex;
+			gap: 2px;
+			color: #fbbc04; /* Google star color */
+
+			.eo-star {
+				font-size: 1.2em;
+				line-height: 1;
+
+				&.eo-star-empty {
+					color: #e0e0e0;
+				}
+
+				&.eo-star-half {
+					/* Basic half star styling if we use full star char, or we can just let it be */
+					position: relative;
+					display: inline-block;
+					color: #e0e0e0; /* Background empty color */
+					&::after {
+						content: '\2605'; /* Full star unicode */
+						color: #fbbc04;
+						position: absolute;
+						left: 0;
+						top: 0;
+						width: 50%;
+						overflow: hidden;
+					}
+				}
+			}
+		}
+	}
+}
+
