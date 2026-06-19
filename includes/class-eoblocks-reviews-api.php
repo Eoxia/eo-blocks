@@ -130,6 +130,7 @@ class Eoblocks_Reviews_API {
 
 		if ( false !== $cached ) {
 			$cached['url'] = isset( $options['google_url'] ) ? $options['google_url'] : '';
+			$cached['review_url'] = isset( $options['google_review_url'] ) ? $options['google_review_url'] : '';
 			return $cached;
 		}
 
@@ -156,6 +157,7 @@ class Eoblocks_Reviews_API {
 			set_transient( $transient_key, $result, DAY_IN_SECONDS );
 			
 			$result['url'] = isset( $options['google_url'] ) ? $options['google_url'] : '';
+			$result['review_url'] = isset( $options['google_review_url'] ) ? $options['google_review_url'] : '';
 			return $result;
 		}
 

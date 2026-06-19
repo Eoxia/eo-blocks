@@ -5,7 +5,7 @@ import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { count, prefix, suffix, useApi } = attributes;
+	const { count, prefix, suffix, useApi, addReviewLink, reviewLinkText } = attributes;
 	const [ apiData, setApiData ] = useState( null );
 
 	useEffect( () => {
@@ -57,12 +57,30 @@ export default function Edit( { attributes, setAttributes } ) {
 						value={ suffix }
 						onChange={ ( val ) => setAttributes( { suffix: val } ) }
 					/>
+					
+					<ToggleControl
+						label={ __( 'Ajouter un lien "Déposer un avis"', 'eo-blocks' ) }
+						checked={ addReviewLink }
+						onChange={ ( val ) => setAttributes( { addReviewLink: val } ) }
+					/>
+					{ addReviewLink && (
+						<TextControl
+							label={ __( 'Texte du lien', 'eo-blocks' ) }
+							value={ reviewLinkText }
+							onChange={ ( val ) => setAttributes( { reviewLinkText: val } ) }
+						/>
+					) }
 				</PanelBody>
 			</InspectorControls>
-			<div class="eo-google-reviews-count-wrapper">
-				{ prefix && <span class="eo-grc-prefix">{ prefix }</span> }
-				<span class="eo-grc-count">{ displayCount }</span>
-				{ suffix && <span class="eo-grc-suffix">{ suffix }</span> }
+			<div className="eo-google-reviews-count-wrapper">
+				{ prefix && <span className="eo-grc-prefix">{ prefix }</span> }
+				<span className="eo-grc-count">{ displayCount }</span>
+				{ suffix && <span className="eo-grc-suffix">{ suffix }</span> }
+				{ addReviewLink && reviewLinkText && (
+					<a href={ apiData && apiData.review_url ? apiData.review_url : '#' } onClick={ (e) => e.preventDefault() } className="eo-grc-review-link" style={ { marginLeft: '10px' } }>
+						{ reviewLinkText }
+					</a>
+				) }
 			</div>
 		</div>
 	);
