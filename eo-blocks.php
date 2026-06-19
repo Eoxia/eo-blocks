@@ -53,7 +53,21 @@ function eo_blocks_block_init() {
 		if ( ! empty( $url ) && $url !== '.' && $url !== '..' && is_dir( $block_dir ) ) {
 			// Register main block if block.json exists
 			if ( file_exists( $block_dir . '/block.json' ) ) {
-				register_block_type( $block_dir );
+				$options = get_option('eoblocks_reviews_settings', array());
+				$skip = false;
+				if ( strpos( $url, 'eo-google-reviews-' ) !== false && empty( $options['google_active'] ) ) {
+					$skip = true;
+				}
+				if ( strpos( $url, 'eo-trustpilot-reviews-' ) !== false && empty( $options['trustpilot_active'] ) ) {
+					$skip = true;
+				}
+				if ( strpos( $url, 'eo-tripadvisor-reviews-' ) !== false && empty( $options['tripadvisor_active'] ) ) {
+					$skip = true;
+				}
+
+				if ( ! $skip ) {
+					register_block_type( $block_dir );
+				}
 			}
 
 			// Register inner-blocks if present

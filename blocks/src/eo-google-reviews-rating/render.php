@@ -10,6 +10,14 @@ $rating = isset( $attributes['rating'] ) ? (float) $attributes['rating'] : 5.0;
 $maxRating = isset( $attributes['maxRating'] ) ? (int) $attributes['maxRating'] : 5;
 $showStars = isset( $attributes['showStars'] ) ? (bool) $attributes['showStars'] : true;
 
+// Fetch API data if configured
+if ( class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
+	$api_data = \EoBlocks\Includes\Eoblocks_Reviews_API::get_google_data();
+	if ( $api_data && ! empty( $api_data['rating'] ) ) {
+		$rating = (float) $api_data['rating'];
+	}
+}
+
 // Output formatting
 $formatted_rating = number_format( $rating, 1, ',', '' );
 ?>

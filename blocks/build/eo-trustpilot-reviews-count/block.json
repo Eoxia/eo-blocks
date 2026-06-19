@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "eo-blocks/google-reviews-count",
+  "version": "1.0.0",
+  "title": "Trustpilot Reviews Count",
+  "category": "eo-blocks",
+  "icon": "star-filled",
+  "description": "Display the number of Trustpilot Reviews",
+  "example": {},
+  "attributes": {
+    "count": {
+      "type": "number",
+      "default": 80
+    },
+    "prefix": {
+      "type": "string",
+      "default": ""
+    },
+    "suffix": {
+      "type": "string",
+      "default": "Avis Trustpilot"
+    }
+  },
+  "supports": {
+    "html": false,
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "textdomain": "eo-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

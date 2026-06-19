@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "eo-blocks/google-reviews-rating",
+  "version": "1.0.0",
+  "title": "Trustpilot Reviews Rating",
+  "category": "eo-blocks",
+  "icon": "star-filled",
+  "description": "Display the average Trustpilot Reviews rating",
+  "example": {},
+  "attributes": {
+    "rating": {
+      "type": "number",
+      "default": 5
+    },
+    "maxRating": {
+      "type": "number",
+      "default": 5
+    },
+    "showStars": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "supports": {
+    "html": false,
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "textdomain": "eo-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

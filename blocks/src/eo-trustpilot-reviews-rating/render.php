@@ -1,6 +1,6 @@
 <?php
 /**
- * Render for Google Reviews Rating block.
+ * Render for Trustpilot Reviews Rating block.
  *
  * @package eo-blocks
  */
@@ -12,7 +12,7 @@ $showStars = isset( $attributes['showStars'] ) ? (bool) $attributes['showStars']
 
 // Fetch API data if configured
 if ( class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
-	$api_data = \EoBlocks\Includes\Eoblocks_Reviews_API::get_google_data();
+	$api_data = \EoBlocks\Includes\Eoblocks_Reviews_API::get_trustpilot_data();
 	if ( $api_data && ! empty( $api_data['rating'] ) ) {
 		$rating = (float) $api_data['rating'];
 	}
@@ -22,7 +22,7 @@ if ( class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
 $formatted_rating = number_format( $rating, 1, ',', '' );
 ?>
 <div <?php echo $wrapper_attributes; ?>>
-	<div class="eo-google-reviews-rating-wrapper">
+	<div class="eo-trustpilot-reviews-rating-wrapper">
 		<span class="eo-grr-score"><?php echo esc_html( $formatted_rating ); ?></span>
 		
 		<?php if ( $showStars ) : ?>
@@ -43,3 +43,4 @@ $formatted_rating = number_format( $rating, 1, ',', '' );
 		<?php endif; ?>
 	</div>
 </div>
+
