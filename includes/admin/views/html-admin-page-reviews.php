@@ -265,17 +265,17 @@ $providers = array(
 							<?php endforeach; ?>
 						</div>
 
-						<div class="eo-card-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;">
-							<button type="submit" name="submit" id="submit-<?php echo esc_attr( $provider_key ); ?>" class="button button-primary" style="display: flex; align-items: center; gap: 5px;">
-								<span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Enregistrer', 'eo-blocks' ); ?>
-							</button>
-							
-							<div class="eo-test-connection-wrapper" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>" style="display: flex; align-items: center; gap: 5px;">
-									<span class="dashicons dashicons-admin-network"></span> <?php esc_html_e( 'Tester la connexion', 'eo-blocks' ); ?>
+						<div class="eo-card-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;">
+							<div class="eo-test-connection-wrapper" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>">
+									<?php esc_html_e( 'Tester la connexion', 'eo-blocks' ); ?>
 								</button>
-								<span class="eo-test-result" style="text-align: right; font-size: 13px; line-height: 1.4;"></span>
+								<span class="eo-test-result" style="text-align: left; font-size: 13px; line-height: 1.4;"></span>
 							</div>
+
+							<button type="submit" name="submit" id="submit-<?php echo esc_attr( $provider_key ); ?>" class="button button-primary" style="background: #46b450; border-color: #46b450; color: #fff; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px;" title="<?php esc_attr_e( 'Enregistrer', 'eo-blocks' ); ?>">
+								<span class="dashicons dashicons-saved" style="font-size: 24px; width: 24px; height: 24px; line-height: 24px;"></span>
+							</button>
 						</div>
 					</div>
 				</div>
