@@ -109,12 +109,18 @@ jQuery(document).ready(function($) {
                     });
                 }
             } else {
-                var errorMsg = (typeof response.data === 'string') ? response.data : 'Erreur inconnue';
-                $('#eo-google-oauth-locations-error').html('<strong>Erreur API Google :</strong> ' + errorMsg + '<br><br>Avez-vous bien activé <strong>My Business Business Information API</strong> et <strong>My Business Account Management API</strong> dans Google Cloud ?').slideDown();
+                var errorMsg = (typeof response.data === 'string') ? response.data : eoReviewsAdmin.i18n.unknownError;
+                
+                // Simplify the "API not enabled" error message
+                if (errorMsg.indexOf('has not been used in project') !== -1 || errorMsg.indexOf('is disabled') !== -1) {
+                    errorMsg = eoReviewsAdmin.i18n.apiNotEnabled;
+                }
+
+                $('#eo-google-oauth-locations-error').html('<strong>' + eoReviewsAdmin.i18n.apiErrorPrefix + '</strong> ' + errorMsg + '<br><br>' + eoReviewsAdmin.i18n.apiCheckReminder).slideDown();
             }
         }).fail(function() {
             $btn.prop('disabled', false).text('Rafraîchir la liste');
-            $('#eo-google-oauth-locations-error').html('Erreur serveur lors du chargement des établissements.').slideDown();
+            $('#eo-google-oauth-locations-error').html(eoReviewsAdmin.i18n.serverError).slideDown();
         });
     });
 

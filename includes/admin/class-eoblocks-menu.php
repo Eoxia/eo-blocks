@@ -100,6 +100,13 @@ class Eoblocks_Menu {
 			
 			wp_localize_script( 'eo-blocks-reviews-admin-js', 'eoReviewsAdmin', array(
 				'nonce' => wp_create_nonce( 'eo_reviews_admin_nonce' ),
+				'i18n'  => array(
+					'apiErrorPrefix'   => __( 'Erreur API Google :', 'eo-blocks' ),
+					'apiNotEnabled'    => __( 'L\'API Google My Business n\'est pas activée sur votre projet Google Cloud.', 'eo-blocks' ),
+					'apiCheckReminder' => __( 'Avez-vous bien activé <strong>My Business Business Information API</strong> et <strong>My Business Account Management API</strong> dans Google Cloud ?', 'eo-blocks' ),
+					'serverError'      => __( 'Erreur serveur lors du chargement des établissements.', 'eo-blocks' ),
+					'unknownError'     => __( 'Erreur inconnue', 'eo-blocks' ),
+				)
 			) );
 		}
 	}
