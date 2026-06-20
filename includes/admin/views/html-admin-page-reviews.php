@@ -265,12 +265,16 @@ $providers = array(
 							<?php endforeach; ?>
 						</div>
 
-						<div class="eo-card-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-							<?php submit_button( __( 'Enregistrer', 'eo-blocks' ), 'primary', 'submit', false, array('id' => 'submit-'.$provider_key) ); ?>
+						<div class="eo-card-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;">
+							<button type="submit" name="submit" id="submit-<?php echo esc_attr( $provider_key ); ?>" class="button button-primary" style="display: flex; align-items: center; gap: 5px;">
+								<span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Enregistrer', 'eo-blocks' ); ?>
+							</button>
 							
-							<div class="eo-test-connection-wrapper" style="display: flex; gap: 10px; align-items: center;">
-								<span class="eo-test-result"></span>
-								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>"><?php esc_html_e( 'Tester la connexion', 'eo-blocks' ); ?></button>
+							<div class="eo-test-connection-wrapper" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>" style="display: flex; align-items: center; gap: 5px;">
+									<span class="dashicons dashicons-admin-network"></span> <?php esc_html_e( 'Tester la connexion', 'eo-blocks' ); ?>
+								</button>
+								<span class="eo-test-result" style="text-align: right; font-size: 13px; line-height: 1.4;"></span>
 							</div>
 						</div>
 					</div>
