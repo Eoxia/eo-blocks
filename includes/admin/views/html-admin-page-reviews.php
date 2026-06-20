@@ -150,11 +150,17 @@ $providers = array(
 											<li>Allez dans "API et services" > "Écran de consentement OAuth" et configurez-le (type Interne ou Externe).</li>
 											<li>Allez dans "Identifiants" > "Créer des identifiants" > "ID client OAuth".</li>
 											<li>Type d'application : <strong>Application Web</strong>.</li>
-											<li>URI de redirection autorisés : copiez l'URI ci-dessous et collez-la.</li>
+											<li>Copiez-collez les deux URI ci-dessous dans les champs correspondants de Google Cloud.</li>
 										</ul>
-										<div class="eo-setting-field" style="margin-top: 15px;">
-											<label>URI de redirection (à copier dans Google Cloud)</label>
-											<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly style="background: #f0f0f1;" />
+										<div style="display: flex; gap: 20px; margin-top: 15px;">
+											<div class="eo-setting-field" style="flex: 1;">
+												<label>Origines JavaScript autorisées</label>
+												<input type="text" class="eo-api-input" value="<?php echo esc_attr( site_url() ); ?>" readonly style="background: #f0f0f1;" />
+											</div>
+											<div class="eo-setting-field" style="flex: 1;">
+												<label>URI de redirection autorisés</label>
+												<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly style="background: #f0f0f1;" />
+											</div>
 										</div>
 									</div>
 
