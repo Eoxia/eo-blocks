@@ -141,4 +141,13 @@ jQuery(document).ready(function($) {
             alert('Erreur serveur lors de la déconnexion.');
         });
     });
+
+    // Google OAuth: Ensure saved before connect
+    $('.eo-oauth-actions .button-primary').on('click', function(e) {
+        var $btn = $(this);
+        if ($btn.attr('href') === '#' || $btn.attr('href') === '') {
+            e.preventDefault();
+            alert("⚠️ Attention !\n\nVous devez d'abord coller votre Client ID et votre Client Secret, puis descendre tout en bas de la page pour cliquer sur le bouton bleu 'Enregistrer les modifications'.\n\nUne fois la page rechargée, vous pourrez cliquer ici pour vous connecter !");
+        }
+    });
 });

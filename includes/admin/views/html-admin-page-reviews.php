@@ -165,7 +165,7 @@ $providers = array(
 
 									<?php else : ?>
 										<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary">Se connecter avec Google</a>
-										<p class="description">Vous devez d'abord enregistrer (Enregistrer les modifications) le Client ID et le Secret avant de cliquer ici.</p>
+										<p class="description" style="color: #d63638; font-weight: bold;">⚠️ Étape obligatoire : Vous devez d'abord coller vos identifiants ci-dessus et cliquer sur "Enregistrer les modifications" (tout en bas de la page) AVANT de cliquer sur ce bouton de connexion.</p>
 									<?php endif; ?>
 								</div>
 
