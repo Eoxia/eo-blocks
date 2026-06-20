@@ -213,6 +213,7 @@ $providers = array(
 														</select>
 														<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
 													</div>
+													<div id="eo-google-oauth-locations-error" style="color: #d63638; margin-top: 10px; display: none; font-size: 13px; line-height: 1.4; background: #fcf0f1; border-left: 4px solid #d63638; padding: 10px;"></div>
 												</div>
 
 											<?php else : ?>

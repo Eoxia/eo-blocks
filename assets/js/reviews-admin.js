@@ -94,6 +94,7 @@ jQuery(document).ready(function($) {
 
         $.post(ajaxurl, data, function(response) {
             $btn.prop('disabled', false).text('Rafraîchir la liste');
+            $('#eo-google-oauth-locations-error').hide();
             if (response.success) {
                 var locations = response.data;
                 $select.empty();
@@ -109,11 +110,11 @@ jQuery(document).ready(function($) {
                 }
             } else {
                 var errorMsg = (typeof response.data === 'string') ? response.data : 'Erreur inconnue';
-                alert('Erreur lors du chargement des établissements : \n' + errorMsg + '\n\nAvez-vous bien activé "My Business Business Information API" et "My Business Account Management API" dans Google Cloud ?');
+                $('#eo-google-oauth-locations-error').html('<strong>Erreur API Google :</strong> ' + errorMsg + '<br><br>Avez-vous bien activé <strong>My Business Business Information API</strong> et <strong>My Business Account Management API</strong> dans Google Cloud ?').slideDown();
             }
         }).fail(function() {
             $btn.prop('disabled', false).text('Rafraîchir la liste');
-            alert('Erreur serveur lors du chargement des établissements.');
+            $('#eo-google-oauth-locations-error').html('Erreur serveur lors du chargement des établissements.').slideDown();
         });
     });
 
