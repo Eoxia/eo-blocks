@@ -154,8 +154,15 @@ $providers = array(
 										</ul>
 										<div style="display: flex; gap: 20px; margin-top: 15px;">
 											<div class="eo-setting-field" style="flex: 1;">
+												<?php
+													$parsed = parse_url( site_url() );
+													$js_origin = $parsed['scheme'] . '://' . $parsed['host'];
+													if ( isset( $parsed['port'] ) ) {
+														$js_origin .= ':' . $parsed['port'];
+													}
+												?>
 												<label>Origines JavaScript autorisées</label>
-												<input type="text" class="eo-api-input" value="<?php echo esc_attr( site_url() ); ?>" readonly style="background: #f0f0f1;" />
+												<input type="text" class="eo-api-input" value="<?php echo esc_attr( $js_origin ); ?>" readonly style="background: #f0f0f1;" />
 											</div>
 											<div class="eo-setting-field" style="flex: 1;">
 												<label>URI de redirection autorisés</label>
