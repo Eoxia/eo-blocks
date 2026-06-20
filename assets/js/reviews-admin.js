@@ -143,11 +143,20 @@ jQuery(document).ready(function($) {
     });
 
     // Google OAuth: Ensure saved before connect
-    $('.eo-oauth-actions .button-primary').on('click', function(e) {
-        var $btn = $(this);
-        if ($btn.attr('href') === '#' || $btn.attr('href') === '') {
-            e.preventDefault();
-            alert("⚠️ Attention !\n\nVous devez d'abord coller votre Client ID et votre Client Secret, puis descendre tout en bas de la page pour cliquer sur le bouton bleu 'Enregistrer les modifications'.\n\nUne fois la page rechargée, vous pourrez cliquer ici pour vous connecter !");
+    $('.eo-oauth-actions .eo-oauth-disabled-btn').on('click', function(e) {
+        e.preventDefault();
+        alert("⚠️ Attention !\n\nVous devez d'abord coller votre Client ID et votre Client Secret, puis descendre tout en bas de la page pour cliquer sur le bouton bleu 'Enregistrer les modifications'.\n\nUne fois la page rechargée, vous pourrez cliquer ici pour vous connecter !");
+    });
+
+    // Toggle active auth method UI
+    $('.eo-google-auth-method').on('change', function() {
+        var method = $(this).val();
+        if (method === 'oauth') {
+            $('.eo-google-method-oauth').css({ 'opacity': '1', 'pointer-events': 'auto' });
+            $('.eo-google-method-api_key').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+        } else {
+            $('.eo-google-method-oauth').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+            $('.eo-google-method-api_key').css({ 'opacity': '1', 'pointer-events': 'auto' });
         }
     });
 });

@@ -157,25 +157,28 @@ class Eoblocks_Reviews_API {
 				'reviews' => isset( $data['result']['reviews'] ) ? $data['result']['reviews'] : array(),
 			);
 
-			// Try to override reviews with OAuth 2.0 if configured
+			// Try to override reviews with OAuth 2.0 if configured and selected
 			if ( class_exists( '\EoBlocks\Includes\Eoblocks_Google_OAuth' ) ) {
-				$oauth_location = isset($options['google_oauth_location']) ? $options['google_oauth_location'] : '';
-				if ( ! empty( $oauth_location ) ) {
-					$oauth_reviews = \EoBlocks\Includes\Eoblocks_Google_OAuth::get_all_reviews( $oauth_location );
-					if ( is_array( $oauth_reviews ) && ! empty( $oauth_reviews ) ) {
-						// Map OAuth review format to Places API format
-						$mapped_reviews = array();
-						foreach ( $oauth_reviews as $rev ) {
-							$mapped_reviews[] = array(
-								'author_name' => isset($rev['reviewer']['displayName']) ? $rev['reviewer']['displayName'] : 'Utilisateur Google',
-								'profile_photo_url' => isset($rev['reviewer']['profilePhotoUrl']) ? $rev['reviewer']['profilePhotoUrl'] : '',
-								'rating' => isset($rev['starRating']) ? self::convert_star_rating($rev['starRating']) : 5,
-								'text' => isset($rev['comment']) ? $rev['comment'] : '',
-								'time' => isset($rev['createTime']) ? strtotime($rev['createTime']) : time(),
-								'relative_time_description' => isset($rev['createTime']) ? date_i18n( get_option( 'date_format' ), strtotime($rev['createTime']) ) : '',
-							);
+				$auth_method = isset($options['google_auth_method']) ? $options['google_auth_method'] : 'api_key';
+				if ( $auth_method === 'oauth' ) {
+					$oauth_location = isset($options['google_oauth_location']) ? $options['google_oauth_location'] : '';
+					if ( ! empty( $oauth_location ) ) {
+						$oauth_reviews = \EoBlocks\Includes\Eoblocks_Google_OAuth::get_all_reviews( $oauth_location );
+						if ( is_array( $oauth_reviews ) && ! empty( $oauth_reviews ) ) {
+							// Map OAuth review format to Places API format
+							$mapped_reviews = array();
+							foreach ( $oauth_reviews as $rev ) {
+								$mapped_reviews[] = array(
+									'author_name' => isset($rev['reviewer']['displayName']) ? $rev['reviewer']['displayName'] : 'Utilisateur Google',
+									'profile_photo_url' => isset($rev['reviewer']['profilePhotoUrl']) ? $rev['reviewer']['profilePhotoUrl'] : '',
+									'rating' => isset($rev['starRating']) ? self::convert_star_rating($rev['starRating']) : 5,
+									'text' => isset($rev['comment']) ? $rev['comment'] : '',
+									'time' => isset($rev['createTime']) ? strtotime($rev['createTime']) : time(),
+									'relative_time_description' => isset($rev['createTime']) ? date_i18n( get_option( 'date_format' ), strtotime($rev['createTime']) ) : '',
+								);
+							}
+							$result['reviews'] = $mapped_reviews;
 						}
-						$result['reviews'] = $mapped_reviews;
 					}
 				}
 			}

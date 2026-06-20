@@ -122,56 +122,77 @@ $providers = array(
 						</div>
 
 						<div class="eo-api-credentials" style="<?php echo $auto_sync_value ? '' : 'display: none;'; ?>">
-							<?php if ( $provider_key === 'google' ) : ?>
-								<h3 style="margin-top: 15px;">Méthode 1 : OAuth 2.0 (Recommandé)</h3>
-								<p class="description">Permet de récupérer plus de 5 avis (tous les avis). Nécessite une application Google Cloud approuvée.</p>
-								
-								<?php
-									$client_id = isset($options['google_oauth_client_id']) ? $options['google_oauth_client_id'] : '';
-									$client_secret = isset($options['google_oauth_client_secret']) ? $options['google_oauth_client_secret'] : '';
-									$is_connected = !empty($options['google_oauth_access_token']);
-								?>
-								<div class="eo-setting-field">
-									<label>Client ID OAuth</label>
-									<input type="text" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_id]" value="<?php echo esc_attr($client_id); ?>" />
+							<?php if ( $provider_key === 'google' ) : 
+								$auth_method = isset($options['google_auth_method']) ? $options['google_auth_method'] : 'api_key';
+							?>
+								<div class="eo-setting-field" style="margin-bottom: 20px; padding: 15px; background: #f0f0f1; border-left: 4px solid #2271b1;">
+									<label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Méthode d'authentification Google</label>
+									<label style="display: inline-block; margin-right: 20px;">
+										<input type="radio" name="eoblocks_reviews_settings[google_auth_method]" class="eo-google-auth-method" value="oauth" <?php checked('oauth', $auth_method); ?>>
+										OAuth 2.0 (Recommandé - Tous les avis)
+									</label>
+									<label style="display: inline-block;">
+										<input type="radio" name="eoblocks_reviews_settings[google_auth_method]" class="eo-google-auth-method" value="api_key" <?php checked('api_key', $auth_method); ?>>
+										Clé API Publique (Limité à 5 avis)
+									</label>
 								</div>
-								<div class="eo-setting-field">
-									<label>Client Secret OAuth</label>
-									<input type="password" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_secret]" value="<?php echo esc_attr($client_secret); ?>" />
-								</div>
-								<div class="eo-setting-field">
-									<label>URI de redirection</label>
-									<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly />
-									<p class="description">Copiez cette URI dans la configuration de votre application sur Google Cloud.</p>
-								</div>
-								
-								<div class="eo-oauth-actions" style="margin-top: 15px; margin-bottom: 20px;">
-									<?php if ( $is_connected ) : ?>
-										<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
-										<span style="color: green; font-weight: bold; margin-left: 10px;">Connecté avec succès.</span>
-										
-										<div class="eo-setting-field" style="margin-top: 15px;">
-											<label>Sélectionner l'établissement :</label>
-											<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="min-width: 300px;">
-												<option value="">Chargement des établissements...</option>
-												<?php if ( !empty($options['google_oauth_location']) ) : ?>
-													<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
-														Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
-													</option>
-												<?php endif; ?>
-											</select>
-											<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
-										</div>
 
-									<?php else : ?>
-										<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary">Se connecter avec Google</a>
-										<p class="description" style="color: #d63638; font-weight: bold;">⚠️ Étape obligatoire : Vous devez d'abord coller vos identifiants ci-dessus et cliquer sur "Enregistrer les modifications" (tout en bas de la page) AVANT de cliquer sur ce bouton de connexion.</p>
-									<?php endif; ?>
+								<div class="eo-google-method-section eo-google-method-oauth" style="<?php echo $auth_method === 'oauth' ? '' : 'opacity: 0.5; pointer-events: none;'; ?>">
+									<h3 style="margin-top: 15px;">Méthode 1 : OAuth 2.0 (Recommandé)</h3>
+									<p class="description">Permet de récupérer plus de 5 avis (tous les avis). Nécessite une application Google Cloud approuvée.</p>
+									
+									<?php
+										$client_id = isset($options['google_oauth_client_id']) ? $options['google_oauth_client_id'] : '';
+										$client_secret = isset($options['google_oauth_client_secret']) ? $options['google_oauth_client_secret'] : '';
+										$is_connected = !empty($options['google_oauth_access_token']);
+									?>
+									<div class="eo-setting-field">
+										<label>Client ID OAuth</label>
+										<input type="text" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_id]" value="<?php echo esc_attr($client_id); ?>" />
+									</div>
+									<div class="eo-setting-field">
+										<label>Client Secret OAuth</label>
+										<input type="password" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_secret]" value="<?php echo esc_attr($client_secret); ?>" />
+									</div>
+									<div class="eo-setting-field">
+										<label>URI de redirection</label>
+										<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly />
+										<p class="description">Copiez cette URI dans la configuration de votre application sur Google Cloud.</p>
+									</div>
+									
+									<div class="eo-oauth-actions" style="margin-top: 15px; margin-bottom: 20px;">
+										<?php if ( $is_connected ) : ?>
+											<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
+											<span style="color: green; font-weight: bold; margin-left: 10px;">Connecté avec succès.</span>
+											
+											<div class="eo-setting-field" style="margin-top: 15px;">
+												<label>Sélectionner l'établissement :</label>
+												<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="min-width: 300px;">
+													<option value="">Chargement des établissements...</option>
+													<?php if ( !empty($options['google_oauth_location']) ) : ?>
+														<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
+															Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
+														</option>
+													<?php endif; ?>
+												</select>
+												<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
+											</div>
+
+										<?php else : ?>
+											<?php if ( empty($client_id) ) : ?>
+												<button type="button" class="button button-primary eo-oauth-disabled-btn" style="opacity: 0.5; cursor: not-allowed;">Se connecter avec Google</button>
+												<p class="description" style="color: #d63638; font-weight: bold;">⚠️ Étape obligatoire : Vous devez d'abord coller votre Client ID et Secret ci-dessus et cliquer sur "Enregistrer les modifications" tout en bas de la page pour pouvoir vous connecter.</p>
+											<?php else : ?>
+												<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary">Se connecter avec Google</a>
+											<?php endif; ?>
+										<?php endif; ?>
+									</div>
 								</div>
 
 								<hr>
-								<h3 style="margin-top: 15px;">Méthode 2 : Clé API Publique</h3>
-								<p class="description">Méthode simple. Limitée à 5 avis maximum.</p>
+								<div class="eo-google-method-section eo-google-method-api_key" style="<?php echo $auth_method === 'api_key' ? '' : 'opacity: 0.5; pointer-events: none;'; ?>">
+									<h3 style="margin-top: 15px;">Méthode 2 : Clé API Publique</h3>
+									<p class="description">Méthode simple. Limitée à 5 avis maximum.</p>
 							<?php endif; ?>
 
 							<?php foreach ( $provider_data['api_fields'] as $field_key => $field_label ) : 
@@ -192,6 +213,11 @@ $providers = array(
 								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>">Tester la connexion</button>
 								<span class="eo-test-result"></span>
 							</div>
+							
+							<?php if ( $provider_key === 'google' ) : ?>
+								</div> <!-- end method 2 section -->
+							<?php endif; ?>
+							
 							<hr>
 						</div>
 
