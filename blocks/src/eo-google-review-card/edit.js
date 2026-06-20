@@ -5,7 +5,7 @@ import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { useApi, layout, shape, width, height, showPhoto, showName, showStars, showDate, showText, textLimit } = attributes;
+	const { useApi, layout, shape, width, height, showPhoto, showName, showStars, showDate, showText, textLimit, reviewsCount } = attributes;
 	const [ apiData, setApiData ] = useState( null );
 
 	useEffect( () => {
@@ -16,7 +16,8 @@ export default function Edit( { attributes, setAttributes } ) {
 		} ).catch( () => {} );
 	}, [] );
 
-	const reviews = (useApi && apiData && apiData.reviews) ? apiData.reviews : [];
+	const allReviews = (useApi && apiData && apiData.reviews) ? apiData.reviews : [];
+	const reviews = allReviews.slice(0, reviewsCount);
 
 	return (
 		<div { ...useBlockProps() }>
@@ -70,6 +71,16 @@ export default function Edit( { attributes, setAttributes } ) {
 						value={ height }
 						onChange={ ( val ) => setAttributes( { height: val } ) }
 						help={ __( 'Ex: auto, 250px, etc.', 'eo-blocks' ) }
+					/>
+
+					<TextControl
+						label={ __( 'Nombre d\'avis à afficher', 'eo-blocks' ) }
+						type="number"
+						value={ reviewsCount }
+						onChange={ ( val ) => setAttributes( { reviewsCount: Number(val) } ) }
+						help={ __( 'Maximum 5 avis (limite de l\'API Google).', 'eo-blocks' ) }
+						min={ 1 }
+						max={ 5 }
 					/>
 
 					<ToggleControl

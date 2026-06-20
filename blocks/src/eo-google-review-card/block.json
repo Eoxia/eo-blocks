@@ -52,6 +52,10 @@
 		"textLimit": {
 			"type": "number",
 			"default": 150
+		},
+		"reviewsCount": {
+			"type": "number",
+			"default": 5
 		}
 	},
 	"supports": {

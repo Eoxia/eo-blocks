@@ -11,12 +11,13 @@ $showStars = isset( $attributes['showStars'] ) ? $attributes['showStars'] : true
 $showDate = isset( $attributes['showDate'] ) ? $attributes['showDate'] : true;
 $showText = isset( $attributes['showText'] ) ? $attributes['showText'] : true;
 $textLimit = isset( $attributes['textLimit'] ) ? (int) $attributes['textLimit'] : 150;
+$reviewsCount = isset( $attributes['reviewsCount'] ) ? (int) $attributes['reviewsCount'] : 5;
 
 $reviews = array();
 if ( $use_api && class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
 	$api_data = \EoBlocks\Includes\Eoblocks_Reviews_API::get_google_data();
 	if ( $api_data && ! empty( $api_data['reviews'] ) ) {
-		$reviews = $api_data['reviews'];
+		$reviews = array_slice( $api_data['reviews'], 0, $reviewsCount );
 	}
 }
 
