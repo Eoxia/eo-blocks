@@ -162,7 +162,8 @@ input:checked + .eo-slider:before {
     color: #333;
 }
 
-.eo-setting-field input {
+.eo-setting-field input[type="text"],
+.eo-setting-field input[type="password"] {
     width: 100%;
     padding: 6px 8px;
     border: 1px solid #ccc;
