@@ -195,20 +195,24 @@ $providers = array(
 										
 										<div class="eo-oauth-actions" style="margin-top: 15px;">
 											<?php if ( $is_connected ) : ?>
-												<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
-												<span style="color: green; font-weight: bold; margin-left: 10px;">Connecté avec succès.</span>
+												<div style="display: flex; align-items: center; gap: 10px;">
+													<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
+													<span style="color: green; font-weight: bold;">Connecté avec succès.</span>
+												</div>
 												
 												<div class="eo-setting-field" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
 													<label>Sélectionner l'établissement :</label>
-													<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="min-width: 300px;">
-														<option value="">Chargement des établissements...</option>
-														<?php if ( !empty($options['google_oauth_location']) ) : ?>
-															<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
-																Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
-															</option>
-														<?php endif; ?>
-													</select>
-													<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
+													<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+														<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="flex: 1; max-width: 400px;">
+															<option value="">Chargement des établissements...</option>
+															<?php if ( !empty($options['google_oauth_location']) ) : ?>
+																<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
+																	Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
+																</option>
+															<?php endif; ?>
+														</select>
+														<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
+													</div>
 												</div>
 
 											<?php else : ?>
