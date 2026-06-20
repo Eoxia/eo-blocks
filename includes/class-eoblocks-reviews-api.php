@@ -125,7 +125,7 @@ class Eoblocks_Reviews_API {
 			return false;
 		}
 
-		$transient_key = 'eoblocks_google_reviews_' . md5( $place_id );
+		$transient_key = 'eoblocks_google_reviews_v2_' . md5( $place_id );
 		$cached = get_transient( $transient_key );
 
 		if ( false !== $cached ) {
