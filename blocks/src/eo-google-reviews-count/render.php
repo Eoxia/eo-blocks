@@ -2,10 +2,12 @@
 $wrapper_attributes = get_block_wrapper_attributes();
 $count = isset( $attributes['count'] ) ? (int) $attributes['count'] : 80;
 $prefix = isset( $attributes['prefix'] ) ? $attributes['prefix'] : '';
-$suffix = isset( $attributes['suffix'] ) ? $attributes['suffix'] : '';
+$suffix = isset( $attributes['suffix'] ) ? $attributes['suffix'] : __( 'Avis Google', 'eo-blocks' );
+if ( $suffix === 'Avis Google' ) $suffix = __( 'Avis Google', 'eo-blocks' );
 $use_api = isset( $attributes['useApi'] ) ? $attributes['useApi'] : true;
 $add_review_link = isset( $attributes['addReviewLink'] ) ? $attributes['addReviewLink'] : false;
-$review_link_text = isset( $attributes['reviewLinkText'] ) ? $attributes['reviewLinkText'] : 'Ajouter votre avis';
+$review_link_text = isset( $attributes['reviewLinkText'] ) ? $attributes['reviewLinkText'] : __( 'Ajouter votre avis', 'eo-blocks' );
+if ( $review_link_text === 'Ajouter votre avis' ) $review_link_text = __( 'Ajouter votre avis', 'eo-blocks' );
 $review_url = '';
 
 if ( $use_api && class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {

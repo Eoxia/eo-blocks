@@ -114,6 +114,8 @@ jQuery(document).ready(function($) {
                 // Simplify the "API not enabled" error message
                 if (errorMsg.indexOf('has not been used in project') !== -1 || errorMsg.indexOf('is disabled') !== -1) {
                     errorMsg = eoReviewsAdmin.i18n.apiNotEnabled;
+                } else if (errorMsg.indexOf('Quota exceeded') !== -1) {
+                    errorMsg = eoReviewsAdmin.i18n.quotaExceeded;
                 }
 
                 $('#eo-google-oauth-locations-error').html('<strong>' + eoReviewsAdmin.i18n.apiErrorPrefix + '</strong> ' + errorMsg + '<br><br>' + eoReviewsAdmin.i18n.apiCheckReminder).slideDown();

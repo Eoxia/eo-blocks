@@ -103,6 +103,7 @@ class Eoblocks_Menu {
 				'i18n'  => array(
 					'apiErrorPrefix'   => __( 'Erreur API Google :', 'eo-blocks' ),
 					'apiNotEnabled'    => __( 'L\'API Google My Business n\'est pas activée sur votre projet Google Cloud.', 'eo-blocks' ),
+					'quotaExceeded'    => __( 'Le quota de requêtes vers l\'API Google a été dépassé. Veuillez patienter un peu avant de réessayer.', 'eo-blocks' ),
 					'apiCheckReminder' => __( 'Avez-vous bien activé <strong>My Business Business Information API</strong> et <strong>My Business Account Management API</strong> dans Google Cloud ?', 'eo-blocks' ),
 					'serverError'      => __( 'Erreur serveur lors du chargement des établissements.', 'eo-blocks' ),
 					'unknownError'     => __( 'Erreur inconnue', 'eo-blocks' ),

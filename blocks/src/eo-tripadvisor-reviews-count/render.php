@@ -2,7 +2,8 @@
 $wrapper_attributes = get_block_wrapper_attributes();
 $count = isset( $attributes['count'] ) ? (int) $attributes['count'] : 80;
 $prefix = isset( $attributes['prefix'] ) ? $attributes['prefix'] : '';
-$suffix = isset( $attributes['suffix'] ) ? $attributes['suffix'] : '';
+$suffix = isset( $attributes['suffix'] ) ? $attributes['suffix'] : __( 'Avis TripAdvisor', 'eo-blocks' );
+if ( $suffix === 'Avis TripAdvisor' ) $suffix = __( 'Avis TripAdvisor', 'eo-blocks' );
 $use_api = isset( $attributes['useApi'] ) ? $attributes['useApi'] : true;
 
 if ( $use_api && class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {

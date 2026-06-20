@@ -1,7 +1,10 @@
 <?php
 $wrapper_attributes = get_block_wrapper_attributes();
-$message = isset( $attributes['message'] ) ? $attributes['message'] : 'Laissez-nous votre avis sur Google';
-$buttonText = isset( $attributes['buttonText'] ) ? $attributes['buttonText'] : 'Évaluer';
+$message = isset( $attributes['message'] ) ? $attributes['message'] : __( 'Laissez-nous votre avis sur Google', 'eo-blocks' );
+if ( $message === 'Laissez-nous votre avis sur Google' ) $message = __( 'Laissez-nous votre avis sur Google', 'eo-blocks' );
+
+$buttonText = isset( $attributes['buttonText'] ) ? $attributes['buttonText'] : __( 'Évaluer', 'eo-blocks' );
+if ( $buttonText === 'Évaluer' ) $buttonText = __( 'Évaluer', 'eo-blocks' );
 $use_api = isset( $attributes['useApi'] ) ? $attributes['useApi'] : true;
 
 $review_url = '#';
