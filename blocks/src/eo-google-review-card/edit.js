@@ -78,9 +78,8 @@ export default function Edit( { attributes, setAttributes } ) {
 						type="number"
 						value={ reviewsCount }
 						onChange={ ( val ) => setAttributes( { reviewsCount: Number(val) } ) }
-						help={ __( 'Maximum 5 avis (limite de l\'API Google).', 'eo-blocks' ) }
+						help={ __( 'Limité à 5 avec la Clé API publique. Illimité avec OAuth 2.0.', 'eo-blocks' ) }
 						min={ 1 }
-						max={ 5 }
 					/>
 
 					<ToggleControl

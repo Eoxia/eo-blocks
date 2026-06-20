@@ -122,6 +122,58 @@ $providers = array(
 						</div>
 
 						<div class="eo-api-credentials" style="<?php echo $auto_sync_value ? '' : 'display: none;'; ?>">
+							<?php if ( $provider_key === 'google' ) : ?>
+								<h3 style="margin-top: 15px;">Méthode 1 : OAuth 2.0 (Recommandé)</h3>
+								<p class="description">Permet de récupérer plus de 5 avis (tous les avis). Nécessite une application Google Cloud approuvée.</p>
+								
+								<?php
+									$client_id = isset($options['google_oauth_client_id']) ? $options['google_oauth_client_id'] : '';
+									$client_secret = isset($options['google_oauth_client_secret']) ? $options['google_oauth_client_secret'] : '';
+									$is_connected = !empty($options['google_oauth_access_token']);
+								?>
+								<div class="eo-setting-field">
+									<label>Client ID OAuth</label>
+									<input type="text" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_id]" value="<?php echo esc_attr($client_id); ?>" />
+								</div>
+								<div class="eo-setting-field">
+									<label>Client Secret OAuth</label>
+									<input type="password" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_secret]" value="<?php echo esc_attr($client_secret); ?>" />
+								</div>
+								<div class="eo-setting-field">
+									<label>URI de redirection</label>
+									<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly />
+									<p class="description">Copiez cette URI dans la configuration de votre application sur Google Cloud.</p>
+								</div>
+								
+								<div class="eo-oauth-actions" style="margin-top: 15px; margin-bottom: 20px;">
+									<?php if ( $is_connected ) : ?>
+										<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
+										<span style="color: green; font-weight: bold; margin-left: 10px;">Connecté avec succès.</span>
+										
+										<div class="eo-setting-field" style="margin-top: 15px;">
+											<label>Sélectionner l'établissement :</label>
+											<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="min-width: 300px;">
+												<option value="">Chargement des établissements...</option>
+												<?php if ( !empty($options['google_oauth_location']) ) : ?>
+													<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
+														Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
+													</option>
+												<?php endif; ?>
+											</select>
+											<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
+										</div>
+
+									<?php else : ?>
+										<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary">Se connecter avec Google</a>
+										<p class="description">Vous devez d'abord enregistrer (Enregistrer les modifications) le Client ID et le Secret avant de cliquer ici.</p>
+									<?php endif; ?>
+								</div>
+
+								<hr>
+								<h3 style="margin-top: 15px;">Méthode 2 : Clé API Publique</h3>
+								<p class="description">Méthode simple. Limitée à 5 avis maximum.</p>
+							<?php endif; ?>
+
 							<?php foreach ( $provider_data['api_fields'] as $field_key => $field_label ) : 
 								$field_name = $provider_key . '_' . $field_key;
 								$field_value = isset( $options[ $field_name ] ) ? $options[ $field_name ] : '';

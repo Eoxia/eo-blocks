@@ -78,4 +78,67 @@ jQuery(document).ready(function($) {
             }
         }
     });
+
+    // Google OAuth: Load locations
+    $('#eo-google-oauth-load-locations').on('click', function(e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var $select = $('#eo-google-oauth-location-select');
+        
+        $btn.prop('disabled', true).text('Chargement...');
+        
+        var data = {
+            action: 'eo_google_oauth_get_locations',
+            nonce: window.eoReviewsAdmin ? window.eoReviewsAdmin.nonce : ''
+        };
+
+        $.post(ajaxurl, data, function(response) {
+            $btn.prop('disabled', false).text('Rafraîchir la liste');
+            if (response.success) {
+                var locations = response.data;
+                $select.empty();
+                if (locations.length === 0) {
+                    $select.append('<option value="">Aucun établissement trouvé</option>');
+                } else {
+                    $select.append('<option value="">-- Sélectionnez un établissement --</option>');
+                    $.each(locations, function(i, loc) {
+                        var name = loc.title || loc.name;
+                        var accountName = loc.account_name ? ' (' + loc.account_name + ')' : '';
+                        $select.append('<option value="' + loc.name + '">' + name + accountName + '</option>');
+                    });
+                }
+            } else {
+                alert('Erreur lors du chargement des établissements.');
+            }
+        }).fail(function() {
+            $btn.prop('disabled', false).text('Rafraîchir la liste');
+            alert('Erreur serveur lors du chargement des établissements.');
+        });
+    });
+
+    // Google OAuth: Disconnect
+    $('#eo-google-oauth-disconnect').on('click', function(e) {
+        e.preventDefault();
+        if (!confirm('Voulez-vous vraiment déconnecter le compte Google ?')) return;
+        
+        var $btn = $(this);
+        $btn.prop('disabled', true).text('Déconnexion...');
+        
+        var data = {
+            action: 'eo_google_oauth_disconnect',
+            nonce: window.eoReviewsAdmin ? window.eoReviewsAdmin.nonce : ''
+        };
+
+        $.post(ajaxurl, data, function(response) {
+            if (response.success) {
+                window.location.reload();
+            } else {
+                $btn.prop('disabled', false).text('Déconnecter le compte');
+                alert('Erreur lors de la déconnexion.');
+            }
+        }).fail(function() {
+            $btn.prop('disabled', false).text('Déconnecter le compte');
+            alert('Erreur serveur lors de la déconnexion.');
+        });
+    });
 });

@@ -27,8 +27,9 @@ define( 'EO_BLOCKS_VERSION', '1.0.0' );
  * Autoload the php files.
  */
 require_once EO_BLOCKS_PATH . '/includes/autoload.php';
-
-// Load AJAX API endpoints
+require_once EO_BLOCKS_PATH . '/includes/class-eoblocks-settings.php';
+require_once EO_BLOCKS_PATH . '/includes/class-eoblocks-reviews-api.php';
+require_once EO_BLOCKS_PATH . '/includes/class-eoblocks-google-oauth.php';
 require_once EO_BLOCKS_PATH . '/includes/api-eo-search.php';
 
 // Initialize Reviews API

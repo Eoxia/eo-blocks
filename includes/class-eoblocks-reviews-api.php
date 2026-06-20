@@ -156,14 +156,50 @@ class Eoblocks_Reviews_API {
 				'count'   => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
 				'reviews' => isset( $data['result']['reviews'] ) ? $data['result']['reviews'] : array(),
 			);
+
+			// Try to override reviews with OAuth 2.0 if configured
+			if ( class_exists( '\EoBlocks\Includes\Eoblocks_Google_OAuth' ) ) {
+				$oauth_location = isset($options['google_oauth_location']) ? $options['google_oauth_location'] : '';
+				if ( ! empty( $oauth_location ) ) {
+					$oauth_reviews = \EoBlocks\Includes\Eoblocks_Google_OAuth::get_all_reviews( $oauth_location );
+					if ( is_array( $oauth_reviews ) && ! empty( $oauth_reviews ) ) {
+						// Map OAuth review format to Places API format
+						$mapped_reviews = array();
+						foreach ( $oauth_reviews as $rev ) {
+							$mapped_reviews[] = array(
+								'author_name' => isset($rev['reviewer']['displayName']) ? $rev['reviewer']['displayName'] : 'Utilisateur Google',
+								'profile_photo_url' => isset($rev['reviewer']['profilePhotoUrl']) ? $rev['reviewer']['profilePhotoUrl'] : '',
+								'rating' => isset($rev['starRating']) ? self::convert_star_rating($rev['starRating']) : 5,
+								'text' => isset($rev['comment']) ? $rev['comment'] : '',
+								'time' => isset($rev['createTime']) ? strtotime($rev['createTime']) : time(),
+								'relative_time_description' => isset($rev['createTime']) ? date_i18n( get_option( 'date_format' ), strtotime($rev['createTime']) ) : '',
+							);
+						}
+						$result['reviews'] = $mapped_reviews;
+					}
+				}
+			}
+
 			set_transient( $transient_key, $result, DAY_IN_SECONDS );
 			
 			$result['url'] = isset( $options['google_url'] ) ? $options['google_url'] : '';
 			$result['review_url'] = isset( $options['google_review_url'] ) ? $options['google_review_url'] : '';
+
 			return $result;
 		}
 
 		return false;
+	}
+
+	private static function convert_star_rating($star) {
+		switch ($star) {
+			case 'ONE': return 1;
+			case 'TWO': return 2;
+			case 'THREE': return 3;
+			case 'FOUR': return 4;
+			case 'FIVE': return 5;
+			default: return 5;
+		}
 	}
 
 	/**
