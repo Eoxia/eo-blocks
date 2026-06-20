@@ -100,6 +100,33 @@ class Eoblocks_Menu {
 			
 			wp_localize_script( 'eo-blocks-reviews-admin-js', 'eoReviewsAdmin', array(
 				'nonce' => wp_create_nonce( 'eo_reviews_admin_nonce' ),
+				'i18n'  => array(
+					'apiErrorPrefix'   => __( 'Erreur API Google :', 'eo-blocks' ),
+					'apiNotEnabled'    => __( 'L\'API Google My Business n\'est pas activée sur votre projet Google Cloud.', 'eo-blocks' ),
+					'quotaExceeded'    => __( 'Le quota de requêtes vers l\'API Google a été dépassé. Veuillez patienter un peu avant de réessayer.', 'eo-blocks' ),
+					'apiCheckReminder' => __( 'Avez-vous bien activé <strong>My Business Business Information API</strong> et <strong>My Business Account Management API</strong> dans Google Cloud ?', 'eo-blocks' ),
+					'serverError'      => __( 'Erreur serveur lors du chargement des établissements.', 'eo-blocks' ),
+					'unknownError'     => __( 'Erreur inconnue', 'eo-blocks' ),
+					'active'           => __( 'ACTIF', 'eo-blocks' ),
+					'inactive'         => __( 'INACTIF', 'eo-blocks' ),
+					'testInProgress'   => __( 'Test en cours...', 'eo-blocks' ),
+					'testConnection'   => __( 'Tester la connexion', 'eo-blocks' ),
+					'connected'        => __( 'Connecté !', 'eo-blocks' ),
+					'reviewsLabel'     => __( 'Avis', 'eo-blocks' ),
+					'ratingLabel'      => __( 'Note', 'eo-blocks' ),
+					'connectionError'  => __( 'Erreur de connexion.', 'eo-blocks' ),
+					'serverErrorTest'  => __( 'Erreur serveur.', 'eo-blocks' ),
+					'loading'          => __( 'Chargement...', 'eo-blocks' ),
+					'refreshList'      => __( 'Rafraîchir la liste', 'eo-blocks' ),
+					'noLocationFound'  => __( 'Aucun établissement trouvé', 'eo-blocks' ),
+					'selectLocation'   => __( '-- Sélectionnez un établissement --', 'eo-blocks' ),
+					'disconnecting'    => __( 'Déconnexion...', 'eo-blocks' ),
+					'disconnectAccount'=> __( 'Déconnecter le compte', 'eo-blocks' ),
+					'confirmDisconnect'=> __( 'Voulez-vous vraiment déconnecter le compte Google ?', 'eo-blocks' ),
+					'disconnectError'  => __( 'Erreur lors de la déconnexion.', 'eo-blocks' ),
+					'disconnectServer' => __( 'Erreur serveur lors de la déconnexion.', 'eo-blocks' ),
+					'saveCredentialsAlert' => __( "⚠️ Attention !\n\nVous devez d'abord coller votre Client ID et votre Client Secret, puis descendre tout en bas de la page pour cliquer sur le bouton bleu 'Enregistrer les modifications'.\n\nUne fois la page rechargée, vous pourrez cliquer ici pour vous connecter !", 'eo-blocks' ),
+				)
 			) );
 		}
 	}

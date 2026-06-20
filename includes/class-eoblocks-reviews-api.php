@@ -53,7 +53,7 @@ class Eoblocks_Reviews_API {
 		check_ajax_referer( 'eo_reviews_admin_nonce', 'security' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'Non autorisé.' ) );
+			wp_send_json_error( array( 'message' => __( 'Non autorisé.', 'eo-blocks' ) ) );
 		}
 
 		$provider = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
@@ -63,7 +63,7 @@ class Eoblocks_Reviews_API {
 			$place_id = isset( $_POST['place_id'] ) ? sanitize_text_field( wp_unslash( $_POST['place_id'] ) ) : '';
 			
 			if ( empty( $api_key ) || empty( $place_id ) ) {
-				wp_send_json_error( array( 'message' => 'Clé API ou Place ID manquant.' ) );
+				wp_send_json_error( array( 'message' => __( 'Clé API ou Place ID manquant.', 'eo-blocks' ) ) );
 			}
 
 			$url = add_query_arg( array(
@@ -75,7 +75,7 @@ class Eoblocks_Reviews_API {
 			$response = wp_remote_get( $url );
 
 			if ( is_wp_error( $response ) ) {
-				wp_send_json_error( array( 'message' => 'Erreur réseau lors de la requête.' ) );
+				wp_send_json_error( array( 'message' => __( 'Erreur réseau lors de la requête.', 'eo-blocks' ) ) );
 			}
 
 			$body = wp_remote_retrieve_body( $response );
@@ -90,10 +90,10 @@ class Eoblocks_Reviews_API {
 					wp_send_json_success( $result );
 				} else {
 					$err_msg = isset( $data['error_message'] ) ? $data['error_message'] : $data['status'];
-					wp_send_json_error( array( 'message' => 'Erreur API: ' . $err_msg ) );
+					wp_send_json_error( array( 'message' => sprintf( __( 'Erreur API: %s', 'eo-blocks' ), $err_msg ) ) );
 				}
 			}
-			wp_send_json_error( array( 'message' => 'Réponse inattendue de l\'API.' ) );
+			wp_send_json_error( array( 'message' => __( 'Réponse inattendue de l\'API.', 'eo-blocks' ) ) );
 		}
 
 		// Fallback/Mock for other providers
@@ -125,7 +125,7 @@ class Eoblocks_Reviews_API {
 			return false;
 		}
 
-		$transient_key = 'eoblocks_google_reviews_' . md5( $place_id );
+		$transient_key = 'eoblocks_google_reviews_v2_' . md5( $place_id );
 		$cached = get_transient( $transient_key );
 
 		if ( false !== $cached ) {
@@ -136,8 +136,9 @@ class Eoblocks_Reviews_API {
 
 		$url = add_query_arg( array(
 			'place_id' => $place_id,
-			'fields'   => 'rating,user_ratings_total',
+			'fields'   => 'rating,user_ratings_total,reviews',
 			'key'      => $api_key,
+			'language' => get_locale(), // Fetch reviews in the current language if possible
 		), 'https://maps.googleapis.com/maps/api/place/details/json' );
 
 		$response = wp_remote_get( $url );
@@ -151,17 +152,57 @@ class Eoblocks_Reviews_API {
 
 		if ( isset( $data['status'] ) && $data['status'] === 'OK' && isset( $data['result'] ) ) {
 			$result = array(
-				'rating' => isset( $data['result']['rating'] ) ? (float) $data['result']['rating'] : 0,
-				'count'  => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
+				'rating'  => isset( $data['result']['rating'] ) ? (float) $data['result']['rating'] : 0,
+				'count'   => isset( $data['result']['user_ratings_total'] ) ? (int) $data['result']['user_ratings_total'] : 0,
+				'reviews' => isset( $data['result']['reviews'] ) ? $data['result']['reviews'] : array(),
 			);
+
+			// Try to override reviews with OAuth 2.0 if configured and selected
+			if ( class_exists( '\EoBlocks\Includes\Eoblocks_Google_OAuth' ) ) {
+				$auth_method = isset($options['google_auth_method']) ? $options['google_auth_method'] : 'api_key';
+				if ( $auth_method === 'oauth' ) {
+					$oauth_location = isset($options['google_oauth_location']) ? $options['google_oauth_location'] : '';
+					if ( ! empty( $oauth_location ) ) {
+						$oauth_reviews = \EoBlocks\Includes\Eoblocks_Google_OAuth::get_all_reviews( $oauth_location );
+						if ( is_array( $oauth_reviews ) && ! empty( $oauth_reviews ) ) {
+							// Map OAuth review format to Places API format
+							$mapped_reviews = array();
+							foreach ( $oauth_reviews as $rev ) {
+								$mapped_reviews[] = array(
+									'author_name' => isset($rev['reviewer']['displayName']) ? $rev['reviewer']['displayName'] : 'Utilisateur Google',
+									'profile_photo_url' => isset($rev['reviewer']['profilePhotoUrl']) ? $rev['reviewer']['profilePhotoUrl'] : '',
+									'rating' => isset($rev['starRating']) ? self::convert_star_rating($rev['starRating']) : 5,
+									'text' => isset($rev['comment']) ? $rev['comment'] : '',
+									'time' => isset($rev['createTime']) ? strtotime($rev['createTime']) : time(),
+									'relative_time_description' => isset($rev['createTime']) ? date_i18n( get_option( 'date_format' ), strtotime($rev['createTime']) ) : '',
+								);
+							}
+							$result['reviews'] = $mapped_reviews;
+						}
+					}
+				}
+			}
+
 			set_transient( $transient_key, $result, DAY_IN_SECONDS );
 			
 			$result['url'] = isset( $options['google_url'] ) ? $options['google_url'] : '';
 			$result['review_url'] = isset( $options['google_review_url'] ) ? $options['google_review_url'] : '';
+
 			return $result;
 		}
 
 		return false;
+	}
+
+	private static function convert_star_rating($star) {
+		switch ($star) {
+			case 'ONE': return 1;
+			case 'TWO': return 2;
+			case 'THREE': return 3;
+			case 'FOUR': return 4;
+			case 'FIVE': return 5;
+			default: return 5;
+		}
 	}
 
 	/**

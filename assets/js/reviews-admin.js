@@ -6,10 +6,10 @@ jQuery(document).ready(function($) {
         
         if ($(this).is(':checked')) {
             $card.addClass('is-active');
-            $label.text('ACTIF');
+            $label.text(eoReviewsAdmin.i18n.active);
         } else {
             $card.removeClass('is-active');
-            $label.text('INACTIF');
+            $label.text(eoReviewsAdmin.i18n.inactive);
         }
     });
 
@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
         var $card = $btn.closest('.eo-card-body');
         var $result = $btn.siblings('.eo-test-result');
         
-        $btn.prop('disabled', true).text('Test en cours...');
+        $btn.prop('disabled', true).text(eoReviewsAdmin.i18n.testInProgress);
         $result.html('<span class="dashicons dashicons-update spin"></span>').removeClass('success error');
 
         var data = {
@@ -46,17 +46,17 @@ jQuery(document).ready(function($) {
         });
 
         $.post(ajaxurl, data, function(response) {
-            $btn.prop('disabled', false).text('Tester la connexion');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.testConnection);
             if (response.success) {
                 var info = response.data;
-                $result.html('<span style="color: green;" class="dashicons dashicons-yes-alt"></span> Connecté ! (Avis: ' + info.count + ', Note: ' + info.rating + ')').addClass('success');
+                $result.html('<span style="color: green;" class="dashicons dashicons-yes-alt"></span> ' + eoReviewsAdmin.i18n.connected + ' (' + eoReviewsAdmin.i18n.reviewsLabel + ': ' + info.count + ', ' + eoReviewsAdmin.i18n.ratingLabel + ': ' + info.rating + ')').addClass('success');
             } else {
-                var errMsg = response.data && response.data.message ? response.data.message : 'Erreur de connexion.';
+                var errMsg = response.data && response.data.message ? response.data.message : eoReviewsAdmin.i18n.connectionError;
                 $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> ' + errMsg).addClass('error');
             }
         }).fail(function() {
-            $btn.prop('disabled', false).text('Tester la connexion');
-            $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> Erreur serveur.').addClass('error');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.testConnection);
+            $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> ' + eoReviewsAdmin.i18n.serverErrorTest).addClass('error');
         });
     });
 
@@ -78,4 +78,100 @@ jQuery(document).ready(function($) {
             }
         }
     });
+
+    // Google OAuth: Load locations
+    $('#eo-google-oauth-load-locations').on('click', function(e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var $select = $('#eo-google-oauth-location-select');
+        
+        $btn.prop('disabled', true).text(eoReviewsAdmin.i18n.loading);
+        
+        var data = {
+            action: 'eo_google_oauth_get_locations',
+            nonce: window.eoReviewsAdmin ? window.eoReviewsAdmin.nonce : ''
+        };
+
+        $.post(ajaxurl, data, function(response) {
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.refreshList);
+            $('#eo-google-oauth-locations-error').hide();
+            if (response.success) {
+                var locations = response.data;
+                $select.empty();
+                if (locations.length === 0) {
+                    $select.append('<option value="">' + eoReviewsAdmin.i18n.noLocationFound + '</option>');
+                } else {
+                    $select.append('<option value="">' + eoReviewsAdmin.i18n.selectLocation + '</option>');
+                    $.each(locations, function(i, loc) {
+                        var name = loc.title || loc.name;
+                        var accountName = loc.account_name ? ' (' + loc.account_name + ')' : '';
+                        $select.append('<option value="' + loc.name + '">' + name + accountName + '</option>');
+                    });
+                }
+            } else {
+                var errorMsg = (typeof response.data === 'string') ? response.data : eoReviewsAdmin.i18n.unknownError;
+                
+                // Simplify the "API not enabled" error message
+                if (errorMsg.indexOf('has not been used in project') !== -1 || errorMsg.indexOf('is disabled') !== -1) {
+                    errorMsg = eoReviewsAdmin.i18n.apiNotEnabled;
+                } else if (errorMsg.indexOf('Quota exceeded') !== -1) {
+                    errorMsg = eoReviewsAdmin.i18n.quotaExceeded;
+                }
+
+                $('#eo-google-oauth-locations-error').html('<strong>' + eoReviewsAdmin.i18n.apiErrorPrefix + '</strong> ' + errorMsg + '<br><br>' + eoReviewsAdmin.i18n.apiCheckReminder).slideDown();
+            }
+        }).fail(function() {
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.refreshList);
+            $('#eo-google-oauth-locations-error').html(eoReviewsAdmin.i18n.serverError).slideDown();
+        });
+    });
+
+    // Google OAuth: Disconnect
+    $('#eo-google-oauth-disconnect').on('click', function(e) {
+        e.preventDefault();
+        if (!confirm(eoReviewsAdmin.i18n.confirmDisconnect)) return;
+        
+        var $btn = $(this);
+        $btn.prop('disabled', true).text(eoReviewsAdmin.i18n.disconnecting);
+        
+        var data = {
+            action: 'eo_google_oauth_disconnect',
+            nonce: window.eoReviewsAdmin ? window.eoReviewsAdmin.nonce : ''
+        };
+
+        $.post(ajaxurl, data, function(response) {
+            if (response.success) {
+                window.location.reload();
+            } else {
+                $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.disconnectAccount);
+                alert(eoReviewsAdmin.i18n.disconnectError);
+            }
+        }).fail(function() {
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.disconnectAccount);
+            alert(eoReviewsAdmin.i18n.disconnectServer);
+        });
+    });
+
+    // Google OAuth: Ensure saved before connect
+    $('.eo-oauth-actions .eo-oauth-disabled-btn').on('click', function(e) {
+        e.preventDefault();
+        alert(eoReviewsAdmin.i18n.saveCredentialsAlert);
+    });
+
+    // Toggle active auth method UI
+    $('.eo-google-auth-method').on('change', function() {
+        var method = $(this).val();
+        if (method === 'oauth') {
+            $('.eo-google-method-oauth').css({ 'opacity': '1', 'pointer-events': 'auto' });
+            $('.eo-google-method-api_key').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+        } else {
+            $('.eo-google-method-oauth').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+            $('.eo-google-method-api_key').css({ 'opacity': '1', 'pointer-events': 'auto' });
+        }
+    });
+
+    // Auto-load locations if connected
+    if ($('#eo-google-oauth-load-locations').length > 0) {
+        $('#eo-google-oauth-load-locations').trigger('click');
+    }
 });
