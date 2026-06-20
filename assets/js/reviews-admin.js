@@ -108,7 +108,8 @@ jQuery(document).ready(function($) {
                     });
                 }
             } else {
-                alert('Erreur lors du chargement des établissements.');
+                var errorMsg = (typeof response.data === 'string') ? response.data : 'Erreur inconnue';
+                alert('Erreur lors du chargement des établissements : \n' + errorMsg + '\n\nAvez-vous bien activé "My Business Business Information API" et "My Business Account Management API" dans Google Cloud ?');
             }
         }).fail(function() {
             $btn.prop('disabled', false).text('Rafraîchir la liste');

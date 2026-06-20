@@ -167,6 +167,10 @@ class Eoblocks_Google_OAuth {
 			return $body['accounts'];
 		}
 		
+		if ( isset( $body['error']['message'] ) ) {
+			return new \WP_Error( 'google_api_error', $body['error']['message'] );
+		}
+		
 		return array();
 	}
 
@@ -192,6 +196,10 @@ class Eoblocks_Google_OAuth {
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( isset( $body['locations'] ) ) {
 			return $body['locations'];
+		}
+		
+		if ( isset( $body['error']['message'] ) ) {
+			return new \WP_Error( 'google_api_error', $body['error']['message'] );
 		}
 		
 		return array();
@@ -220,13 +228,19 @@ class Eoblocks_Google_OAuth {
 		}
 
 		$accounts = self::get_accounts();
+		if ( is_wp_error( $accounts ) ) {
+			wp_send_json_error( $accounts->get_error_message() );
+		}
 		if ( $accounts === false ) {
-			wp_send_json_error( 'Failed to fetch accounts.' );
+			wp_send_json_error( 'Échec de récupération des comptes.' );
 		}
 
 		$all_locations = array();
 		foreach ( $accounts as $account ) {
 			$locations = self::get_locations( $account['name'] );
+			if ( is_wp_error( $locations ) ) {
+				wp_send_json_error( $locations->get_error_message() );
+			}
 			if ( ! empty( $locations ) ) {
 				foreach ( $locations as $loc ) {
 					$loc['account_name'] = isset($account['accountName']) ? $account['accountName'] : '';
