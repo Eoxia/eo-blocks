@@ -138,54 +138,74 @@ $providers = array(
 								</div>
 
 								<div class="eo-google-method-section eo-google-method-oauth" style="<?php echo $auth_method === 'oauth' ? '' : 'opacity: 0.5; pointer-events: none;'; ?>">
-									<h3 style="margin-top: 15px;">Méthode 1 : OAuth 2.0 (Recommandé)</h3>
-									<p class="description">Permet de récupérer plus de 5 avis (tous les avis). Nécessite une application Google Cloud approuvée.</p>
 									
-									<?php
-										$client_id = isset($options['google_oauth_client_id']) ? $options['google_oauth_client_id'] : '';
-										$client_secret = isset($options['google_oauth_client_secret']) ? $options['google_oauth_client_secret'] : '';
-										$is_connected = !empty($options['google_oauth_access_token']);
-									?>
-									<div class="eo-setting-field">
-										<label>Client ID OAuth</label>
-										<input type="text" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_id]" value="<?php echo esc_attr($client_id); ?>" />
+									<div style="background: #fff; border: 1px solid #ccd0d4; padding: 20px; border-radius: 4px; margin-top: 15px;">
+										<h4 style="margin-top: 0;">Étape 1 : Obtenir les identifiants</h4>
+										<p>Pour utiliser OAuth 2.0 (et contourner la limite de 5 avis), vous devez créer une application sur Google Cloud.</p>
+										<p>
+											<a href="https://console.cloud.google.com/" target="_blank" class="button">Aller sur Google Cloud Console</a>
+										</p>
+										<ul style="list-style-type: disc; margin-left: 20px; font-size: 13px; color: #555;">
+											<li>Créez un projet ou sélectionnez-en un.</li>
+											<li>Allez dans "API et services" > "Écran de consentement OAuth" et configurez-le (type Interne ou Externe).</li>
+											<li>Allez dans "Identifiants" > "Créer des identifiants" > "ID client OAuth".</li>
+											<li>Type d'application : <strong>Application Web</strong>.</li>
+											<li>URI de redirection autorisés : copiez l'URI ci-dessous et collez-la.</li>
+										</ul>
+										<div class="eo-setting-field" style="margin-top: 15px;">
+											<label>URI de redirection (à copier dans Google Cloud)</label>
+											<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly style="background: #f0f0f1;" />
+										</div>
 									</div>
-									<div class="eo-setting-field">
-										<label>Client Secret OAuth</label>
-										<input type="password" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_secret]" value="<?php echo esc_attr($client_secret); ?>" />
-									</div>
-									<div class="eo-setting-field">
-										<label>URI de redirection</label>
-										<input type="text" class="eo-api-input" value="<?php echo esc_attr( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_redirect_uri() ); ?>" readonly />
-										<p class="description">Copiez cette URI dans la configuration de votre application sur Google Cloud.</p>
-									</div>
-									
-									<div class="eo-oauth-actions" style="margin-top: 15px; margin-bottom: 20px;">
-										<?php if ( $is_connected ) : ?>
-											<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
-											<span style="color: green; font-weight: bold; margin-left: 10px;">Connecté avec succès.</span>
-											
-											<div class="eo-setting-field" style="margin-top: 15px;">
-												<label>Sélectionner l'établissement :</label>
-												<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="min-width: 300px;">
-													<option value="">Chargement des établissements...</option>
-													<?php if ( !empty($options['google_oauth_location']) ) : ?>
-														<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
-															Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
-														</option>
-													<?php endif; ?>
-												</select>
-												<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
-											</div>
 
-										<?php else : ?>
-											<?php if ( empty($client_id) ) : ?>
-												<button type="button" class="button button-primary eo-oauth-disabled-btn" style="opacity: 0.5; cursor: not-allowed;">Se connecter avec Google</button>
-												<p class="description" style="color: #d63638; font-weight: bold;">⚠️ Étape obligatoire : Vous devez d'abord coller votre Client ID et Secret ci-dessus et cliquer sur "Enregistrer les modifications" tout en bas de la page pour pouvoir vous connecter.</p>
+									<div style="background: #fff; border: 1px solid #ccd0d4; padding: 20px; border-radius: 4px; margin-top: 15px;">
+										<h4 style="margin-top: 0;">Étape 2 : Remplir les informations</h4>
+										<p>Collez ici les identifiants générés à l'étape 1, puis <strong>Enregistrez les modifications (en bas de la page)</strong>.</p>
+										<?php
+											$client_id = isset($options['google_oauth_client_id']) ? $options['google_oauth_client_id'] : '';
+											$client_secret = isset($options['google_oauth_client_secret']) ? $options['google_oauth_client_secret'] : '';
+											$is_connected = !empty($options['google_oauth_access_token']);
+										?>
+										<div class="eo-setting-field">
+											<label>Client ID OAuth</label>
+											<input type="text" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_id]" value="<?php echo esc_attr($client_id); ?>" />
+										</div>
+										<div class="eo-setting-field" style="margin-bottom: 0;">
+											<label>Client Secret OAuth</label>
+											<input type="password" class="eo-api-input" name="eoblocks_reviews_settings[google_oauth_client_secret]" value="<?php echo esc_attr($client_secret); ?>" />
+										</div>
+									</div>
+
+									<div style="background: #fff; border: 1px solid #ccd0d4; padding: 20px; border-radius: 4px; margin-top: 15px;">
+										<h4 style="margin-top: 0;">Étape 3 : Se connecter et sélectionner l'établissement</h4>
+										<p>Une fois les identifiants enregistrés, connectez votre compte Google pour autoriser l'accès.</p>
+										
+										<div class="eo-oauth-actions" style="margin-top: 15px;">
+											<?php if ( $is_connected ) : ?>
+												<button type="button" class="button" id="eo-google-oauth-disconnect">Déconnecter le compte</button>
+												<span style="color: green; font-weight: bold; margin-left: 10px;">Connecté avec succès.</span>
+												
+												<div class="eo-setting-field" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+													<label>Sélectionner l'établissement :</label>
+													<select name="eoblocks_reviews_settings[google_oauth_location]" id="eo-google-oauth-location-select" style="min-width: 300px;">
+														<option value="">Chargement des établissements...</option>
+														<?php if ( !empty($options['google_oauth_location']) ) : ?>
+															<option value="<?php echo esc_attr($options['google_oauth_location']); ?>" selected>
+																Établissement sélectionné (ID: <?php echo esc_html($options['google_oauth_location']); ?>)
+															</option>
+														<?php endif; ?>
+													</select>
+													<button type="button" class="button" id="eo-google-oauth-load-locations">Rafraîchir la liste</button>
+												</div>
+
 											<?php else : ?>
-												<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary">Se connecter avec Google</a>
+												<?php if ( empty($client_id) ) : ?>
+													<button type="button" class="button button-primary eo-oauth-disabled-btn" style="opacity: 0.5; cursor: not-allowed;">Se connecter avec Google</button>
+												<?php else : ?>
+													<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary">Se connecter avec Google</a>
+												<?php endif; ?>
 											<?php endif; ?>
-										<?php endif; ?>
+										</div>
 									</div>
 								</div>
 
