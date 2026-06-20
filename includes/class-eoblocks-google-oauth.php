@@ -232,7 +232,7 @@ class Eoblocks_Google_OAuth {
 			wp_send_json_error( $accounts->get_error_message() );
 		}
 		if ( $accounts === false ) {
-			wp_send_json_error( 'Échec de récupération des comptes.' );
+			wp_send_json_error( __( 'Échec de récupération des comptes.', 'eo-blocks' ) );
 		}
 
 		$all_locations = array();

@@ -53,7 +53,7 @@ class Eoblocks_Reviews_API {
 		check_ajax_referer( 'eo_reviews_admin_nonce', 'security' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'Non autorisé.' ) );
+			wp_send_json_error( array( 'message' => __( 'Non autorisé.', 'eo-blocks' ) ) );
 		}
 
 		$provider = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
@@ -63,7 +63,7 @@ class Eoblocks_Reviews_API {
 			$place_id = isset( $_POST['place_id'] ) ? sanitize_text_field( wp_unslash( $_POST['place_id'] ) ) : '';
 			
 			if ( empty( $api_key ) || empty( $place_id ) ) {
-				wp_send_json_error( array( 'message' => 'Clé API ou Place ID manquant.' ) );
+				wp_send_json_error( array( 'message' => __( 'Clé API ou Place ID manquant.', 'eo-blocks' ) ) );
 			}
 
 			$url = add_query_arg( array(
@@ -75,7 +75,7 @@ class Eoblocks_Reviews_API {
 			$response = wp_remote_get( $url );
 
 			if ( is_wp_error( $response ) ) {
-				wp_send_json_error( array( 'message' => 'Erreur réseau lors de la requête.' ) );
+				wp_send_json_error( array( 'message' => __( 'Erreur réseau lors de la requête.', 'eo-blocks' ) ) );
 			}
 
 			$body = wp_remote_retrieve_body( $response );
@@ -90,10 +90,10 @@ class Eoblocks_Reviews_API {
 					wp_send_json_success( $result );
 				} else {
 					$err_msg = isset( $data['error_message'] ) ? $data['error_message'] : $data['status'];
-					wp_send_json_error( array( 'message' => 'Erreur API: ' . $err_msg ) );
+					wp_send_json_error( array( 'message' => sprintf( __( 'Erreur API: %s', 'eo-blocks' ), $err_msg ) ) );
 				}
 			}
-			wp_send_json_error( array( 'message' => 'Réponse inattendue de l\'API.' ) );
+			wp_send_json_error( array( 'message' => __( 'Réponse inattendue de l\'API.', 'eo-blocks' ) ) );
 		}
 
 		// Fallback/Mock for other providers

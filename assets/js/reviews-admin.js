@@ -6,10 +6,10 @@ jQuery(document).ready(function($) {
         
         if ($(this).is(':checked')) {
             $card.addClass('is-active');
-            $label.text('ACTIF');
+            $label.text(eoReviewsAdmin.i18n.active);
         } else {
             $card.removeClass('is-active');
-            $label.text('INACTIF');
+            $label.text(eoReviewsAdmin.i18n.inactive);
         }
     });
 
@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
         var $card = $btn.closest('.eo-card-body');
         var $result = $btn.siblings('.eo-test-result');
         
-        $btn.prop('disabled', true).text('Test en cours...');
+        $btn.prop('disabled', true).text(eoReviewsAdmin.i18n.testInProgress);
         $result.html('<span class="dashicons dashicons-update spin"></span>').removeClass('success error');
 
         var data = {
@@ -46,17 +46,17 @@ jQuery(document).ready(function($) {
         });
 
         $.post(ajaxurl, data, function(response) {
-            $btn.prop('disabled', false).text('Tester la connexion');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.testConnection);
             if (response.success) {
                 var info = response.data;
-                $result.html('<span style="color: green;" class="dashicons dashicons-yes-alt"></span> Connecté ! (Avis: ' + info.count + ', Note: ' + info.rating + ')').addClass('success');
+                $result.html('<span style="color: green;" class="dashicons dashicons-yes-alt"></span> ' + eoReviewsAdmin.i18n.connected + ' (' + eoReviewsAdmin.i18n.reviewsLabel + ': ' + info.count + ', ' + eoReviewsAdmin.i18n.ratingLabel + ': ' + info.rating + ')').addClass('success');
             } else {
-                var errMsg = response.data && response.data.message ? response.data.message : 'Erreur de connexion.';
+                var errMsg = response.data && response.data.message ? response.data.message : eoReviewsAdmin.i18n.connectionError;
                 $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> ' + errMsg).addClass('error');
             }
         }).fail(function() {
-            $btn.prop('disabled', false).text('Tester la connexion');
-            $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> Erreur serveur.').addClass('error');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.testConnection);
+            $result.html('<span style="color: red;" class="dashicons dashicons-warning"></span> ' + eoReviewsAdmin.i18n.serverErrorTest).addClass('error');
         });
     });
 
@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
         var $btn = $(this);
         var $select = $('#eo-google-oauth-location-select');
         
-        $btn.prop('disabled', true).text('Chargement...');
+        $btn.prop('disabled', true).text(eoReviewsAdmin.i18n.loading);
         
         var data = {
             action: 'eo_google_oauth_get_locations',
@@ -93,15 +93,15 @@ jQuery(document).ready(function($) {
         };
 
         $.post(ajaxurl, data, function(response) {
-            $btn.prop('disabled', false).text('Rafraîchir la liste');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.refreshList);
             $('#eo-google-oauth-locations-error').hide();
             if (response.success) {
                 var locations = response.data;
                 $select.empty();
                 if (locations.length === 0) {
-                    $select.append('<option value="">Aucun établissement trouvé</option>');
+                    $select.append('<option value="">' + eoReviewsAdmin.i18n.noLocationFound + '</option>');
                 } else {
-                    $select.append('<option value="">-- Sélectionnez un établissement --</option>');
+                    $select.append('<option value="">' + eoReviewsAdmin.i18n.selectLocation + '</option>');
                     $.each(locations, function(i, loc) {
                         var name = loc.title || loc.name;
                         var accountName = loc.account_name ? ' (' + loc.account_name + ')' : '';
@@ -119,7 +119,7 @@ jQuery(document).ready(function($) {
                 $('#eo-google-oauth-locations-error').html('<strong>' + eoReviewsAdmin.i18n.apiErrorPrefix + '</strong> ' + errorMsg + '<br><br>' + eoReviewsAdmin.i18n.apiCheckReminder).slideDown();
             }
         }).fail(function() {
-            $btn.prop('disabled', false).text('Rafraîchir la liste');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.refreshList);
             $('#eo-google-oauth-locations-error').html(eoReviewsAdmin.i18n.serverError).slideDown();
         });
     });
@@ -127,10 +127,10 @@ jQuery(document).ready(function($) {
     // Google OAuth: Disconnect
     $('#eo-google-oauth-disconnect').on('click', function(e) {
         e.preventDefault();
-        if (!confirm('Voulez-vous vraiment déconnecter le compte Google ?')) return;
+        if (!confirm(eoReviewsAdmin.i18n.confirmDisconnect)) return;
         
         var $btn = $(this);
-        $btn.prop('disabled', true).text('Déconnexion...');
+        $btn.prop('disabled', true).text(eoReviewsAdmin.i18n.disconnecting);
         
         var data = {
             action: 'eo_google_oauth_disconnect',
@@ -141,19 +141,19 @@ jQuery(document).ready(function($) {
             if (response.success) {
                 window.location.reload();
             } else {
-                $btn.prop('disabled', false).text('Déconnecter le compte');
-                alert('Erreur lors de la déconnexion.');
+                $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.disconnectAccount);
+                alert(eoReviewsAdmin.i18n.disconnectError);
             }
         }).fail(function() {
-            $btn.prop('disabled', false).text('Déconnecter le compte');
-            alert('Erreur serveur lors de la déconnexion.');
+            $btn.prop('disabled', false).text(eoReviewsAdmin.i18n.disconnectAccount);
+            alert(eoReviewsAdmin.i18n.disconnectServer);
         });
     });
 
     // Google OAuth: Ensure saved before connect
     $('.eo-oauth-actions .eo-oauth-disabled-btn').on('click', function(e) {
         e.preventDefault();
-        alert("⚠️ Attention !\n\nVous devez d'abord coller votre Client ID et votre Client Secret, puis descendre tout en bas de la page pour cliquer sur le bouton bleu 'Enregistrer les modifications'.\n\nUne fois la page rechargée, vous pourrez cliquer ici pour vous connecter !");
+        alert(eoReviewsAdmin.i18n.saveCredentialsAlert);
     });
 
     // Toggle active auth method UI
