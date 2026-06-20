@@ -242,17 +242,10 @@ $providers = array(
 								</div>
 							<?php endforeach; ?>
 							
-							<div class="eo-test-connection-wrapper" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; display: flex; gap: 15px; align-items: center;">
-								<?php submit_button( 'Enregistrer les modifications', 'primary', 'submit', false, array('id' => 'submit-top') ); ?>
-								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>">Tester la connexion</button>
-								<span class="eo-test-result"></span>
-							</div>
-							
 							<?php if ( $provider_key === 'google' ) : ?>
 								</div> <!-- end method 2 section -->
 							<?php endif; ?>
 							
-							<hr>
 						</div>
 
 						<div class="eo-card-settings">
@@ -265,6 +258,15 @@ $providers = array(
 									<input type="text" name="eoblocks_reviews_settings[<?php echo esc_attr( $field_name ); ?>]" value="<?php echo esc_attr( $field_value ); ?>" />
 								</div>
 							<?php endforeach; ?>
+						</div>
+
+						<div class="eo-card-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+							<?php submit_button( 'Enregistrer', 'primary', 'submit', false, array('id' => 'submit-'.$provider_key) ); ?>
+							
+							<div class="eo-test-connection-wrapper" style="display: flex; gap: 10px; align-items: center;">
+								<span class="eo-test-result"></span>
+								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>">Tester la connexion</button>
+							</div>
 						</div>
 					</div>
 				</div>
