@@ -159,4 +159,9 @@ jQuery(document).ready(function($) {
             $('.eo-google-method-api_key').css({ 'opacity': '1', 'pointer-events': 'auto' });
         }
     });
+
+    // Auto-load locations if connected
+    if ($('#eo-google-oauth-load-locations').length > 0) {
+        $('#eo-google-oauth-load-locations').trigger('click');
+    }
 });

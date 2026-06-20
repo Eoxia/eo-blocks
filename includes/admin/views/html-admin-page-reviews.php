@@ -242,7 +242,8 @@ $providers = array(
 								</div>
 							<?php endforeach; ?>
 							
-							<div class="eo-test-connection-wrapper">
+							<div class="eo-test-connection-wrapper" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; display: flex; gap: 15px; align-items: center;">
+								<?php submit_button( 'Enregistrer les modifications', 'primary', 'submit', false, array('id' => 'submit-top') ); ?>
 								<button type="button" class="button eo-test-connection-btn" data-provider="<?php echo esc_attr( $provider_key ); ?>">Tester la connexion</button>
 								<span class="eo-test-result"></span>
 							</div>
