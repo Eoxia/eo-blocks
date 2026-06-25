@@ -39,8 +39,13 @@ if ( class_exists( '\EoBlocks\Includes\Eoblocks_Reviews_API' ) ) {
 require_once EO_BLOCKS_PATH . '/includes/api-eo-maps.php';
 
 use EoBlocks\Includes\Eoblocks;
+use EoBlocks\Includes\Eoblocks_Summary;
 
 $eoblocks = new Eoblocks();
+
+if ( class_exists( '\EoBlocks\Includes\Eoblocks_Summary' ) ) {
+	new Eoblocks_Summary();
+}
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.

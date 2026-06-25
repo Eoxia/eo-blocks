@@ -35,6 +35,6 @@
 	"dependencies": {
 		"@wordpress/icons": "^10.10.0",
 		"classnames": "^2.5.1",
-		"swiper": "^12.2.0"
+		"swiper": "^8.4.5"
 	}
 }
