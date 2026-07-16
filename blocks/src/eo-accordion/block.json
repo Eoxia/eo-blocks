@@ -28,6 +28,10 @@
 		"isOpened": {
 			"type": "boolean",
 			"default": false
+		},
+		"displaySchema": {
+			"type": "boolean",
+			"default": false
 		}
   	},
 	"supports": {
