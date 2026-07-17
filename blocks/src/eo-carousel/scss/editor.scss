@@ -20,10 +20,12 @@
 
 		.block-editor-block-list__layout {
 			display: block;
+		}
 
-			> [data-block] {
-				width: 100%;
-			}
+		// Scoped to the slide wrapper itself (by block type, not by DOM depth) so this
+		// never affects the layout of blocks placed *inside* a slide.
+		[data-type="eo-blocks/slide"] {
+			width: 100%;
 		}
 	}
 

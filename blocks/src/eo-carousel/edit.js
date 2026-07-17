@@ -296,7 +296,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<div {...useBlockProps({ className: 'eo-carousel-editor' })}>
 				{ activeSlide && (
 					<style>
-						{ `[data-block="${ clientId }"] .eo-carousel-editor__track .block-editor-block-list__layout > [data-block]:not([data-block="${ activeSlide.clientId }"]) { display: none; }` }
+						{ /*
+						 * Only elements carrying data-type="eo-blocks/slide" are targeted, never a
+						 * depth-based selector, so blocks inserted *inside* the active slide (which
+						 * carry their own, different data-type) are never accidentally hidden.
+						 */ `
+						[data-block="${ clientId }"] .eo-carousel-editor__track [data-type="eo-blocks/slide"]:not([data-block="${ activeSlide.clientId }"]) { display: none; }
+						` }
 					</style>
 				) }
 
