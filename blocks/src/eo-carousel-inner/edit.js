@@ -3,7 +3,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InspectorControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps, InnerBlocks, store as blockEditorStore } from '@wordpress/block-editor';
 import { PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
@@ -33,10 +33,17 @@ import './scss/editor.scss';
  */
 export default function Edit( { attributes, setAttributes, clientId } ) {
 
-	const isEmpty = useSelect(
+	const { isEmpty, slidePosition, slidesCount } = useSelect(
 		(select) => {
-			const innerBlocks = select('core/block-editor').getBlocks(clientId);
-			return innerBlocks.length === 0;
+			const editorSelect = select(blockEditorStore);
+			const innerBlocks = editorSelect.getBlocks(clientId);
+			const parentClientId = editorSelect.getBlockRootClientId(clientId);
+			const siblingIds = parentClientId ? editorSelect.getBlockOrder(parentClientId) : [];
+			return {
+				isEmpty: innerBlocks.length === 0,
+				slidePosition: siblingIds.indexOf(clientId) + 1,
+				slidesCount: siblingIds.length,
+			};
 		},
 		[clientId]
 	);
@@ -44,6 +51,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		<>
 			<InspectorControls>
 				<PanelBody title={ __( 'Slide settings', 'eo-blocks' ) }>
+					{ slidesCount > 0 && (
+						<p className="eo-slide__position">
+							{ /* translators: 1: slide position, 2: total number of slides. */
+							sprintf( __( 'Slide %1$d of %2$d', 'eo-blocks' ), slidePosition, slidesCount ) }
+						</p>
+					) }
 				</PanelBody>
 			</InspectorControls>
 

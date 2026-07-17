@@ -4,5 +4,12 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-eo-carousel{
+.wp-block-eo-blocks-slide {
+	min-height: 120px;
+}
+
+.eo-slide__position {
+	margin: 0;
+	font-style: italic;
+	color: #757575;
 }

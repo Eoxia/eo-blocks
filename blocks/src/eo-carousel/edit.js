@@ -3,7 +3,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -11,13 +11,15 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InspectorControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { PanelBody, Button, RangeControl, ToggleControl, SelectControl, ColorPicker, Dropdown } from '@wordpress/components';
+import { InspectorControls, useBlockProps, InnerBlocks, store as blockEditorStore } from '@wordpress/block-editor';
+import { PanelBody, Button, RangeControl, ToggleControl, SelectControl, ColorPicker, Dropdown, Tooltip } from '@wordpress/components';
 import { __experimentalNumberControl as NumberControl,
 	__experimentalHStack as HStack,
 	__experimentalText as Text
 } from '@wordpress/components';
-import {Icon, plus} from '@wordpress/icons';
+import { useSelect, useDispatch } from '@wordpress/data';
+import { useState, useEffect, useRef, useMemo } from '@wordpress/element';
+import { Icon, plus, chevronLeft, chevronRight, arrowLeft, arrowRight, copy, trash } from '@wordpress/icons';
 
 
 /**
@@ -37,22 +39,110 @@ import './scss/editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const innerBlocksCount = wp.data.select('core/block-editor').getBlockOrder(clientId).length;
-	const CustomAppender = () => (
-		<div style={{ textAlign: 'center', margin: '10px 0' }}>
-			<Button
-				variant="secondary"
-				onClick={() => wp.data.dispatch('core/block-editor').insertBlock(
-					wp.blocks.createBlock('eo-blocks/slide'),
-					innerBlocksCount,
-					clientId
-				)}
-			>
-				<Icon icon={plus} />
-				{ __( 'Add a new slide', 'eo-blocks' ) }
-			</Button>
-		</div>
+	const { slides, selectedClientId, selectedParents } = useSelect(
+		( select ) => {
+			const editorSelect = select( blockEditorStore );
+			const selected = editorSelect.getSelectedBlockClientId();
+			return {
+				slides: editorSelect.getBlocks( clientId ),
+				selectedClientId: selected,
+				selectedParents: selected ? editorSelect.getBlockParents( selected, true ) : [],
+			};
+		},
+		[ clientId ]
 	);
+
+	const { selectBlock, insertBlock, removeBlock, moveBlocksUp, moveBlocksDown } = useDispatch( blockEditorStore );
+
+	// If the current editor selection is a slide (or something inside a slide),
+	// that slide becomes the active one, just like clicking through a real carousel.
+	const selectedSlideId = useMemo( () => {
+		if ( ! selectedClientId ) {
+			return null;
+		}
+		const slideIds = slides.map( ( slide ) => slide.clientId );
+		if ( slideIds.includes( selectedClientId ) ) {
+			return selectedClientId;
+		}
+		return selectedParents.find( ( id ) => slideIds.includes( id ) ) || null;
+	}, [ selectedClientId, selectedParents, slides ] );
+
+	const [ activeSlideId, setActiveSlideId ] = useState( slides[ 0 ]?.clientId ?? null );
+	const lastIndexRef = useRef( 0 );
+
+	useEffect( () => {
+		if ( selectedSlideId ) {
+			setActiveSlideId( selectedSlideId );
+		}
+	}, [ selectedSlideId ] );
+
+	const activeIndex = useMemo( () => {
+		const ids = slides.map( ( slide ) => slide.clientId );
+		let index = activeSlideId ? ids.indexOf( activeSlideId ) : -1;
+		if ( index === -1 ) {
+			index = Math.max( Math.min( lastIndexRef.current, ids.length - 1 ), 0 );
+		}
+		lastIndexRef.current = index;
+		return index;
+	}, [ slides, activeSlideId ] );
+
+	const activeSlide = slides[ activeIndex ];
+
+	const goToSlide = ( index ) => {
+		const target = slides[ index ];
+		if ( ! target ) {
+			return;
+		}
+		setActiveSlideId( target.clientId );
+		selectBlock( target.clientId );
+	};
+
+	const goPrev = () => goToSlide( ( activeIndex - 1 + slides.length ) % slides.length );
+	const goNext = () => goToSlide( ( activeIndex + 1 ) % slides.length );
+
+	const addSlide = ( afterIndex ) => {
+		const newBlock = wp.blocks.createBlock( 'eo-blocks/slide' );
+		insertBlock( newBlock, afterIndex + 1, clientId );
+		setActiveSlideId( newBlock.clientId );
+		selectBlock( newBlock.clientId );
+	};
+
+	const duplicateSlide = ( index ) => {
+		const source = slides[ index ];
+		if ( ! source ) {
+			return;
+		}
+		const cloned = wp.blocks.cloneBlock( source );
+		insertBlock( cloned, index + 1, clientId );
+		setActiveSlideId( cloned.clientId );
+		selectBlock( cloned.clientId );
+	};
+
+	const deleteSlide = ( index ) => {
+		const target = slides[ index ];
+		if ( ! target || slides.length <= 1 ) {
+			return;
+		}
+		const fallback = slides[ index - 1 ] || slides[ index + 1 ];
+		removeBlock( target.clientId, false );
+		if ( fallback ) {
+			setActiveSlideId( fallback.clientId );
+		}
+	};
+
+	const moveSlideLeft = () => {
+		if ( ! activeSlide || activeIndex <= 0 ) {
+			return;
+		}
+		moveBlocksUp( [ activeSlide.clientId ], clientId );
+	};
+
+	const moveSlideRight = () => {
+		if ( ! activeSlide || activeIndex >= slides.length - 1 ) {
+			return;
+		}
+		moveBlocksDown( [ activeSlide.clientId ], clientId );
+	};
 
 	return (
 		<>
@@ -203,13 +293,116 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div {...useBlockProps()}>
-				<div className="eo-carousel__inner">
-					<InnerBlocks
-						template={[]}
-						renderAppender={() => <CustomAppender/>}
-					/>
+			<div {...useBlockProps({ className: 'eo-carousel-editor' })}>
+				{ activeSlide && (
+					<style>
+						{ `[data-block="${ clientId }"] .eo-carousel-editor__track .block-editor-block-list__layout > [data-block]:not([data-block="${ activeSlide.clientId }"]) { display: none; }` }
+					</style>
+				) }
+
+				<div className="eo-carousel-editor__viewport" style={{ '--eo-carousel-editor-color': attributes.mainColor }}>
+					<div className="eo-carousel-editor__track">
+						<InnerBlocks
+							allowedBlocks={['eo-blocks/slide']}
+							renderAppender={false}
+						/>
+					</div>
+
+					{ slides.length === 0 && (
+						<div className="eo-carousel-editor__empty">
+							<p>{ __( 'This carousel is empty.', 'eo-blocks' ) }</p>
+							<Button variant="primary" onClick={ () => addSlide( -1 ) }>
+								<Icon icon={ plus } />
+								{ __( 'Add a new slide', 'eo-blocks' ) }
+							</Button>
+						</div>
+					) }
+
+					{ slides.length > 1 && (
+						<>
+							<Button
+								className="eo-carousel-editor__nav eo-carousel-editor__nav--prev"
+								icon={ chevronLeft }
+								label={ __( 'Previous slide', 'eo-blocks' ) }
+								onClick={ goPrev }
+							/>
+							<Button
+								className="eo-carousel-editor__nav eo-carousel-editor__nav--next"
+								icon={ chevronRight }
+								label={ __( 'Next slide', 'eo-blocks' ) }
+								onClick={ goNext }
+							/>
+						</>
+					) }
 				</div>
+
+				{ slides.length > 0 && (
+					<div className="eo-carousel-editor__toolbar">
+						<div className="eo-carousel-editor__dots">
+							{ slides.map( ( slide, index ) => (
+								<Tooltip
+									key={ slide.clientId }
+									text={
+										/* translators: %d: slide number. */
+										sprintf( __( 'Slide %d', 'eo-blocks' ), index + 1 )
+									}
+								>
+									<button
+										type="button"
+										className={ 'eo-carousel-editor__dot' + ( index === activeIndex ? ' is-active' : '' ) }
+										onClick={ () => goToSlide( index ) }
+									>
+										<span className="screen-reader-text">
+											{ /* translators: %d: slide number. */
+											sprintf( __( 'Go to slide %d', 'eo-blocks' ), index + 1 ) }
+										</span>
+									</button>
+								</Tooltip>
+							) ) }
+							<Tooltip text={ __( 'Add a new slide', 'eo-blocks' ) }>
+								<button
+									type="button"
+									className="eo-carousel-editor__dot eo-carousel-editor__dot--add"
+									onClick={ () => addSlide( slides.length - 1 ) }
+								>
+									<Icon icon={ plus } size={ 14 } />
+									<span className="screen-reader-text">{ __( 'Add a new slide', 'eo-blocks' ) }</span>
+								</button>
+							</Tooltip>
+						</div>
+
+						<div className="eo-carousel-editor__actions">
+							<span className="eo-carousel-editor__counter">
+								{ /* translators: 1: current slide number, 2: total number of slides. */
+								sprintf( __( 'Slide %1$d / %2$d', 'eo-blocks' ), activeIndex + 1, slides.length ) }
+							</span>
+							<Button
+								icon={ arrowLeft }
+								label={ __( 'Move slide left', 'eo-blocks' ) }
+								onClick={ moveSlideLeft }
+								disabled={ activeIndex <= 0 }
+							/>
+							<Button
+								icon={ arrowRight }
+								label={ __( 'Move slide right', 'eo-blocks' ) }
+								onClick={ moveSlideRight }
+								disabled={ activeIndex >= slides.length - 1 }
+							/>
+							<Button
+								icon={ copy }
+								label={ __( 'Duplicate slide', 'eo-blocks' ) }
+								onClick={ () => duplicateSlide( activeIndex ) }
+							/>
+							<Button
+								icon={ trash }
+								label={ __( 'Delete slide', 'eo-blocks' ) }
+								onClick={ () => deleteSlide( activeIndex ) }
+								disabled={ slides.length <= 1 }
+								isDestructive
+							/>
+						</div>
+					</div>
+				) }
 			</div>
 		</>
 	);
