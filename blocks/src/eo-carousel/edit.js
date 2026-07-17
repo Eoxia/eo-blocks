@@ -68,15 +68,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}, [ selectedClientId, selectedParents, slides ] );
 
 	const [ activeSlideId, setActiveSlideId ] = useState( slides[ 0 ]?.clientId ?? null );
+	// Whether the carousel is currently parked on the trailing, virtual "add a
+	// slide" slot rather than on one of the real slides.
+	const [ isOnAddSlot, setIsOnAddSlot ] = useState( false );
 	const lastIndexRef = useRef( 0 );
 
 	useEffect( () => {
 		if ( selectedSlideId ) {
 			setActiveSlideId( selectedSlideId );
+			setIsOnAddSlot( false );
 		}
 	}, [ selectedSlideId ] );
 
 	const activeIndex = useMemo( () => {
+		if ( isOnAddSlot && slides.length > 0 ) {
+			return slides.length;
+		}
 		const ids = slides.map( ( slide ) => slide.clientId );
 		let index = activeSlideId ? ids.indexOf( activeSlideId ) : -1;
 		if ( index === -1 ) {
@@ -84,25 +91,34 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 		lastIndexRef.current = index;
 		return index;
-	}, [ slides, activeSlideId ] );
+	}, [ slides, activeSlideId, isOnAddSlot ] );
 
+	// Undefined when activeIndex points at the trailing virtual "add a slide" slot.
 	const activeSlide = slides[ activeIndex ];
 
 	const goToSlide = ( index ) => {
+		if ( slides.length > 0 && index === slides.length ) {
+			setIsOnAddSlot( true );
+			return;
+		}
 		const target = slides[ index ];
 		if ( ! target ) {
 			return;
 		}
+		setIsOnAddSlot( false );
 		setActiveSlideId( target.clientId );
 		selectBlock( target.clientId );
 	};
 
-	const goPrev = () => goToSlide( ( activeIndex - 1 + slides.length ) % slides.length );
-	const goNext = () => goToSlide( ( activeIndex + 1 ) % slides.length );
+	// The navigable range includes one extra, virtual slot at the end for "add a slide".
+	const totalSlots = slides.length > 0 ? slides.length + 1 : 0;
+	const goPrev = () => totalSlots && goToSlide( ( activeIndex - 1 + totalSlots ) % totalSlots );
+	const goNext = () => totalSlots && goToSlide( ( activeIndex + 1 ) % totalSlots );
 
 	const addSlide = ( afterIndex ) => {
 		const newBlock = wp.blocks.createBlock( 'eo-blocks/slide' );
 		insertBlock( newBlock, afterIndex + 1, clientId );
+		setIsOnAddSlot( false );
 		setActiveSlideId( newBlock.clientId );
 		selectBlock( newBlock.clientId );
 	};
@@ -114,6 +130,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 		const cloned = wp.blocks.cloneBlock( source );
 		insertBlock( cloned, index + 1, clientId );
+		setIsOnAddSlot( false );
 		setActiveSlideId( cloned.clientId );
 		selectBlock( cloned.clientId );
 	};
@@ -294,14 +311,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			</InspectorControls>
 
 			<div {...useBlockProps({ className: 'eo-carousel-editor' })}>
-				{ activeSlide && (
+				{ slides.length > 0 && (
 					<style>
 						{ /*
 						 * Only elements carrying data-type="eo-blocks/slide" are targeted, never a
 						 * depth-based selector, so blocks inserted *inside* the active slide (which
-						 * carry their own, different data-type) are never accidentally hidden.
+						 * carry their own, different data-type) are never accidentally hidden. When
+						 * activeSlide is undefined (the virtual "add a slide" slot is active), every
+						 * real slide is hidden and the placeholder card below takes their place.
 						 */ `
-						[data-block="${ clientId }"] .eo-carousel-editor__track [data-type="eo-blocks/slide"]:not([data-block="${ activeSlide.clientId }"]) { display: none; }
+						[data-block="${ clientId }"] .eo-carousel-editor__track [data-type="eo-blocks/slide"]${ activeSlide ? `:not([data-block="${ activeSlide.clientId }"])` : '' } { display: none; }
 						` }
 					</style>
 				) }
@@ -324,7 +343,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						</div>
 					) }
 
-					{ slides.length > 1 && (
+					{ isOnAddSlot && (
+						<div className="eo-carousel-editor__empty eo-carousel-editor__empty--add-slide">
+							<p>{ __( 'Add another slide to your carousel.', 'eo-blocks' ) }</p>
+							<Button variant="primary" onClick={ () => addSlide( slides.length - 1 ) }>
+								<Icon icon={ plus } />
+								{ __( 'Add a new slide', 'eo-blocks' ) }
+							</Button>
+						</div>
+					) }
+
+					{ slides.length > 0 && (
 						<>
 							<Button
 								className="eo-carousel-editor__nav eo-carousel-editor__nav--prev"
@@ -379,31 +408,34 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 						<div className="eo-carousel-editor__actions">
 							<span className="eo-carousel-editor__counter">
-								{ /* translators: 1: current slide number, 2: total number of slides. */
-								sprintf( __( 'Slide %1$d / %2$d', 'eo-blocks' ), activeIndex + 1, slides.length ) }
+								{ isOnAddSlot
+									? __( 'New slide', 'eo-blocks' )
+									: /* translators: 1: current slide number, 2: total number of slides. */
+									  sprintf( __( 'Slide %1$d / %2$d', 'eo-blocks' ), activeIndex + 1, slides.length ) }
 							</span>
 							<Button
 								icon={ arrowLeft }
 								label={ __( 'Move slide left', 'eo-blocks' ) }
 								onClick={ moveSlideLeft }
-								disabled={ activeIndex <= 0 }
+								disabled={ isOnAddSlot || activeIndex <= 0 }
 							/>
 							<Button
 								icon={ arrowRight }
 								label={ __( 'Move slide right', 'eo-blocks' ) }
 								onClick={ moveSlideRight }
-								disabled={ activeIndex >= slides.length - 1 }
+								disabled={ isOnAddSlot || activeIndex >= slides.length - 1 }
 							/>
 							<Button
 								icon={ copy }
 								label={ __( 'Duplicate slide', 'eo-blocks' ) }
 								onClick={ () => duplicateSlide( activeIndex ) }
+								disabled={ isOnAddSlot }
 							/>
 							<Button
 								icon={ trash }
 								label={ __( 'Delete slide', 'eo-blocks' ) }
 								onClick={ () => deleteSlide( activeIndex ) }
-								disabled={ slides.length <= 1 }
+								disabled={ isOnAddSlot || slides.length <= 1 }
 								isDestructive
 							/>
 						</div>

@@ -38,6 +38,11 @@
 		padding: 48px 16px;
 		text-align: center;
 		color: #757575;
+
+		&--add-slide {
+			border: 1px dashed #949494;
+			border-radius: 4px;
+		}
 	}
 
 	.eo-carousel-editor__nav {
