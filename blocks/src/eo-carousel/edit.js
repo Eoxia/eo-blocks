@@ -18,7 +18,7 @@ import { __experimentalNumberControl as NumberControl,
 	__experimentalText as Text
 } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useState, useEffect, useRef, useMemo } from '@wordpress/element';
+import { Fragment, useState, useEffect, useRef, useMemo } from '@wordpress/element';
 import { Icon, plus, chevronLeft, chevronRight, copy, trash } from '@wordpress/icons';
 
 
@@ -56,7 +56,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const dotsRef = useRef( null );
 	const dragIndexRef = useRef( null );
 	const slidesRef = useRef( slides );
-	const [ dragOverIndex, setDragOverIndex ] = useState( null );
+	// Index of the gap bar (0..slides.length) currently highlighted as a drop target.
+	const [ dragOverGap, setDragOverGap ] = useState( null );
 
 	useEffect( () => {
 		slidesRef.current = slides;
@@ -176,7 +177,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			return;
 		}
 
-		const getDotIndex = ( target ) => {
+		// The drag source is always a dot ([data-slide-index]).
+		const getSlideIndex = ( target ) => {
 			const dotEl = target?.closest?.( '[data-slide-index]' );
 			if ( ! dotEl || ! container.contains( dotEl ) ) {
 				return null;
@@ -185,8 +187,29 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			return Number.isNaN( index ) ? null : index;
 		};
 
+		// The drop target is a gap bar ([data-drop-index], 0..slides.length: "insert
+		// here"). Hovering a dot instead of a bar still resolves to whichever gap
+		// is nearest the pointer, so the thin bars stay easy to hit.
+		const getGapIndex = ( target, clientX ) => {
+			const gapEl = target?.closest?.( '[data-drop-index]' );
+			if ( gapEl && container.contains( gapEl ) ) {
+				const index = Number( gapEl.dataset.dropIndex );
+				return Number.isNaN( index ) ? null : index;
+			}
+			const dotEl = target?.closest?.( '[data-slide-index]' );
+			if ( dotEl && container.contains( dotEl ) ) {
+				const index = Number( dotEl.dataset.slideIndex );
+				if ( Number.isNaN( index ) ) {
+					return null;
+				}
+				const rect = dotEl.getBoundingClientRect();
+				return clientX < rect.left + rect.width / 2 ? index : index + 1;
+			}
+			return null;
+		};
+
 		const onDragStart = ( event ) => {
-			const index = getDotIndex( event.target );
+			const index = getSlideIndex( event.target );
 			if ( index === null ) {
 				return;
 			}
@@ -201,33 +224,36 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			if ( dragIndexRef.current === null ) {
 				return;
 			}
-			const index = getDotIndex( event.target );
-			if ( index === null ) {
+			const gapIndex = getGapIndex( event.target, event.clientX );
+			if ( gapIndex === null ) {
 				return;
 			}
 			event.preventDefault();
 			event.stopPropagation();
 			event.dataTransfer.dropEffect = 'move';
-			setDragOverIndex( index );
+			setDragOverGap( gapIndex );
 		};
 
 		const onDrop = ( event ) => {
-			const index = getDotIndex( event.target );
+			const gapIndex = getGapIndex( event.target, event.clientX );
 			const fromIndex = dragIndexRef.current;
 			dragIndexRef.current = null;
-			setDragOverIndex( null );
-			if ( index === null || fromIndex === null || fromIndex === index ) {
+			setDragOverGap( null );
+			if ( gapIndex === null || fromIndex === null ) {
 				return;
 			}
 			event.preventDefault();
 			event.stopPropagation();
+			// moveBlockToPosition expects the target index in the array *after*
+			// the dragged item has been removed from it.
+			const toIndex = gapIndex > fromIndex ? gapIndex - 1 : gapIndex;
+			if ( toIndex === fromIndex ) {
+				return;
+			}
 			const source = slidesRef.current[ fromIndex ];
 			if ( ! source ) {
 				return;
 			}
-			// moveBlockToPosition expects the target index in the array *after*
-			// the dragged item has been removed from it.
-			const toIndex = index > fromIndex ? index - 1 : index;
 			moveBlockToPosition( source.clientId, clientId, clientId, toIndex );
 			setIsOnAddSlot( false );
 			setActiveSlideId( source.clientId );
@@ -235,7 +261,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 		const onDragEnd = () => {
 			dragIndexRef.current = null;
-			setDragOverIndex( null );
+			setDragOverGap( null );
 		};
 
 		container.addEventListener( 'dragstart', onDragStart );
@@ -465,31 +491,36 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<div className="eo-carousel-editor__toolbar">
 						<div className="eo-carousel-editor__dots" ref={ dotsRef }>
 							{ slides.map( ( slide, index ) => (
-								<Tooltip
-									key={ slide.clientId }
-									text={
-										/* translators: %d: slide number. */
-										sprintf( __( 'Slide %d', 'eo-blocks' ), index + 1 )
-									}
-								>
-									<button
-										type="button"
-										draggable
-										data-slide-index={ index }
-										className={
-											'eo-carousel-editor__dot'
-											+ ( index === activeIndex ? ' is-active' : '' )
-											+ ( index === dragOverIndex ? ' is-dragover' : '' )
+								<Fragment key={ slide.clientId }>
+									<span
+										className={ 'eo-carousel-editor__dot-gap' + ( index === dragOverGap ? ' is-dragover' : '' ) }
+										data-drop-index={ index }
+									/>
+									<Tooltip
+										text={
+											/* translators: %d: slide number. */
+											sprintf( __( 'Slide %d', 'eo-blocks' ), index + 1 )
 										}
-										onClick={ () => goToSlide( index ) }
 									>
-										<span className="screen-reader-text">
-											{ /* translators: %d: slide number. */
-											sprintf( __( 'Go to slide %d', 'eo-blocks' ), index + 1 ) }
-										</span>
-									</button>
-								</Tooltip>
+										<button
+											type="button"
+											draggable
+											data-slide-index={ index }
+											className={ 'eo-carousel-editor__dot' + ( index === activeIndex ? ' is-active' : '' ) }
+											onClick={ () => goToSlide( index ) }
+										>
+											<span className="screen-reader-text">
+												{ /* translators: %d: slide number. */
+												sprintf( __( 'Go to slide %d', 'eo-blocks' ), index + 1 ) }
+											</span>
+										</button>
+									</Tooltip>
+								</Fragment>
 							) ) }
+							<span
+								className={ 'eo-carousel-editor__dot-gap' + ( slides.length === dragOverGap ? ' is-dragover' : '' ) }
+								data-drop-index={ slides.length }
+							/>
 							<Tooltip text={ __( 'Add a new slide', 'eo-blocks' ) }>
 								<button
 									type="button"

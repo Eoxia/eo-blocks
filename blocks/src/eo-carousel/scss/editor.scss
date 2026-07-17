@@ -109,11 +109,6 @@
 			background: var(--eo-carousel-editor-color, #007aff);
 		}
 
-		&.is-dragover {
-			border-color: var(--eo-carousel-editor-color, #007aff);
-			transform: scale(1.4);
-		}
-
 		&--add {
 			cursor: pointer;
 			border-style: dashed;
@@ -123,6 +118,33 @@
 				border-color: var(--eo-carousel-editor-color, #007aff);
 				color: var(--eo-carousel-editor-color, #007aff);
 			}
+		}
+	}
+
+	// Thin insertion markers between (and after the last) dot: they make it
+	// unambiguous exactly where a dragged slide will land, rather than relying
+	// on "drop it onto another dot".
+	.eo-carousel-editor__dot-gap {
+		display: flex;
+		flex: 0 0 auto;
+		align-items: center;
+		justify-content: center;
+		width: 8px;
+		height: 20px;
+
+		&::before {
+			content: "";
+			display: block;
+			width: 2px;
+			height: 14px;
+			border-radius: 1px;
+			background: transparent;
+			transition: background-color 0.15s ease, width 0.15s ease;
+		}
+
+		&.is-dragover::before {
+			width: 3px;
+			background: var(--eo-carousel-editor-color, #007aff);
 		}
 	}
 
