@@ -19,7 +19,7 @@ import { __experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useState, useEffect, useRef, useMemo } from '@wordpress/element';
-import { Icon, plus, chevronLeft, chevronRight, arrowLeft, arrowRight, copy, trash } from '@wordpress/icons';
+import { Icon, plus, chevronLeft, chevronRight, copy, trash } from '@wordpress/icons';
 
 
 /**
@@ -52,7 +52,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		[ clientId ]
 	);
 
-	const { selectBlock, insertBlock, removeBlock, moveBlocksUp, moveBlocksDown } = useDispatch( blockEditorStore );
+	const { selectBlock, insertBlock, removeBlock, moveBlockToPosition } = useDispatch( blockEditorStore );
+	const dragIndexRef = useRef( null );
+	const [ dragOverIndex, setDragOverIndex ] = useState( null );
 
 	// If the current editor selection is a slide (or something inside a slide),
 	// that slide becomes the active one, just like clicking through a real carousel.
@@ -147,18 +149,49 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 	};
 
-	const moveSlideLeft = () => {
-		if ( ! activeSlide || activeIndex <= 0 ) {
-			return;
-		}
-		moveBlocksUp( [ activeSlide.clientId ], clientId );
+	// Reordering slides by dragging their dot. Native HTML5 drag & drop, no
+	// extra dependency: moveBlockToPosition already ships with block-editor.
+	const handleDotDragStart = ( event, index ) => {
+		dragIndexRef.current = index;
+		event.dataTransfer.effectAllowed = 'move';
+		// Firefox requires data to be set for the drag to actually start.
+		event.dataTransfer.setData( 'text/plain', String( index ) );
 	};
 
-	const moveSlideRight = () => {
-		if ( ! activeSlide || activeIndex >= slides.length - 1 ) {
+	const handleDotDragOver = ( event, index ) => {
+		if ( dragIndexRef.current === null ) {
 			return;
 		}
-		moveBlocksDown( [ activeSlide.clientId ], clientId );
+		event.preventDefault();
+		event.dataTransfer.dropEffect = 'move';
+		if ( dragOverIndex !== index ) {
+			setDragOverIndex( index );
+		}
+	};
+
+	const handleDotDrop = ( event, index ) => {
+		event.preventDefault();
+		const fromIndex = dragIndexRef.current;
+		dragIndexRef.current = null;
+		setDragOverIndex( null );
+		if ( fromIndex === null || fromIndex === index ) {
+			return;
+		}
+		const source = slides[ fromIndex ];
+		if ( ! source ) {
+			return;
+		}
+		// moveBlockToPosition expects the target index in the array *after* the
+		// dragged item has been removed from it.
+		const toIndex = index > fromIndex ? index - 1 : index;
+		moveBlockToPosition( source.clientId, clientId, clientId, toIndex );
+		setIsOnAddSlot( false );
+		setActiveSlideId( source.clientId );
+	};
+
+	const handleDotDragEnd = () => {
+		dragIndexRef.current = null;
+		setDragOverIndex( null );
 	};
 
 	return (
@@ -384,8 +417,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								>
 									<button
 										type="button"
-										className={ 'eo-carousel-editor__dot' + ( index === activeIndex ? ' is-active' : '' ) }
+										draggable
+										className={
+											'eo-carousel-editor__dot'
+											+ ( index === activeIndex ? ' is-active' : '' )
+											+ ( index === dragOverIndex ? ' is-dragover' : '' )
+										}
 										onClick={ () => goToSlide( index ) }
+										onDragStart={ ( event ) => handleDotDragStart( event, index ) }
+										onDragOver={ ( event ) => handleDotDragOver( event, index ) }
+										onDrop={ ( event ) => handleDotDrop( event, index ) }
+										onDragEnd={ handleDotDragEnd }
 									>
 										<span className="screen-reader-text">
 											{ /* translators: %d: slide number. */
@@ -413,18 +455,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									: /* translators: 1: current slide number, 2: total number of slides. */
 									  sprintf( __( 'Slide %1$d / %2$d', 'eo-blocks' ), activeIndex + 1, slides.length ) }
 							</span>
-							<Button
-								icon={ arrowLeft }
-								label={ __( 'Move slide left', 'eo-blocks' ) }
-								onClick={ moveSlideLeft }
-								disabled={ isOnAddSlot || activeIndex <= 0 }
-							/>
-							<Button
-								icon={ arrowRight }
-								label={ __( 'Move slide right', 'eo-blocks' ) }
-								onClick={ moveSlideRight }
-								disabled={ isOnAddSlot || activeIndex >= slides.length - 1 }
-							/>
 							<Button
 								icon={ copy }
 								label={ __( 'Duplicate slide', 'eo-blocks' ) }

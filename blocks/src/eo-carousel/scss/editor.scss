@@ -102,14 +102,20 @@
 		border: 1px solid #949494;
 		border-radius: 50%;
 		background: #fff;
-		cursor: pointer;
+		cursor: grab;
 
 		&.is-active {
 			border-color: var(--eo-carousel-editor-color, #007aff);
 			background: var(--eo-carousel-editor-color, #007aff);
 		}
 
+		&.is-dragover {
+			border-color: var(--eo-carousel-editor-color, #007aff);
+			transform: scale(1.4);
+		}
+
 		&--add {
+			cursor: pointer;
 			border-style: dashed;
 			color: #757575;
 
