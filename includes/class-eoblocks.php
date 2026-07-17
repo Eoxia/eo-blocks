@@ -40,9 +40,11 @@ class Eoblocks {
 		add_action( 'init', array( $this, 'register_global_assets' ) );
 		add_filter( 'block_categories_all', array( $this, 'create_block_category' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'group_link_frontend' ), 10, 2 );
+        add_filter( 'render_block', array( $this, 'animations_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_custom_block_hooks' ) );
 		add_shortcode( 'eo_map', array( $this, 'render_map_shortcode' ) );
+
 	}
 
 	/**
@@ -112,6 +114,7 @@ class Eoblocks {
         wp_register_script( 'eo-blocks-swiper-js', EO_BLOCKS_URL . 'assets/inc/swiper-bundle.min.js', array(), '11.1.15', true );
 
         wp_enqueue_script( 'eo-blocks-js', EO_BLOCKS_URL . 'assets/js/eoblocks.js', array( 'jquery'), '1.1.0' );
+        wp_enqueue_script( 'eo-blocks-animations-js', EO_BLOCKS_URL . 'assets/js/animations.js', array(), '1.0.0', true );
         wp_enqueue_style( 'eo-blocks-css', EO_BLOCKS_URL . 'assets/css/style.min.css', array(), '1.0.0', 'all' );
 
         // Localize AJAX URL for eo-search block
@@ -133,6 +136,9 @@ class Eoblocks {
                 '1.2.0',
                 true
             );
+
+            // Animation gallery preview styles (keyframes + modal grid).
+            wp_enqueue_style( 'eo-blocks-css', EO_BLOCKS_URL . 'assets/css/style.min.css', array(), '1.0.0', 'all' );
 
             // Localize AJAX URL for eo-search block in editor
             wp_localize_script( 'eo-blocks-hooks', 'eoSearch', array(
@@ -184,6 +190,43 @@ class Eoblocks {
         return $block_content;
     }
 
+    /**
+     * Adds the data-eo-anim-in / data-eo-anim-out attributes on a block's
+     * root element so assets/js/animations.js can trigger the matching
+     * CSS animation on scroll. Works for any block (EO Blocks, core or
+     * third-party) since the attributes are read directly from the parsed
+     * block comment, without requiring PHP-side attribute registration.
+     */
+    public function animations_frontend( $block_content, $block ) {
+        $attrs = isset( $block['attrs'] ) ? $block['attrs'] : array();
+
+        $anim_in  = ! empty( $attrs['eoAnimationIn'] ) ? sanitize_html_class( $attrs['eoAnimationIn'] ) : '';
+        $anim_out = ! empty( $attrs['eoAnimationOut'] ) ? sanitize_html_class( $attrs['eoAnimationOut'] ) : '';
+
+        if ( ! $anim_in && ! $anim_out ) {
+            return $block_content;
+        }
+
+        if ( ! preg_match( '/^\s*<[a-zA-Z]/', $block_content ) ) {
+            return $block_content;
+        }
+
+        $data_attrs = '';
+        if ( $anim_in ) {
+            $data_attrs .= ' data-eo-anim-in="' . esc_attr( $anim_in ) . '"';
+        }
+        if ( $anim_out ) {
+            $data_attrs .= ' data-eo-anim-out="' . esc_attr( $anim_out ) . '"';
+        }
+
+        return preg_replace(
+            '/^(\s*<[a-zA-Z][a-zA-Z0-9-]*)/',
+            '$1' . $data_attrs,
+            $block_content,
+            1
+        );
+    }
+
 	/**
 	 * Shortcode to render maps.
 	 */
@@ -230,4 +273,5 @@ class Eoblocks {
 		<?php
 		return ob_get_clean();
 	}
-}
+
+}

@@ -64,6 +64,8 @@ class Eoblocks_Settings {
 				'eoblocks',
 				'eoblocks_settings_section'
 		);
+
+		register_setting('eoblocks_reviews_group', 'eoblocks_reviews_settings');
 	}
 
 	public function dolibarr_url_cb() {

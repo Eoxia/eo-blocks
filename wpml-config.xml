@@ -1,0 +1,26 @@
+<wpml-config>
+  <gutenberg-blocks>
+    <gutenberg-block type="eo-blocks/accordion" translate="1">
+      <key name="title" />
+      <key name="subtitle" />
+    </gutenberg-block>
+    <gutenberg-block type="eo-blocks/kpi-contentment" translate="1">
+      <key name="blockLabel" />
+    </gutenberg-block>
+    <gutenberg-block type="eo-blocks/search" translate="1">
+      <key name="searchText" />
+    </gutenberg-block>
+    <gutenberg-block type="eo-blocks/summary" translate="1">
+      <key name="labelMenuMobile" />
+    </gutenberg-block>
+    <gutenberg-block type="core/heading" translate="1">
+      <xpath>//h1</xpath>
+      <xpath>//h2</xpath>
+      <xpath>//h3</xpath>
+      <xpath>//h4</xpath>
+      <xpath>//h5</xpath>
+      <xpath>//h6</xpath>
+      <key name="summaryLabel"/>
+    </gutenberg-block>
+  </gutenberg-blocks>
+</wpml-config>

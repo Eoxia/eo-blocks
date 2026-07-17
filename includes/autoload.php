@@ -22,13 +22,17 @@ spl_autoload_register(function ($class) {
 
 	// Decompose file name and file path.
 	$last_slash_pos = strrpos($relative_class, '\\');
-	$class_name = substr($relative_class, $last_slash_pos + 1);
+	if ( $last_slash_pos !== false ) {
+		$class_name = substr($relative_class, $last_slash_pos + 1);
+		$file_path = strtolower( substr($relative_class, 0, $last_slash_pos) );
+		$file_path = str_replace('\\', '/', $file_path);
+	} else {
+		$class_name = $relative_class;
+		$file_path = '';
+	}
+	
 	$file_name = str_replace('_', '-', $class_name);
 	$file_name = 'class-' . strtolower( $file_name ) . '.php';
-	$file_path = strtolower( substr($relative_class, 0, $last_slash_pos) );
-	$file_path = str_replace('\\', '/', $file_path);
-
-
 
 	// Replace the namespace prefix with the base directory, replace namespace
 	// separators with directory separators in the relative class name, append

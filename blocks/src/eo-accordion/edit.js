@@ -61,6 +61,12 @@ export default function Edit( { attributes, setAttributes } ) {
 						checked={ attributes.isOpened }
 						onChange={ ( value ) => setAttributes( { isOpened: value } ) }
 					/>
+					<ToggleControl
+						label={ __( 'Display schema.org markup (FAQPage)', 'eo-blocks' ) }
+						help={ __( 'Adds this question/answer to the page\'s FAQPage structured data (JSON-LD), combined with every other accordion block on the page that has this option enabled.', 'eo-blocks' ) }
+						checked={ attributes.displaySchema }
+						onChange={ ( value ) => setAttributes( { displaySchema: value } ) }
+					/>
 				</PanelBody>
 			</InspectorControls>
 
