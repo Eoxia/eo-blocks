@@ -53,8 +53,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	);
 
 	const { selectBlock, insertBlock, removeBlock, moveBlockToPosition } = useDispatch( blockEditorStore );
+	const dotsRef = useRef( null );
 	const dragIndexRef = useRef( null );
+	const slidesRef = useRef( slides );
 	const [ dragOverIndex, setDragOverIndex ] = useState( null );
+
+	useEffect( () => {
+		slidesRef.current = slides;
+	}, [ slides ] );
 
 	// If the current editor selection is a slide (or something inside a slide),
 	// that slide becomes the active one, just like clicking through a real carousel.
@@ -151,48 +157,99 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	// Reordering slides by dragging their dot. Native HTML5 drag & drop, no
 	// extra dependency: moveBlockToPosition already ships with block-editor.
-	const handleDotDragStart = ( event, index ) => {
-		dragIndexRef.current = index;
-		event.dataTransfer.effectAllowed = 'move';
-		// Firefox requires data to be set for the drag to actually start.
-		event.dataTransfer.setData( 'text/plain', String( index ) );
-	};
-
-	const handleDotDragOver = ( event, index ) => {
-		if ( dragIndexRef.current === null ) {
+	//
+	// This is wired up with real, native addEventListener calls instead of
+	// React's onDragStart/onDragOver/onDrop props on purpose. The block wrapper
+	// (an ancestor of these dots) has its own native "dragstart" listener for
+	// WordPress's block-to-block dragging, which calls preventDefault() -
+	// cancelling the whole drag - whenever the event target isn't the wrapper
+	// itself. That listener is attached outside of React, so it still runs even
+	// if we call stopPropagation() from a React event prop: React only starts
+	// dispatching synthetic events once the native event has already reached
+	// the document root, by which point the wrapper's listener has already
+	// cancelled the drag. Stopping propagation from a listener bound directly
+	// on the dots container happens earlier in the real bubble phase, before
+	// the event can reach that wrapper.
+	useEffect( () => {
+		const container = dotsRef.current;
+		if ( ! container ) {
 			return;
 		}
-		event.preventDefault();
-		event.dataTransfer.dropEffect = 'move';
-		if ( dragOverIndex !== index ) {
+
+		const getDotIndex = ( target ) => {
+			const dotEl = target?.closest?.( '[data-slide-index]' );
+			if ( ! dotEl || ! container.contains( dotEl ) ) {
+				return null;
+			}
+			const index = Number( dotEl.dataset.slideIndex );
+			return Number.isNaN( index ) ? null : index;
+		};
+
+		const onDragStart = ( event ) => {
+			const index = getDotIndex( event.target );
+			if ( index === null ) {
+				return;
+			}
+			event.stopPropagation();
+			dragIndexRef.current = index;
+			event.dataTransfer.effectAllowed = 'move';
+			// Firefox requires data to be set for the drag to actually start.
+			event.dataTransfer.setData( 'text/plain', String( index ) );
+		};
+
+		const onDragOver = ( event ) => {
+			if ( dragIndexRef.current === null ) {
+				return;
+			}
+			const index = getDotIndex( event.target );
+			if ( index === null ) {
+				return;
+			}
+			event.preventDefault();
+			event.stopPropagation();
+			event.dataTransfer.dropEffect = 'move';
 			setDragOverIndex( index );
-		}
-	};
+		};
 
-	const handleDotDrop = ( event, index ) => {
-		event.preventDefault();
-		const fromIndex = dragIndexRef.current;
-		dragIndexRef.current = null;
-		setDragOverIndex( null );
-		if ( fromIndex === null || fromIndex === index ) {
-			return;
-		}
-		const source = slides[ fromIndex ];
-		if ( ! source ) {
-			return;
-		}
-		// moveBlockToPosition expects the target index in the array *after* the
-		// dragged item has been removed from it.
-		const toIndex = index > fromIndex ? index - 1 : index;
-		moveBlockToPosition( source.clientId, clientId, clientId, toIndex );
-		setIsOnAddSlot( false );
-		setActiveSlideId( source.clientId );
-	};
+		const onDrop = ( event ) => {
+			const index = getDotIndex( event.target );
+			const fromIndex = dragIndexRef.current;
+			dragIndexRef.current = null;
+			setDragOverIndex( null );
+			if ( index === null || fromIndex === null || fromIndex === index ) {
+				return;
+			}
+			event.preventDefault();
+			event.stopPropagation();
+			const source = slidesRef.current[ fromIndex ];
+			if ( ! source ) {
+				return;
+			}
+			// moveBlockToPosition expects the target index in the array *after*
+			// the dragged item has been removed from it.
+			const toIndex = index > fromIndex ? index - 1 : index;
+			moveBlockToPosition( source.clientId, clientId, clientId, toIndex );
+			setIsOnAddSlot( false );
+			setActiveSlideId( source.clientId );
+		};
 
-	const handleDotDragEnd = () => {
-		dragIndexRef.current = null;
-		setDragOverIndex( null );
-	};
+		const onDragEnd = () => {
+			dragIndexRef.current = null;
+			setDragOverIndex( null );
+		};
+
+		container.addEventListener( 'dragstart', onDragStart );
+		container.addEventListener( 'dragover', onDragOver );
+		container.addEventListener( 'drop', onDrop );
+		container.addEventListener( 'dragend', onDragEnd );
+
+		return () => {
+			container.removeEventListener( 'dragstart', onDragStart );
+			container.removeEventListener( 'dragover', onDragOver );
+			container.removeEventListener( 'drop', onDrop );
+			container.removeEventListener( 'dragend', onDragEnd );
+		};
+	}, [ clientId, moveBlockToPosition ] );
 
 	return (
 		<>
@@ -406,7 +463,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 				{ slides.length > 0 && (
 					<div className="eo-carousel-editor__toolbar">
-						<div className="eo-carousel-editor__dots">
+						<div className="eo-carousel-editor__dots" ref={ dotsRef }>
 							{ slides.map( ( slide, index ) => (
 								<Tooltip
 									key={ slide.clientId }
@@ -418,16 +475,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									<button
 										type="button"
 										draggable
+										data-slide-index={ index }
 										className={
 											'eo-carousel-editor__dot'
 											+ ( index === activeIndex ? ' is-active' : '' )
 											+ ( index === dragOverIndex ? ' is-dragover' : '' )
 										}
 										onClick={ () => goToSlide( index ) }
-										onDragStart={ ( event ) => handleDotDragStart( event, index ) }
-										onDragOver={ ( event ) => handleDotDragOver( event, index ) }
-										onDrop={ ( event ) => handleDotDrop( event, index ) }
-										onDragEnd={ handleDotDragEnd }
 									>
 										<span className="screen-reader-text">
 											{ /* translators: %d: slide number. */
