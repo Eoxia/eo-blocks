@@ -3,7 +3,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -11,13 +11,15 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InspectorControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { PanelBody, Button, RangeControl, ToggleControl, SelectControl, ColorPicker, Dropdown } from '@wordpress/components';
+import { InspectorControls, useBlockProps, InnerBlocks, store as blockEditorStore } from '@wordpress/block-editor';
+import { PanelBody, Button, RangeControl, ToggleControl, SelectControl, ColorPicker, Dropdown, Tooltip } from '@wordpress/components';
 import { __experimentalNumberControl as NumberControl,
 	__experimentalHStack as HStack,
 	__experimentalText as Text
 } from '@wordpress/components';
-import {Icon, plus} from '@wordpress/icons';
+import { useSelect, useDispatch } from '@wordpress/data';
+import { Fragment, useState, useEffect, useRef, useMemo } from '@wordpress/element';
+import { Icon, plus, chevronLeft, chevronRight, copy, trash } from '@wordpress/icons';
 
 
 /**
@@ -37,22 +39,243 @@ import './scss/editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const innerBlocksCount = wp.data.select('core/block-editor').getBlockOrder(clientId).length;
-	const CustomAppender = () => (
-		<div style={{ textAlign: 'center', margin: '10px 0' }}>
-			<Button
-				variant="secondary"
-				onClick={() => wp.data.dispatch('core/block-editor').insertBlock(
-					wp.blocks.createBlock('eo-blocks/slide'),
-					innerBlocksCount,
-					clientId
-				)}
-			>
-				<Icon icon={plus} />
-				{ __( 'Add a new slide', 'eo-blocks' ) }
-			</Button>
-		</div>
+	const { slides, selectedClientId, selectedParents } = useSelect(
+		( select ) => {
+			const editorSelect = select( blockEditorStore );
+			const selected = editorSelect.getSelectedBlockClientId();
+			return {
+				slides: editorSelect.getBlocks( clientId ),
+				selectedClientId: selected,
+				selectedParents: selected ? editorSelect.getBlockParents( selected, true ) : [],
+			};
+		},
+		[ clientId ]
 	);
+
+	const { selectBlock, insertBlock, removeBlock, moveBlockToPosition } = useDispatch( blockEditorStore );
+	const dotsRef = useRef( null );
+	const dragIndexRef = useRef( null );
+	const slidesRef = useRef( slides );
+	// Index of the gap bar (0..slides.length) currently highlighted as a drop target.
+	const [ dragOverGap, setDragOverGap ] = useState( null );
+
+	useEffect( () => {
+		slidesRef.current = slides;
+	}, [ slides ] );
+
+	// If the current editor selection is a slide (or something inside a slide),
+	// that slide becomes the active one, just like clicking through a real carousel.
+	const selectedSlideId = useMemo( () => {
+		if ( ! selectedClientId ) {
+			return null;
+		}
+		const slideIds = slides.map( ( slide ) => slide.clientId );
+		if ( slideIds.includes( selectedClientId ) ) {
+			return selectedClientId;
+		}
+		return selectedParents.find( ( id ) => slideIds.includes( id ) ) || null;
+	}, [ selectedClientId, selectedParents, slides ] );
+
+	const [ activeSlideId, setActiveSlideId ] = useState( slides[ 0 ]?.clientId ?? null );
+	// Whether the carousel is currently parked on the trailing, virtual "add a
+	// slide" slot rather than on one of the real slides.
+	const [ isOnAddSlot, setIsOnAddSlot ] = useState( false );
+	const lastIndexRef = useRef( 0 );
+
+	useEffect( () => {
+		if ( selectedSlideId ) {
+			setActiveSlideId( selectedSlideId );
+			setIsOnAddSlot( false );
+		}
+	}, [ selectedSlideId ] );
+
+	const activeIndex = useMemo( () => {
+		if ( isOnAddSlot && slides.length > 0 ) {
+			return slides.length;
+		}
+		const ids = slides.map( ( slide ) => slide.clientId );
+		let index = activeSlideId ? ids.indexOf( activeSlideId ) : -1;
+		if ( index === -1 ) {
+			index = Math.max( Math.min( lastIndexRef.current, ids.length - 1 ), 0 );
+		}
+		lastIndexRef.current = index;
+		return index;
+	}, [ slides, activeSlideId, isOnAddSlot ] );
+
+	// Undefined when activeIndex points at the trailing virtual "add a slide" slot.
+	const activeSlide = slides[ activeIndex ];
+
+	const goToSlide = ( index ) => {
+		if ( slides.length > 0 && index === slides.length ) {
+			setIsOnAddSlot( true );
+			return;
+		}
+		const target = slides[ index ];
+		if ( ! target ) {
+			return;
+		}
+		setIsOnAddSlot( false );
+		setActiveSlideId( target.clientId );
+		selectBlock( target.clientId );
+	};
+
+	// The navigable range includes one extra, virtual slot at the end for "add a slide".
+	const totalSlots = slides.length > 0 ? slides.length + 1 : 0;
+	const goPrev = () => totalSlots && goToSlide( ( activeIndex - 1 + totalSlots ) % totalSlots );
+	const goNext = () => totalSlots && goToSlide( ( activeIndex + 1 ) % totalSlots );
+
+	const addSlide = ( afterIndex ) => {
+		const newBlock = wp.blocks.createBlock( 'eo-blocks/slide' );
+		insertBlock( newBlock, afterIndex + 1, clientId );
+		setIsOnAddSlot( false );
+		setActiveSlideId( newBlock.clientId );
+		selectBlock( newBlock.clientId );
+	};
+
+	const duplicateSlide = ( index ) => {
+		const source = slides[ index ];
+		if ( ! source ) {
+			return;
+		}
+		const cloned = wp.blocks.cloneBlock( source );
+		insertBlock( cloned, index + 1, clientId );
+		setIsOnAddSlot( false );
+		setActiveSlideId( cloned.clientId );
+		selectBlock( cloned.clientId );
+	};
+
+	const deleteSlide = ( index ) => {
+		const target = slides[ index ];
+		if ( ! target || slides.length <= 1 ) {
+			return;
+		}
+		const fallback = slides[ index - 1 ] || slides[ index + 1 ];
+		removeBlock( target.clientId, false );
+		if ( fallback ) {
+			setActiveSlideId( fallback.clientId );
+		}
+	};
+
+	// Reordering slides by dragging their dot. Native HTML5 drag & drop, no
+	// extra dependency: moveBlockToPosition already ships with block-editor.
+	//
+	// This is wired up with real, native addEventListener calls instead of
+	// React's onDragStart/onDragOver/onDrop props on purpose. The block wrapper
+	// (an ancestor of these dots) has its own native "dragstart" listener for
+	// WordPress's block-to-block dragging, which calls preventDefault() -
+	// cancelling the whole drag - whenever the event target isn't the wrapper
+	// itself. That listener is attached outside of React, so it still runs even
+	// if we call stopPropagation() from a React event prop: React only starts
+	// dispatching synthetic events once the native event has already reached
+	// the document root, by which point the wrapper's listener has already
+	// cancelled the drag. Stopping propagation from a listener bound directly
+	// on the dots container happens earlier in the real bubble phase, before
+	// the event can reach that wrapper.
+	useEffect( () => {
+		const container = dotsRef.current;
+		if ( ! container ) {
+			return;
+		}
+
+		// The drag source is always a dot ([data-slide-index]).
+		const getSlideIndex = ( target ) => {
+			const dotEl = target?.closest?.( '[data-slide-index]' );
+			if ( ! dotEl || ! container.contains( dotEl ) ) {
+				return null;
+			}
+			const index = Number( dotEl.dataset.slideIndex );
+			return Number.isNaN( index ) ? null : index;
+		};
+
+		// The drop target is a gap bar ([data-drop-index], 0..slides.length: "insert
+		// here"). Hovering a dot instead of a bar still resolves to whichever gap
+		// is nearest the pointer, so the thin bars stay easy to hit.
+		const getGapIndex = ( target, clientX ) => {
+			const gapEl = target?.closest?.( '[data-drop-index]' );
+			if ( gapEl && container.contains( gapEl ) ) {
+				const index = Number( gapEl.dataset.dropIndex );
+				return Number.isNaN( index ) ? null : index;
+			}
+			const dotEl = target?.closest?.( '[data-slide-index]' );
+			if ( dotEl && container.contains( dotEl ) ) {
+				const index = Number( dotEl.dataset.slideIndex );
+				if ( Number.isNaN( index ) ) {
+					return null;
+				}
+				const rect = dotEl.getBoundingClientRect();
+				return clientX < rect.left + rect.width / 2 ? index : index + 1;
+			}
+			return null;
+		};
+
+		const onDragStart = ( event ) => {
+			const index = getSlideIndex( event.target );
+			if ( index === null ) {
+				return;
+			}
+			event.stopPropagation();
+			dragIndexRef.current = index;
+			event.dataTransfer.effectAllowed = 'move';
+			// Firefox requires data to be set for the drag to actually start.
+			event.dataTransfer.setData( 'text/plain', String( index ) );
+		};
+
+		const onDragOver = ( event ) => {
+			if ( dragIndexRef.current === null ) {
+				return;
+			}
+			const gapIndex = getGapIndex( event.target, event.clientX );
+			if ( gapIndex === null ) {
+				return;
+			}
+			event.preventDefault();
+			event.stopPropagation();
+			event.dataTransfer.dropEffect = 'move';
+			setDragOverGap( gapIndex );
+		};
+
+		const onDrop = ( event ) => {
+			const gapIndex = getGapIndex( event.target, event.clientX );
+			const fromIndex = dragIndexRef.current;
+			dragIndexRef.current = null;
+			setDragOverGap( null );
+			if ( gapIndex === null || fromIndex === null ) {
+				return;
+			}
+			event.preventDefault();
+			event.stopPropagation();
+			// moveBlockToPosition expects the target index in the array *after*
+			// the dragged item has been removed from it.
+			const toIndex = gapIndex > fromIndex ? gapIndex - 1 : gapIndex;
+			if ( toIndex === fromIndex ) {
+				return;
+			}
+			const source = slidesRef.current[ fromIndex ];
+			if ( ! source ) {
+				return;
+			}
+			moveBlockToPosition( source.clientId, clientId, clientId, toIndex );
+			setIsOnAddSlot( false );
+			setActiveSlideId( source.clientId );
+		};
+
+		const onDragEnd = () => {
+			dragIndexRef.current = null;
+			setDragOverGap( null );
+		};
+
+		container.addEventListener( 'dragstart', onDragStart );
+		container.addEventListener( 'dragover', onDragOver );
+		container.addEventListener( 'drop', onDrop );
+		container.addEventListener( 'dragend', onDragEnd );
+
+		return () => {
+			container.removeEventListener( 'dragstart', onDragStart );
+			container.removeEventListener( 'dragover', onDragOver );
+			container.removeEventListener( 'drop', onDrop );
+			container.removeEventListener( 'dragend', onDragEnd );
+		};
+	}, [ clientId, moveBlockToPosition ] );
 
 	return (
 		<>
@@ -203,13 +426,136 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div {...useBlockProps()}>
-				<div className="eo-carousel__inner">
-					<InnerBlocks
-						template={[]}
-						renderAppender={() => <CustomAppender/>}
-					/>
+			<div {...useBlockProps({ className: 'eo-carousel-editor' })}>
+				{ slides.length > 0 && (
+					<style>
+						{ /*
+						 * Only elements carrying data-type="eo-blocks/slide" are targeted, never a
+						 * depth-based selector, so blocks inserted *inside* the active slide (which
+						 * carry their own, different data-type) are never accidentally hidden. When
+						 * activeSlide is undefined (the virtual "add a slide" slot is active), every
+						 * real slide is hidden and the placeholder card below takes their place.
+						 */ `
+						[data-block="${ clientId }"] .eo-carousel-editor__track [data-type="eo-blocks/slide"]${ activeSlide ? `:not([data-block="${ activeSlide.clientId }"])` : '' } { display: none; }
+						` }
+					</style>
+				) }
+
+				<div className="eo-carousel-editor__viewport" style={{ '--eo-carousel-editor-color': attributes.mainColor }}>
+					<div className="eo-carousel-editor__track">
+						<InnerBlocks
+							allowedBlocks={['eo-blocks/slide']}
+							renderAppender={false}
+						/>
+					</div>
+
+					{ slides.length === 0 && (
+						<div className="eo-carousel-editor__empty">
+							<p>{ __( 'This carousel is empty.', 'eo-blocks' ) }</p>
+							<Button variant="primary" onClick={ () => addSlide( -1 ) }>
+								<Icon icon={ plus } />
+								{ __( 'Add a new slide', 'eo-blocks' ) }
+							</Button>
+						</div>
+					) }
+
+					{ isOnAddSlot && (
+						<div className="eo-carousel-editor__empty eo-carousel-editor__empty--add-slide">
+							<p>{ __( 'Add another slide to your carousel.', 'eo-blocks' ) }</p>
+							<Button variant="primary" onClick={ () => addSlide( slides.length - 1 ) }>
+								<Icon icon={ plus } />
+								{ __( 'Add a new slide', 'eo-blocks' ) }
+							</Button>
+						</div>
+					) }
+
+					{ slides.length > 0 && (
+						<>
+							<Button
+								className="eo-carousel-editor__nav eo-carousel-editor__nav--prev"
+								icon={ chevronLeft }
+								label={ __( 'Previous slide', 'eo-blocks' ) }
+								onClick={ goPrev }
+							/>
+							<Button
+								className="eo-carousel-editor__nav eo-carousel-editor__nav--next"
+								icon={ chevronRight }
+								label={ __( 'Next slide', 'eo-blocks' ) }
+								onClick={ goNext }
+							/>
+						</>
+					) }
 				</div>
+
+				{ slides.length > 0 && (
+					<div className="eo-carousel-editor__toolbar">
+						<div className="eo-carousel-editor__dots" ref={ dotsRef }>
+							{ slides.map( ( slide, index ) => (
+								<Fragment key={ slide.clientId }>
+									<span
+										className={ 'eo-carousel-editor__dot-gap' + ( index === dragOverGap ? ' is-dragover' : '' ) }
+										data-drop-index={ index }
+									/>
+									<Tooltip
+										text={
+											/* translators: %d: slide number. */
+											sprintf( __( 'Slide %d', 'eo-blocks' ), index + 1 )
+										}
+									>
+										<button
+											type="button"
+											draggable
+											data-slide-index={ index }
+											className={ 'eo-carousel-editor__dot' + ( index === activeIndex ? ' is-active' : '' ) }
+											onClick={ () => goToSlide( index ) }
+										>
+											<span className="screen-reader-text">
+												{ /* translators: %d: slide number. */
+												sprintf( __( 'Go to slide %d', 'eo-blocks' ), index + 1 ) }
+											</span>
+										</button>
+									</Tooltip>
+								</Fragment>
+							) ) }
+							<span
+								className={ 'eo-carousel-editor__dot-gap' + ( slides.length === dragOverGap ? ' is-dragover' : '' ) }
+								data-drop-index={ slides.length }
+							/>
+							<Tooltip text={ __( 'Add a new slide', 'eo-blocks' ) }>
+								<button
+									type="button"
+									className="eo-carousel-editor__dot eo-carousel-editor__dot--add"
+									onClick={ () => addSlide( slides.length - 1 ) }
+								>
+									<Icon icon={ plus } size={ 14 } />
+									<span className="screen-reader-text">{ __( 'Add a new slide', 'eo-blocks' ) }</span>
+								</button>
+							</Tooltip>
+						</div>
+
+						<div className="eo-carousel-editor__actions">
+							<span className="eo-carousel-editor__counter">
+								{ isOnAddSlot
+									? __( 'New slide', 'eo-blocks' )
+									: /* translators: 1: current slide number, 2: total number of slides. */
+									  sprintf( __( 'Slide %1$d / %2$d', 'eo-blocks' ), activeIndex + 1, slides.length ) }
+							</span>
+							<Button
+								icon={ copy }
+								label={ __( 'Duplicate slide', 'eo-blocks' ) }
+								onClick={ () => duplicateSlide( activeIndex ) }
+								disabled={ isOnAddSlot }
+							/>
+							<Button
+								icon={ trash }
+								label={ __( 'Delete slide', 'eo-blocks' ) }
+								onClick={ () => deleteSlide( activeIndex ) }
+								disabled={ isOnAddSlot || slides.length <= 1 }
+								isDestructive
+							/>
+						</div>
+					</div>
+				) }
 			</div>
 		</>
 	);
