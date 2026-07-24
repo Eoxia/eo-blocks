@@ -38,6 +38,9 @@ const excludedBlocks = [
 	'core/pattern',
 	'core/more',
 	'core/nextpage',
+	// Carousel slides: only the parent carousel takes the animation option,
+	// not each individual slide (Swiper manages their visibility itself).
+	'eo-blocks/slide',
 ];
 
 export const ANIMATIONS = [

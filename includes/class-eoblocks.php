@@ -207,7 +207,12 @@ class Eoblocks {
             return $block_content;
         }
 
-        if ( ! preg_match( '/^\s*<[a-zA-Z]/', $block_content ) ) {
+        // Some dynamic blocks (e.g. the carousel) emit one or more leading
+        // <style> blocks before their wrapper element. Skip those so the data
+        // attributes land on the actual wrapper and not on a <style> tag.
+        $target_pattern = '/^(\s*(?:<style\b[^>]*>.*?<\/style>\s*)*<[a-zA-Z][a-zA-Z0-9-]*)/s';
+
+        if ( ! preg_match( $target_pattern, $block_content ) ) {
             return $block_content;
         }
 
@@ -220,7 +225,7 @@ class Eoblocks {
         }
 
         return preg_replace(
-            '/^(\s*<[a-zA-Z][a-zA-Z0-9-]*)/',
+            $target_pattern,
             '$1' . $data_attrs,
             $block_content,
             1
