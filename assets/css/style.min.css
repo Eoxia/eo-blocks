@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
  * Plugin Name:       EO Blocks
  * Description:       A collection of Gutenberg blocks for WordPress made by Eoxia
@@ -703,4 +704,27 @@
 .eo-anim-card__shape[data-eo-anim-preview=flip] {
   -webkit-animation-name: eo-anim-in-flip;
   animation-name: eo-anim-in-flip;
+}
+
+/**
+ * Editor-only styles for the "Affichage selon la largeur d'écran" control
+ * rendered in the Advanced tab of every block.
+ */
+.eo-breakpoint-control__fields {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.eo-breakpoint-control__fields > * {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 0px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.eo-breakpoint-control__error {
+  margin: 8px 0 0;
 }

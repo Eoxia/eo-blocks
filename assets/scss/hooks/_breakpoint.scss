@@ -1,0 +1,20 @@
+/**
+ * Editor-only styles for the "Affichage selon la largeur d'écran" control
+ * rendered in the Advanced tab of every block.
+ */
+.eo-breakpoint-control {
+  &__fields {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+
+    > * {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  &__error {
+    margin: 8px 0 0;
+  }
+}
