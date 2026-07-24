@@ -41,6 +41,7 @@ class Eoblocks {
 		add_filter( 'block_categories_all', array( $this, 'create_block_category' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'group_link_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'animations_frontend' ), 10, 2 );
+        add_filter( 'render_block', array( $this, 'breakpoint_display_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_custom_block_hooks' ) );
 		add_shortcode( 'eo_map', array( $this, 'render_map_shortcode' ) );
@@ -230,6 +231,69 @@ class Eoblocks {
             $block_content,
             1
         );
+    }
+
+    /**
+     * Hides a block outside a viewport-width range (min-width / max-width, in
+     * px) set through the "Affichage selon la largeur d'écran" control. Reads
+     * the eoBreakpoint attribute directly from the parsed block comment, so it
+     * works for any block (EO Blocks, core or third-party) without PHP-side
+     * attribute registration.
+     *
+     * A unique data-eo-bp attribute is injected on the block's root element and
+     * a scoped <style> with the matching media queries is prepended.
+     */
+    public function breakpoint_display_frontend( $block_content, $block ) {
+        $attrs      = isset( $block['attrs'] ) ? $block['attrs'] : array();
+        $breakpoint = isset( $attrs['eoBreakpoint'] ) ? $attrs['eoBreakpoint'] : array();
+
+        if ( empty( $breakpoint['enabled'] ) ) {
+            return $block_content;
+        }
+
+        // Bounds are optional (a single side of the range may be set).
+        $min = ( isset( $breakpoint['min'] ) && $breakpoint['min'] !== '' ) ? floatval( $breakpoint['min'] ) : '';
+        $max = ( isset( $breakpoint['max'] ) && $breakpoint['max'] !== '' ) ? floatval( $breakpoint['max'] ) : '';
+
+        if ( $min === '' && $max === '' ) {
+            return $block_content;
+        }
+
+        // Invalid range (max below min): don't break the rendering, just skip.
+        if ( $min !== '' && $max !== '' && $max < $min ) {
+            return $block_content;
+        }
+
+        // Same wrapper-targeting pattern as animations_frontend: skip any
+        // leading <style> blocks (e.g. the carousel) so the attribute lands on
+        // the real wrapper element.
+        $target_pattern = '/^(\s*(?:<style\b[^>]*>.*?<\/style>\s*)*<[a-zA-Z][a-zA-Z0-9-]*)/s';
+
+        if ( ! preg_match( $target_pattern, $block_content ) ) {
+            return $block_content;
+        }
+
+        $id       = 'eo-bp-' . substr( md5( $block_content . wp_json_encode( $breakpoint ) ), 0, 8 );
+        $selector = '[data-eo-bp="' . $id . '"]';
+
+        // 0.02px offset (Bootstrap convention) avoids overlap at the exact
+        // boundary; bounds are inclusive: visible for min <= width <= max.
+        $rules = '';
+        if ( $min !== '' ) {
+            $rules .= '@media (max-width:' . ( $min - 0.02 ) . 'px){' . $selector . '{display:none !important}}';
+        }
+        if ( $max !== '' ) {
+            $rules .= '@media (min-width:' . ( $max + 0.02 ) . 'px){' . $selector . '{display:none !important}}';
+        }
+
+        $block_content = preg_replace(
+            $target_pattern,
+            '$1 data-eo-bp="' . esc_attr( $id ) . '"',
+            $block_content,
+            1
+        );
+
+        return '<style>' . $rules . '</style>' . $block_content;
     }
 
 	/**
