@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			effect: 'default',
 			spaceBetween: 0,
 			slidesPerView: 1,
+			centerInsufficientSlides: true,
+			autoHeight: true,
 			pagination: {
 				el: '.swiper-pagination',
 				dynamicBullets: true,
