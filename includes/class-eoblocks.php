@@ -83,6 +83,11 @@ class Eoblocks {
 	public function register_global_assets() {
 		wp_register_style( 'leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
 		wp_register_script( 'leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
+
+		// MapLibre GL (vector tiles) + Leaflet binding, used by the "OpenFreeMap" (multilingual) basemap.
+		wp_register_style( 'maplibre-gl-css', 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css', array(), '4.7.1' );
+		wp_register_script( 'maplibre-gl-js', 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js', array(), '4.7.1', true );
+		wp_register_script( 'maplibre-gl-leaflet-js', 'https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.20/leaflet-maplibre-gl.js', array( 'leaflet-js', 'maplibre-gl-js' ), '0.0.20', true );
 	}
 
 	/**
@@ -257,7 +262,9 @@ class Eoblocks {
 		wp_enqueue_style( 'leaflet-css' );
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_script( 'leaflet-js' );
-		wp_enqueue_script( 'eo-map-view-script', EO_BLOCKS_URL . 'blocks/build/eo-map/view.js', array( 'jquery', 'leaflet-js' ), '1.0.0', true );
+		wp_enqueue_style( 'maplibre-gl-css' );
+		wp_enqueue_script( 'maplibre-gl-leaflet-js' );
+		wp_enqueue_script( 'eo-map-view-script', EO_BLOCKS_URL . 'blocks/build/eo-map/view.js', array( 'jquery', 'leaflet-js', 'maplibre-gl-leaflet-js' ), '1.0.0', true );
 		wp_enqueue_style( 'eo-map-style', EO_BLOCKS_URL . 'blocks/build/eo-map/style-index.css', array( 'leaflet-css' ), '1.0.0' );
 
 		ob_start();
