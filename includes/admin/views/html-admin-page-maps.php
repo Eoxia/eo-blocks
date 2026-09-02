@@ -39,6 +39,8 @@ if ( 'edit' === $action ) {
 				'centerLat' => 43.6107,
 				'centerLng' => 3.8767,
 				'tileStyle' => 'osm',
+				'mapLanguage' => 'local',
+				'mapDesign' => 'positron',
 			),
 			'markers'  => array(),
 		);
@@ -161,7 +163,33 @@ wp_reset_postdata();
 							<option value="carto-light" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'carto-light' ); ?>><?php esc_html_e( 'CartoDB Positron (Clair)', 'eo-blocks' ); ?></option>
 							<option value="carto-dark" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'carto-dark' ); ?>><?php esc_html_e( 'CartoDB Dark Matter (Sombre)', 'eo-blocks' ); ?></option>
 							<option value="opentopo" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'opentopo' ); ?>><?php esc_html_e( 'OpenTopoMap (Relief)', 'eo-blocks' ); ?></option>
+							<option value="openfreemap" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'openfreemap' ); ?>><?php esc_html_e( 'OpenFreeMap (multilingue)', 'eo-blocks' ); ?></option>
 						</select>
+					</div>
+
+					<div class="eo-map-form-group" id="eo-map-design-group" style="margin-bottom: 15px; display: none;">
+						<label for="eo-map-design" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Design de la carte', 'eo-blocks' ); ?></label>
+						<select id="eo-map-design" style="width: 100%;">
+							<option value="positron" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'positron' ); ?>><?php esc_html_e( 'Positron (Clair, épuré)', 'eo-blocks' ); ?></option>
+							<option value="liberty" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'liberty' ); ?>><?php esc_html_e( 'Liberty (Détaillé, coloré)', 'eo-blocks' ); ?></option>
+							<option value="bright" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'bright' ); ?>><?php esc_html_e( 'Bright (Vif, contrasté)', 'eo-blocks' ); ?></option>
+							<option value="dark" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'dark' ); ?>><?php esc_html_e( 'Dark (Sombre, épuré)', 'eo-blocks' ); ?></option>
+						</select>
+						<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666;">
+							<?php esc_html_e( 'Uniquement disponible avec le fond de carte OpenFreeMap.', 'eo-blocks' ); ?>
+						</p>
+					</div>
+
+					<div class="eo-map-form-group" id="eo-map-language-group" style="margin-bottom: 15px; display: none;">
+						<label for="eo-map-language" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Langue des noms de lieux', 'eo-blocks' ); ?></label>
+						<select id="eo-map-language" style="width: 100%;">
+							<option value="local" <?php selected( $map_to_edit['settings']['mapLanguage'] ?? 'local', 'local' ); ?>><?php esc_html_e( 'Langue d\'origine (par pays)', 'eo-blocks' ); ?></option>
+							<option value="fr" <?php selected( $map_to_edit['settings']['mapLanguage'] ?? 'local', 'fr' ); ?>><?php esc_html_e( 'Tout en français', 'eo-blocks' ); ?></option>
+							<option value="en" <?php selected( $map_to_edit['settings']['mapLanguage'] ?? 'local', 'en' ); ?>><?php esc_html_e( 'Tout en anglais', 'eo-blocks' ); ?></option>
+						</select>
+						<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666;">
+							<?php esc_html_e( 'Uniquement disponible avec le fond de carte OpenFreeMap.', 'eo-blocks' ); ?>
+						</p>
 					</div>
 
 					<div style="background: #f8f9fa; border: 1px solid #ccd0d4; padding: 12px; border-radius: 4px;">

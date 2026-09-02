@@ -50,6 +50,8 @@ function eo_maps_ajax_save_map() {
 		'centerLat' => floatval( $settings['centerLat'] ?? 0.0 ),
 		'centerLng' => floatval( $settings['centerLng'] ?? 0.0 ),
 		'tileStyle' => sanitize_text_field( $settings['tileStyle'] ?? 'osm' ),
+		'mapLanguage' => sanitize_text_field( $settings['mapLanguage'] ?? 'local' ),
+		'mapDesign' => sanitize_text_field( $settings['mapDesign'] ?? 'positron' ),
 	);
 
 	// Sanitize and save markers

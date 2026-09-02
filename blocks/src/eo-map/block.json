@@ -24,7 +24,7 @@
 	"textdomain": "eo-blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": [ "file:./style-index.css", "leaflet-css", "dashicons" ],
+	"style": [ "file:./style-index.css", "leaflet-css", "maplibre-gl-css", "dashicons" ],
 	"render": "file:./render.php",
-	"viewScript": [ "file:./view.js", "leaflet-js" ]
+	"viewScript": [ "file:./view.js", "leaflet-js", "maplibre-gl-leaflet-js" ]
 }

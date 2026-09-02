@@ -183,7 +183,9 @@ jQuery(document).ready(function($) {
             zoom: parseInt($('#eo-map-zoom').val()) || 12,
             centerLat: parseFloat($('#eo-map-center-lat').val()) || 43.6107,
             centerLng: parseFloat($('#eo-map-center-lng').val()) || 3.8767,
-            tileStyle: $('#eo-map-style').val() || 'osm'
+            tileStyle: $('#eo-map-style').val() || 'osm',
+            mapLanguage: $('#eo-map-language').val() || 'local',
+            mapDesign: $('#eo-map-design').val() || 'positron'
         };
 
         setSaveButtonState('saving');
@@ -311,10 +313,61 @@ jQuery(document).ready(function($) {
         'opentopo': 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
     };
 
-    function setTileLayer(styleKey) {
+    // Rewrites the "text-field" of every MapLibre style layer that shows a place/country
+    // name so it displays in the requested language, falling back to the local (original)
+    // name when no translation exists. Does nothing for lang === 'local'.
+    function applyMapLanguage(maplibreMap, lang) {
+        if (!lang || lang === 'local') {
+            return;
+        }
+
+        var setLabelLanguage = function() {
+            var style = maplibreMap.getStyle();
+            if (!style || !Array.isArray(style.layers)) {
+                return;
+            }
+            style.layers.forEach(function(layer) {
+                var textField = layer.layout && layer.layout['text-field'];
+                if (!textField) {
+                    return;
+                }
+                maplibreMap.setLayoutProperty(layer.id, 'text-field', [
+                    'coalesce',
+                    ['get', 'name:' + lang],
+                    ['get', 'name']
+                ]);
+            });
+        };
+
+        if (maplibreMap.isStyleLoaded()) {
+            setLabelLanguage();
+        } else {
+            maplibreMap.once('load', setLabelLanguage);
+        }
+    }
+
+    // OpenFreeMap design variants (all open-source, no API key, all support language switching).
+    var openFreeMapDesigns = ['positron', 'liberty', 'bright', 'dark'];
+
+    function setTileLayer(styleKey, lang, design) {
         if (currentTileLayer) {
             leafletMap.removeLayer(currentTileLayer);
+            currentTileLayer = null;
         }
+
+        if (styleKey === 'openfreemap') {
+            if (typeof L.maplibreGL !== 'function') {
+                return;
+            }
+            var designKey = openFreeMapDesigns.indexOf(design) !== -1 ? design : 'positron';
+            currentTileLayer = L.maplibreGL({
+                style: 'https://tiles.openfreemap.org/styles/' + designKey,
+                attribution: '© OpenStreetMap contributors © OpenFreeMap'
+            }).addTo(leafletMap);
+            applyMapLanguage(currentTileLayer.getMaplibreMap(), lang);
+            return;
+        }
+
         var url = tileProviders[styleKey] || tileProviders['osm'];
         var attrib = '© OpenStreetMap contributors';
         if (styleKey.indexOf('carto') !== -1) {
@@ -328,14 +381,41 @@ jQuery(document).ready(function($) {
         }).addTo(leafletMap);
     }
 
-    setTileLayer(mapSettings.tileStyle || 'osm');
+    // Shows the design & language selectors only when the OpenFreeMap basemap is selected.
+    function toggleOpenFreeMapFields(styleKey) {
+        var isOpenFreeMap = styleKey === 'openfreemap';
+        $('#eo-map-design-group').toggle(isOpenFreeMap);
+        $('#eo-map-language-group').toggle(isOpenFreeMap);
+    }
+
+    function currentOpenFreeMapSettings() {
+        return {
+            lang: $('#eo-map-language').val(),
+            design: $('#eo-map-design').val()
+        };
+    }
+
+    setTileLayer(mapSettings.tileStyle || 'osm', mapSettings.mapLanguage || 'local', mapSettings.mapDesign || 'positron');
+    toggleOpenFreeMapFields(mapSettings.tileStyle || 'osm');
+    $('#eo-map-language').val(mapSettings.mapLanguage || 'local');
+    $('#eo-map-design').val(mapSettings.mapDesign || 'positron');
 
     // Flag to avoid triggering unsaved changes on initial map load
     var isMapInitialized = false;
 
     // Handle map style dropdown change
     $('#eo-map-style').on('change', function() {
-        setTileLayer($(this).val());
+        var styleKey = $(this).val();
+        toggleOpenFreeMapFields(styleKey);
+        var ofm = currentOpenFreeMapSettings();
+        setTileLayer(styleKey, ofm.lang, ofm.design);
+        markChangesAsUnsaved();
+    });
+
+    // Handle map design/language dropdown change (OpenFreeMap only)
+    $('#eo-map-design, #eo-map-language').on('change', function() {
+        var ofm = currentOpenFreeMapSettings();
+        setTileLayer($('#eo-map-style').val(), ofm.lang, ofm.design);
         markChangesAsUnsaved();
     });
 

@@ -1,4 +1,70 @@
 (function($) {
+
+	/**
+	 * applyMapLanguage
+	 *
+	 * Rewrites the "text-field" of every MapLibre style layer that shows a
+	 * place/country name so it displays in the requested language. Falls back
+	 * to the local (original) name whenever no translation exists for that
+	 * language, and does nothing for lang === 'local' (keeps the style as-is,
+	 * i.e. each place in its own original language).
+	 */
+	function applyMapLanguage( maplibreMap, lang ) {
+		if ( ! lang || lang === 'local' ) {
+			return;
+		}
+
+		var setLabelLanguage = function() {
+			var style = maplibreMap.getStyle();
+			if ( ! style || ! Array.isArray( style.layers ) ) {
+				return;
+			}
+
+			style.layers.forEach( function( layer ) {
+				var textField = layer.layout && layer.layout['text-field'];
+				if ( ! textField ) {
+					return;
+				}
+
+				maplibreMap.setLayoutProperty( layer.id, 'text-field', [
+					'coalesce',
+					[ 'get', 'name:' + lang ],
+					[ 'get', 'name' ]
+				] );
+			} );
+		};
+
+		if ( maplibreMap.isStyleLoaded() ) {
+			setLabelLanguage();
+		} else {
+			maplibreMap.once( 'load', setLabelLanguage );
+		}
+	}
+
+	/**
+	 * addOpenFreeMapLayer
+	 *
+	 * Adds the OpenFreeMap vector basemap (open-source, no API key) to a
+	 * Leaflet map via the MapLibre GL binding, using the requested design
+	 * variant, and applies the requested label language.
+	 */
+	var OPENFREEMAP_DESIGNS = [ 'positron', 'liberty', 'bright', 'dark' ];
+
+	function addOpenFreeMapLayer( map, lang, design ) {
+		if ( typeof L.maplibreGL !== 'function' ) {
+			return;
+		}
+
+		var designKey = OPENFREEMAP_DESIGNS.indexOf( design ) !== -1 ? design : 'positron';
+
+		var glLayer = L.maplibreGL( {
+			style: 'https://tiles.openfreemap.org/styles/' + designKey,
+			attribution: '© OpenStreetMap contributors © OpenFreeMap'
+		} ).addTo( map );
+
+		applyMapLanguage( glLayer.getMaplibreMap(), lang );
+	}
+
 	/**
 	 * initializeBlockMap
 	 *
@@ -34,19 +100,26 @@
 		};
 
 		var styleKey = settings.tileStyle || 'osm';
-		var tileUrl = tileProviders[styleKey] || tileProviders['osm'];
-		
-		var attrib = '© OpenStreetMap contributors';
-		if (styleKey.indexOf('carto') !== -1) {
-			attrib = '© OpenStreetMap contributors, © CartoDB';
-		} else if (styleKey === 'opentopo') {
-			attrib = '© OpenTopoMap contributors';
-		}
 
-		L.tileLayer(tileUrl, {
-			maxZoom: 19,
-			attribution: attrib
-		}).addTo(map);
+		if ( styleKey === 'openfreemap' ) {
+			// Vector basemap (MapLibre GL) that supports switching the language of place/country labels
+			// and choosing a design variant (positron, liberty, bright, dark).
+			addOpenFreeMapLayer( map, settings.mapLanguage, settings.mapDesign );
+		} else {
+			var tileUrl = tileProviders[styleKey] || tileProviders['osm'];
+
+			var attrib = '© OpenStreetMap contributors';
+			if (styleKey.indexOf('carto') !== -1) {
+				attrib = '© OpenStreetMap contributors, © CartoDB';
+			} else if (styleKey === 'opentopo') {
+				attrib = '© OpenTopoMap contributors';
+			}
+
+			L.tileLayer(tileUrl, {
+				maxZoom: 19,
+				attribution: attrib
+			}).addTo(map);
+		}
 
 		// Create custom marker icon according to its type, color and animation
 		function createMarkerIcon(markerData) {
