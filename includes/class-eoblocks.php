@@ -43,6 +43,7 @@ class Eoblocks {
         add_filter( 'render_block', array( $this, 'animations_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'breakpoint_display_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'responsive_columns_frontend' ), 10, 2 );
+        add_filter( 'render_block', array( $this, 'mobile_breakpoint_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_custom_block_hooks' ) );
 		add_shortcode( 'eo_map', array( $this, 'render_map_shortcode' ) );
@@ -403,6 +404,86 @@ class Eoblocks {
 
         return $selector . '{gap:' . $gap . ' !important}'
             . $selector . '>.wp-block-column{flex-basis:' . $basis . ' !important;flex-grow:0 !important}';
+    }
+
+    /**
+     * Changes the width at which a core/navigation block switches between its
+     * horizontal (desktop) and overlay/hamburger (mobile) layouts, set
+     * through the "Mobile Breakpoints" control. Only applies when the
+     * block's own "Overlay" setting is "Mobile": "Off" never renders a
+     * responsive/overlay layout, and "Always" is already an overlay at every
+     * width regardless of viewport, so neither has anything to switch.
+     *
+     * WordPress core hardcodes that switch at 600px (see two
+     * "@media (min-width: 600px)" rules in
+     * wp-includes/blocks/navigation/style.css): one shows the responsive
+     * container as a normal, non-overlay menu, the other hides the
+     * open/hamburger button. Reads the eoMobileBreakpoint attribute directly
+     * from the parsed block comment, so no PHP-side attribute registration is
+     * needed.
+     *
+     * A unique data-eo-mnb attribute is injected on the block's <nav>
+     * wrapper and a scoped <style> is prepended that redoes both rules at the
+     * custom width. When that width is above 600px, an extra rule forces the
+     * mobile layout back on between 600px and the custom width, a range core
+     * itself would otherwise have already switched to desktop.
+     */
+    public function mobile_breakpoint_frontend( $block_content, $block ) {
+        if ( ! isset( $block['blockName'] ) || 'core/navigation' !== $block['blockName'] ) {
+            return $block_content;
+        }
+
+        $attrs = isset( $block['attrs'] ) ? $block['attrs'] : array();
+
+        $overlay_menu = isset( $attrs['overlayMenu'] ) ? $attrs['overlayMenu'] : 'mobile';
+        if ( 'mobile' !== $overlay_menu ) {
+            return $block_content;
+        }
+
+        $breakpoint = isset( $attrs['eoMobileBreakpoint'] ) ? $attrs['eoMobileBreakpoint'] : array();
+        if ( empty( $breakpoint['enabled'] ) || empty( $breakpoint['value'] ) ) {
+            return $block_content;
+        }
+
+        $bp = floatval( $breakpoint['value'] );
+        if ( $bp <= 0 ) {
+            return $block_content;
+        }
+
+        $target_pattern = '/^(\s*(?:<style\b[^>]*>.*?<\/style>\s*)*<[a-zA-Z][a-zA-Z0-9-]*)/s';
+
+        if ( ! preg_match( $target_pattern, $block_content ) ) {
+            return $block_content;
+        }
+
+        $id       = 'eo-mnb-' . substr( md5( $block_content . wp_json_encode( $breakpoint ) ), 0, 8 );
+        $selector = '[data-eo-mnb="' . $id . '"]';
+
+        // Redo core's two 600px rules at the custom breakpoint instead.
+        $rules = '@media (min-width:' . $bp . 'px){'
+            . $selector . ' .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open){display:block !important;width:100% !important;position:relative !important;z-index:auto !important;background-color:inherit !important}'
+            . $selector . ' .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) .wp-block-navigation__responsive-container-close{display:none !important}'
+            . $selector . ' .wp-block-navigation__responsive-container-open:not(.always-shown){display:none !important}'
+            . '}';
+
+        // Core's native 600px rule already applies on its own between 600px
+        // and the custom breakpoint when the latter is higher, so force the
+        // mobile layout back on for that range. When the custom breakpoint is
+        // 600px or below, min-width ends up greater than max-width and the
+        // query simply never matches, which is harmless.
+        $rules .= '@media (min-width:600px) and (max-width:' . ( $bp - 0.02 ) . 'px){'
+            . $selector . ' .wp-block-navigation__responsive-container:not(.is-menu-open){display:none !important}'
+            . $selector . ' .wp-block-navigation__responsive-container-open{display:flex !important}'
+            . '}';
+
+        $block_content = preg_replace(
+            $target_pattern,
+            '$1 data-eo-mnb="' . esc_attr( $id ) . '"',
+            $block_content,
+            1
+        );
+
+        return '<style>' . $rules . '</style>' . $block_content;
     }
 
 	/**
