@@ -42,6 +42,7 @@ class Eoblocks {
         add_filter( 'render_block', array( $this, 'group_link_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'animations_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'breakpoint_display_frontend' ), 10, 2 );
+        add_filter( 'render_block', array( $this, 'responsive_columns_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_custom_block_hooks' ) );
 		add_shortcode( 'eo_map', array( $this, 'render_map_shortcode' ) );
@@ -299,6 +300,109 @@ class Eoblocks {
         );
 
         return '<style>' . $rules . '</style>' . $block_content;
+    }
+
+    /**
+     * Overrides how many columns are shown per row on tablet (≤781px) and
+     * mobile (≤599px) when the "Activer les colonnes responsives" control is
+     * enabled on a core/columns block that has "Stack on mobile" checked —
+     * instead of WordPress' default of stacking every column at 100% width.
+     *
+     * Reads the eoResponsiveColumns attribute directly from the parsed block
+     * comment. A unique data-eo-rc attribute is injected on the columns
+     * wrapper and a scoped <style> with the matching media queries is
+     * prepended. The per-column width always uses the WordPress predefined
+     * block-gap custom property (forced, regardless of any custom gap set on
+     * this particular block) so columns line up exactly N per row.
+     */
+    public function responsive_columns_frontend( $block_content, $block ) {
+        if ( ! isset( $block['blockName'] ) || 'core/columns' !== $block['blockName'] ) {
+            return $block_content;
+        }
+
+        $attrs = isset( $block['attrs'] ) ? $block['attrs'] : array();
+
+        // "Stack on mobile" defaults to true when not explicitly turned off.
+        $is_stacked_on_mobile = ! isset( $attrs['isStackedOnMobile'] ) || $attrs['isStackedOnMobile'];
+        if ( ! $is_stacked_on_mobile ) {
+            return $block_content;
+        }
+
+        $responsive = isset( $attrs['eoResponsiveColumns'] ) ? $attrs['eoResponsiveColumns'] : array();
+        if ( empty( $responsive['enabled'] ) ) {
+            return $block_content;
+        }
+
+        // Number of actual core/column children; tablet/mobile counts can
+        // never exceed it.
+        $columns_count = 0;
+        if ( ! empty( $block['innerBlocks'] ) ) {
+            foreach ( $block['innerBlocks'] as $inner_block ) {
+                if ( isset( $inner_block['blockName'] ) && 'core/column' === $inner_block['blockName'] ) {
+                    $columns_count++;
+                }
+            }
+        }
+
+        if ( $columns_count < 2 ) {
+            return $block_content;
+        }
+
+        $tablet = isset( $responsive['tablet'] ) ? intval( $responsive['tablet'] ) : 0;
+        $mobile = isset( $responsive['mobile'] ) ? intval( $responsive['mobile'] ) : 0;
+
+        // Clamp server-side too, in case a stale value slipped through.
+        $tablet = $tablet > 0 ? min( $tablet, $columns_count ) : 0;
+        $mobile = $mobile > 0 ? min( $mobile, $columns_count ) : 0;
+
+        if ( ! $tablet && ! $mobile ) {
+            return $block_content;
+        }
+
+        $target_pattern = '/^(\s*(?:<style\b[^>]*>.*?<\/style>\s*)*<[a-zA-Z][a-zA-Z0-9-]*)/s';
+
+        if ( ! preg_match( $target_pattern, $block_content ) ) {
+            return $block_content;
+        }
+
+        $id       = 'eo-rc-' . substr( md5( $block_content . wp_json_encode( $responsive ) ), 0, 8 );
+        // Prefixed with .wp-block-columns so this selector's specificity
+        // matches (and, being injected later in the page, wins over) core's
+        // own ":not(.is-not-stacked-on-mobile) > .wp-block-column" rule at
+        // the same breakpoint.
+        $selector = '.wp-block-columns[data-eo-rc="' . $id . '"]';
+
+        $rules = '';
+        if ( $tablet ) {
+            $rules .= '@media (max-width:781px){' . $this->responsive_columns_rule( $selector, $tablet ) . '}';
+        }
+        if ( $mobile ) {
+            $rules .= '@media (max-width:599px){' . $this->responsive_columns_rule( $selector, $mobile ) . '}';
+        }
+
+        $block_content = preg_replace(
+            $target_pattern,
+            '$1 data-eo-rc="' . esc_attr( $id ) . '"',
+            $block_content,
+            1
+        );
+
+        return '<style>' . $rules . '</style>' . $block_content;
+    }
+
+    /**
+     * Builds the "$count columns per row" CSS for one breakpoint: forces the
+     * WordPress predefined block-gap custom property (falling back to core's
+     * own 2em default) and derives each column's flex-basis from it.
+     */
+    private function responsive_columns_rule( $selector, $count ) {
+        $gap   = 'var(--wp--style--block-gap, 2em)';
+        $basis = 1 === $count
+            ? '100%'
+            : 'calc((100% - (' . ( $count - 1 ) . ' * ' . $gap . ')) / ' . $count . ')';
+
+        return $selector . '{gap:' . $gap . ' !important}'
+            . $selector . '>.wp-block-column{flex-basis:' . $basis . ' !important;flex-grow:0 !important}';
     }
 
 	/**
