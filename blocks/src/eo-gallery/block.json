@@ -1,0 +1,115 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo-blocks/gallery",
+	"version": "1.0.0",
+	"title": "EO Gallery",
+	"category": "eo-blocks",
+	"icon": "format-gallery",
+	"description": "Display images and videos as a grid, a masonry or a carousel, with a lightbox.",
+	"keywords": [ "gallery", "images", "photos", "videos", "masonry", "carousel", "lightbox" ],
+	"example": {},
+	"attributes": {
+		"items": {
+			"type": "array",
+			"default": []
+		},
+		"layout": {
+			"type": "string",
+			"enum": [ "grid", "masonry", "carousel" ],
+			"default": "grid"
+		},
+		"columns": {
+			"type": "number",
+			"default": 3
+		},
+		"mobileColumns": {
+			"type": "number",
+			"default": 2
+		},
+		"gap": {
+			"type": "number",
+			"default": 16
+		},
+		"crop": {
+			"type": "boolean",
+			"default": true
+		},
+		"aspectRatio": {
+			"type": "string",
+			"default": "4/3"
+		},
+		"imageSize": {
+			"type": "string",
+			"default": "large"
+		},
+		"radius": {
+			"type": "number",
+			"default": 0
+		},
+		"hoverZoom": {
+			"type": "boolean",
+			"default": true
+		},
+		"order": {
+			"type": "string",
+			"enum": [ "normal", "reverse", "random" ],
+			"default": "normal"
+		},
+		"showCaptions": {
+			"type": "boolean",
+			"default": true
+		},
+		"linkTo": {
+			"type": "string",
+			"enum": [ "lightbox", "media", "attachment", "none" ],
+			"default": "lightbox"
+		},
+		"navigation": {
+			"type": "boolean",
+			"default": true
+		},
+		"navigationPosition": {
+			"type": "string",
+			"default": "inside"
+		},
+		"pagination": {
+			"type": "boolean",
+			"default": true
+		},
+		"mainColor": {
+			"type": "string",
+			"default": "#007aff"
+		},
+		"autoplay": {
+			"type": "boolean",
+			"default": true
+		},
+		"autoplayDelay": {
+			"type": "number",
+			"default": 4000
+		},
+		"loop": {
+			"type": "boolean",
+			"default": true
+		},
+		"speed": {
+			"type": "number",
+			"default": 500
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"align": [ "wide", "full" ],
+		"html": false,
+		"spacing": {
+			"margin": true
+		}
+	},
+	"textdomain": "eo-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
