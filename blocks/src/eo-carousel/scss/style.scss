@@ -8,6 +8,26 @@
 $media__mobile: 599px;
 
 .wp-block-eo-blocks-carousel {
+  // Positioning context for the arrows, which are siblings of .swiper.
+  .eo-carousel__main {
+    position: relative;
+  }
+
+  // Arrows sit in a side gutter instead of over the slides. The gutter is
+  // reserved with padding (not negative offsets) so the arrows never overflow
+  // the page, even on full-width carousels or narrow screens.
+  &.eo-carousel--nav-outside .eo-carousel__main {
+    --eo-carousel-nav-gutter: calc(var(--swiper-navigation-size) / 44 * 27 + 16px);
+    padding-inline: var(--eo-carousel-nav-gutter);
+
+    > .swiper-button-prev {
+      left: 0;
+    }
+    > .swiper-button-next {
+      right: 0;
+    }
+  }
+
   .eo-carousel__thumbs-carousel {
     .wp-block-eo-slide {
       transition: opacity 0.2s ease-out;
