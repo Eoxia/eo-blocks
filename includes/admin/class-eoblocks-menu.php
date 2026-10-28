@@ -88,8 +88,8 @@ class Eoblocks_Menu {
 			wp_enqueue_script( 'maplibre-gl-js', 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js', array(), '4.7.1', true );
 			wp_enqueue_script( 'maplibre-gl-leaflet-js', 'https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.20/leaflet-maplibre-gl.js', array( 'leaflet-js', 'maplibre-gl-js' ), '0.0.20', true );
 
-			wp_enqueue_style( 'eo-blocks-maps-admin-css', EO_BLOCKS_URL . 'assets/css/maps-admin.css', array( 'leaflet-css' ), '1.0.0' );
-			wp_enqueue_script( 'eo-blocks-maps-admin-js', EO_BLOCKS_URL . 'assets/js/maps-admin.js', array( 'jquery', 'leaflet-js', 'maplibre-gl-leaflet-js' ), '1.0.0', true );
+			wp_enqueue_style( 'eo-blocks-maps-admin-css', EO_BLOCKS_URL . 'assets/css/maps-admin.css', array( 'leaflet-css' ), EO_BLOCKS_VERSION );
+			wp_enqueue_script( 'eo-blocks-maps-admin-js', EO_BLOCKS_URL . 'assets/js/maps-admin.js', array( 'jquery', 'leaflet-js', 'maplibre-gl-leaflet-js' ), EO_BLOCKS_VERSION, true );
 
 			wp_localize_script( 'eo-blocks-maps-admin-js', 'eoMapsAdmin', array(
 				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
@@ -100,8 +100,8 @@ class Eoblocks_Menu {
 		}
 
 		if ( isset( $_GET['page'] ) && $_GET['page'] === 'eo-blocks-reviews' ) {
-			wp_enqueue_style( 'eo-blocks-reviews-admin-css', EO_BLOCKS_URL . 'assets/css/reviews-admin.css', array(), '1.0.0' );
-			wp_enqueue_script( 'eo-blocks-reviews-admin-js', EO_BLOCKS_URL . 'assets/js/reviews-admin.js', array('jquery'), '1.0.0', true );
+			wp_enqueue_style( 'eo-blocks-reviews-admin-css', EO_BLOCKS_URL . 'assets/css/reviews-admin.css', array(), EO_BLOCKS_VERSION );
+			wp_enqueue_script( 'eo-blocks-reviews-admin-js', EO_BLOCKS_URL . 'assets/js/reviews-admin.js', array('jquery'), EO_BLOCKS_VERSION, true );
 			
 			wp_localize_script( 'eo-blocks-reviews-admin-js', 'eoReviewsAdmin', array(
 				'nonce' => wp_create_nonce( 'eo_reviews_admin_nonce' ),

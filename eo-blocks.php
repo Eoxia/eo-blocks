@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'EO_BLOCKS_BASEFILE', __FILE__ );
 define( 'EO_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
 define( 'EO_BLOCKS_PATH', plugin_dir_path( __FILE__ ) );
-define( 'EO_BLOCKS_VERSION', '1.0.0' );
+define( 'EO_BLOCKS_VERSION', '2.1.0' );
 
 /**
  * Autoload the php files.
