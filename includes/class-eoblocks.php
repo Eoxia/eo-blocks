@@ -44,6 +44,7 @@ class Eoblocks {
         add_filter( 'render_block', array( $this, 'breakpoint_display_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'responsive_columns_frontend' ), 10, 2 );
         add_filter( 'render_block', array( $this, 'mobile_breakpoint_frontend' ), 10, 2 );
+        add_filter( 'render_block', array( $this, 'text_shadow_frontend' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_custom_block_hooks' ) );
 		add_shortcode( 'eo_map', array( $this, 'render_map_shortcode' ) );
@@ -484,6 +485,57 @@ class Eoblocks {
         );
 
         return '<style>' . $rules . '</style>' . $block_content;
+    }
+
+    /**
+     * Applies the "Text shadow" control (Border & Shadow panel) on a
+     * paragraph's root element: a has-eo-text-shadow-{slug} class for presets
+     * (styled in assets/scss/hooks/_text-shadow.scss), plus an inline
+     * text-shadow style for the "custom" option.
+     */
+    public function text_shadow_frontend( $block_content, $block ) {
+        if ( ! isset( $block['blockName'] ) || 'core/paragraph' !== $block['blockName'] ) {
+            return $block_content;
+        }
+
+        $attrs = isset( $block['attrs'] ) ? $block['attrs'] : array();
+        $slug  = ! empty( $attrs['eoTextShadow'] ) ? sanitize_html_class( $attrs['eoTextShadow'] ) : '';
+        if ( ! $slug ) {
+            return $block_content;
+        }
+
+        $processor = new \WP_HTML_Tag_Processor( $block_content );
+        if ( ! $processor->next_tag() ) {
+            return $block_content;
+        }
+
+        $processor->add_class( 'has-eo-text-shadow-' . $slug );
+
+        if ( 'custom' === $slug ) {
+            // Same defaults as DEFAULT_CUSTOM in hooks/src/text-shadow.js.
+            $custom = wp_parse_args(
+                isset( $attrs['eoTextShadowCustom'] ) && is_array( $attrs['eoTextShadowCustom'] ) ? $attrs['eoTextShadowCustom'] : array(),
+                array( 'x' => 2, 'y' => 2, 'blur' => 4, 'color' => 'rgba(0, 0, 0, 0.4)' )
+            );
+
+            // Only plain color syntaxes (hex, rgb[a](), hsl[a]()) are accepted.
+            $color = is_string( $custom['color'] ) && preg_match( '/^(#[0-9a-fA-F]{3,8}|(rgb|hsl)a?\([0-9.,%\s\/]+\))$/', trim( $custom['color'] ) )
+                ? trim( $custom['color'] )
+                : 'rgba(0, 0, 0, 0.4)';
+
+            $shadow = sprintf(
+                'text-shadow:%spx %spx %spx %s;',
+                floatval( $custom['x'] ),
+                floatval( $custom['y'] ),
+                max( 0, floatval( $custom['blur'] ) ),
+                $color
+            );
+
+            $style = (string) $processor->get_attribute( 'style' );
+            $processor->set_attribute( 'style', $style ? rtrim( $style, '; ' ) . ';' . $shadow : $shadow );
+        }
+
+        return $processor->get_updated_html();
     }
 
 	/**

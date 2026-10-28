@@ -740,3 +740,67 @@
   gap: 8px;
   margin-top: 8px;
 }
+
+/**
+ * "Text shadow" presets (paragraph blocks), applied on the front end through
+ * the has-eo-text-shadow-{slug} class added by the text_shadow_frontend PHP
+ * filter. Values must be kept in sync with TEXT_SHADOWS in
+ * hooks/src/text-shadow.js (used for the editor preview). The "custom"
+ * option is output as an inline style instead.
+ */
+.has-eo-text-shadow-none {
+  text-shadow: none;
+}
+
+.has-eo-text-shadow-natural {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.has-eo-text-shadow-deep {
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.has-eo-text-shadow-sharp {
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.has-eo-text-shadow-outlined {
+  text-shadow: 2px 2px 0 #fff, 3px 3px 0 #000;
+}
+
+.has-eo-text-shadow-crisp {
+  text-shadow: 2px 2px 0 #000;
+}
+
+.has-eo-text-shadow-glow {
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+/**
+ * Editor-only: "Aa" sample inside core's shadow indicator swatches, and the
+ * "Custom" shadow editor.
+ */
+.eo-text-shadow-indicator {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.eo-text-shadow-custom__preview {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  background: #fff;
+  color: #1e1e1e;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+}
+
+.eo-text-shadow-popover {
+  width: 260px;
+}
