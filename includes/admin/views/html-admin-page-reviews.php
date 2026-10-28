@@ -220,7 +220,7 @@ $providers = array(
 												<?php if ( empty($client_id) ) : ?>
 													<button type="button" class="button button-primary eo-oauth-disabled-btn" style="opacity: 0.5; cursor: not-allowed;"><?php esc_html_e( 'Se connecter avec Google', 'eo-blocks' ); ?></button>
 												<?php else : ?>
-													<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary"><?php esc_html_e( 'Se connecter avec Google', 'eo-blocks' ); ?></a>
+													<a href="<?php echo esc_url( \EoBlocks\Includes\Eoblocks_Google_OAuth::get_auth_url() ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Se connecter avec Google', 'eo-blocks' ); ?></a>
 												<?php endif; ?>
 											<?php endif; ?>
 										</div>
