@@ -4,6 +4,11 @@
 // import 'swiper/css/navigation';
 // import 'swiper/css/pagination';
 
+const findArrow = (mainCarousel, direction) => {
+	const selector = `:scope > .swiper-button-${direction}`;
+	return mainCarousel.querySelector(selector) || mainCarousel.parentElement.querySelector(selector);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
 	const carousels = document.querySelectorAll('.wp-block-eo-blocks-carousel');
 	carousels.forEach(carousel => {
@@ -28,9 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				el: '.swiper-pagination',
 				dynamicBullets: true,
 			},
+			// Arrows are direct children of .swiper ("inside") or of its parent
+			// ("outside"). Pass the elements themselves: string selectors would be
+			// resolved against the whole document, and :scope keeps a carousel
+			// nested in a slide from grabbing its parent's arrows (or vice versa).
 			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev',
+				nextEl: findArrow(mainCarousel, 'next'),
+				prevEl: findArrow(mainCarousel, 'prev'),
 			}
 		};
 

@@ -340,6 +340,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						checked={attributes.navigation}
 						onChange={(value) => setAttributes({navigation: value})}
 					/>
+					{attributes.navigation && (
+						<SelectControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							label={__('Arrows position', 'eo-blocks')}
+							value={attributes.navigationPosition}
+							options={[
+								{label: __('Over the slides', 'eo-blocks'), value: 'inside'},
+								{label: __('Outside the slides', 'eo-blocks'), value: 'outside'},
+							]}
+							onChange={(value) => setAttributes({navigationPosition: value})}
+						/>
+					)}
 					<ToggleControl
 						__nextHasNoMarginBottom
 						label={__('Dots navigation', 'eo-blocks')}
