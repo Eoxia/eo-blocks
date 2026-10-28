@@ -36,7 +36,9 @@ const transforms = {
 					height: 0,
 				} ) );
 
-				const linkTo = { media: 'media', attachment: 'attachment', none: 'none' }[ attributes.linkTo ] || 'lightbox';
+				// Explicit links are kept; "none" (the native default) gets the
+				// lightbox, the main reason to switch to this block.
+				const linkTo = { media: 'media', attachment: 'attachment' }[ attributes.linkTo ] || 'lightbox';
 
 				return createBlock( 'eo-blocks/gallery', {
 					items: fromInnerBlocks.length ? fromInnerBlocks : fromLegacy,
