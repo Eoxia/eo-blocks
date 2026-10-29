@@ -1,0 +1,59 @@
+.eo-review-prompt-wrapper {
+	text-align: center;
+	padding: 30px 20px;
+	border: 2px dashed #e0e0e0;
+	border-radius: 8px;
+	background: #fafafa;
+	margin: 20px 0;
+
+	.eo-rp-message {
+		font-size: 20px;
+		color: #333;
+		margin-bottom: 10px;
+		margin-top: 0;
+	}
+
+	.eo-rp-stars {
+		font-size: 30px;
+		color: #e0e0e0;
+		margin-bottom: 20px;
+
+		.star-empty {
+			cursor: pointer;
+			transition: color 0.2s;
+
+			&:hover,
+			&:hover ~ .star-empty {
+				color: #fbbc04; // highlight on hover
+			}
+		}
+		
+		// To make hover fill from left to right, CSS alone is tricky with multiple elements,
+		// but simple hover on container can turn them all yellow
+		&:hover .star-empty {
+			color: #fbbc04;
+		}
+	}
+
+	.eo-rp-button {
+		display: inline-block;
+		background: #1a73e8;
+		color: #fff;
+		padding: 10px 24px;
+		border-radius: 4px;
+		text-decoration: none;
+		font-weight: bold;
+		border: none;
+		cursor: pointer;
+		transition: background 0.2s;
+
+		&:hover {
+			background: #1557b0;
+		}
+
+		&:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+		}
+	}
+}

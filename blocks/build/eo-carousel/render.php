@@ -37,6 +37,8 @@ endif;
 if ( $attributes['autoplay'] && $attributes['marquee'] ) :
     $carousel_attr['allowTouchMove'] = false;
 endif;
+
+$navigation_position = isset( $attributes['navigationPosition'] ) && in_array( $attributes['navigationPosition'], array( 'inside', 'outside' ), true ) ? $attributes['navigationPosition'] : 'inside';
 ?>
 <style>
     :root {
@@ -49,7 +51,17 @@ endif;
     <?php endif; ?>
 </style>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'eo-carousel--nav-' . $navigation_position ) ) ); ?>>
+    <?php
+    // "inside" keeps the historical markup untouched (arrows inside .swiper) so
+    // existing custom CSS keeps matching. "outside" moves the arrows next to
+    // .swiper, in a wrapper, so its overflow: hidden never clips them.
+    $arrows_outside = $attributes['navigation'] && 'outside' === $navigation_position;
+    ?>
+    <?php if ( $arrows_outside ) : ?>
+        <div class="eo-carousel__main">
+    <?php endif; ?>
+
     <div class="swiper eo-carousel__main-carousel" data-carousel=<?php echo wp_json_encode( $carousel_attr ); ?>>
         <div class="swiper-wrapper">
             <?php echo wp_kses_post( $content ); ?>
@@ -59,11 +71,17 @@ endif;
             <div class="swiper-pagination"></div>
         <?php endif; ?>
 
-        <?php if ( $attributes['navigation'] ) : ?>
+        <?php if ( $attributes['navigation'] && ! $arrows_outside ) : ?>
             <div class="swiper-button-prev"></div>
             <div class="swiper-button-next"></div>
         <?php endif; ?>
     </div>
+
+    <?php if ( $arrows_outside ) : ?>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    <?php endif; ?>
     <?php if ( $attributes['thumbs'] ) : ?>
         <div class="swiper eo-carousel__thumbs-carousel">
             <div class="swiper-wrapper">

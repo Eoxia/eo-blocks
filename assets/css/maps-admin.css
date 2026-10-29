@@ -207,3 +207,82 @@
     border-radius: 3px;
     border: 1px solid #ddd;
 }
+
+/* Marker entrance bounce animation */
+@keyframes eo-marker-bounce {
+    0% {
+        opacity: 0;
+        top: -100px;
+    }
+    60% {
+        opacity: 1;
+        top: 10px;
+    }
+    80% {
+        top: -5px;
+    }
+    100% {
+        top: 0px;
+    }
+}
+
+.eo-marker-bounce-animation {
+    animation: eo-marker-bounce 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Custom vector SVG icon reset */
+.leaflet-div-icon.eo-map-custom-svg-icon {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Marker continuous float animation */
+@keyframes eo-marker-float {
+    0% {
+        top: 0px;
+    }
+    50% {
+        top: -8px;
+    }
+    100% {
+        top: 0px;
+    }
+}
+
+.eo-marker-float-animation {
+    animation: eo-marker-float 2s infinite ease-in-out;
+}
+
+/* Marker continuous pulse animation */
+@keyframes eo-marker-pulse-opacity {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.eo-marker-pulse-animation {
+    animation: eo-marker-pulse-opacity 1.5s infinite ease-in-out;
+}
+
+.eo-marker-pulse-animation svg {
+    animation: eo-marker-svg-pulse 1.5s infinite ease-in-out;
+    transform-origin: bottom center;
+}
+
+@keyframes eo-marker-svg-pulse {
+    0% {
+        transform: scale(0.85);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(0.85);
+    }
+}

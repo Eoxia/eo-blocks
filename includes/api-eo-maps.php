@@ -47,9 +47,13 @@ function eo_maps_ajax_save_map() {
 		'width'     => sanitize_text_field( $settings['width'] ?? '100%' ),
 		'height'    => sanitize_text_field( $settings['height'] ?? '600px' ),
 		'zoom'      => intval( $settings['zoom'] ?? 2 ),
+		'minZoom'   => intval( $settings['minZoom'] ?? 0 ),
+		'maxZoom'   => intval( $settings['maxZoom'] ?? 19 ),
 		'centerLat' => floatval( $settings['centerLat'] ?? 0.0 ),
 		'centerLng' => floatval( $settings['centerLng'] ?? 0.0 ),
 		'tileStyle' => sanitize_text_field( $settings['tileStyle'] ?? 'osm' ),
+		'mapLanguage' => sanitize_text_field( $settings['mapLanguage'] ?? 'local' ),
+		'mapDesign' => sanitize_text_field( $settings['mapDesign'] ?? 'positron' ),
 	);
 
 	// Sanitize and save markers
@@ -71,9 +75,13 @@ function eo_maps_ajax_save_map() {
 				'lat'         => floatval( $marker['lat'] ?? 0.0 ),
 				'lng'         => floatval( $marker['lng'] ?? 0.0 ),
 				'url'         => esc_url_raw( $marker['url'] ?? '' ),
+				'link_label'  => sanitize_text_field( $marker['link_label'] ?? '' ),
 				'phone'       => sanitize_text_field( $marker['phone'] ?? '' ),
 				'icon'        => esc_url_raw( $marker['icon'] ?? '' ),
 				'category'    => sanitize_text_field( $marker['category'] ?? '' ),
+				'marker_type' => sanitize_text_field( $marker['marker_type'] ?? 'default' ),
+				'color'       => sanitize_text_field( $marker['color'] ?? '#0066FF' ),
+				'animation'   => sanitize_text_field( $marker['animation'] ?? 'bounce' ),
 				'gallery'     => $gallery,
 			);
 		}

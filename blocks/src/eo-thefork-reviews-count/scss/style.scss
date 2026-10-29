@@ -1,0 +1,20 @@
+.wp-block-eo-blocks-google-reviews-count {
+	.eo-thefork-reviews-count-wrapper {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5em;
+		font-family: inherit;
+
+		.eo-grc-count {
+			font-weight: bold;
+			font-size: 1.2em;
+		}
+
+		.eo-grc-prefix,
+		.eo-grc-suffix {
+			opacity: 0.8;
+		}
+	}
+}
+
+

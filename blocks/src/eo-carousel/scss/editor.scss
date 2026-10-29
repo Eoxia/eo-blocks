@@ -4,18 +4,160 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-eo-blocks-carousel{
-  .block-list-appender {
-    position: static;
-  }
-  .block-editor-block-list__layout {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
+.wp-block-eo-blocks-carousel.eo-carousel-editor {
+	.eo-carousel-editor__viewport {
+		position: relative;
+		border: 1px solid #e0e0e0;
+		border-radius: 4px;
+		background: #fafafa;
+		padding: 16px 48px;
+	}
 
-    .block-list-appender {
-      align-self: flex-start;
-    }
+	.eo-carousel-editor__track {
+		.block-list-appender {
+			position: static;
+		}
 
-  }
+		.block-editor-block-list__layout {
+			display: block;
+		}
+
+		// Scoped to the slide wrapper itself (by block type, not by DOM depth) so this
+		// never affects the layout of blocks placed *inside* a slide.
+		[data-type="eo-blocks/slide"] {
+			width: 100%;
+		}
+	}
+
+	.eo-carousel-editor__empty {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		padding: 48px 16px;
+		text-align: center;
+		color: #757575;
+
+		&--add-slide {
+			border: 1px dashed #949494;
+			border-radius: 4px;
+		}
+	}
+
+	.eo-carousel-editor__nav {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		border-radius: 50%;
+		background: #fff;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+		&:hover {
+			background: var(--eo-carousel-editor-color, #007aff);
+			color: #fff;
+		}
+
+		&--prev {
+			left: 8px;
+		}
+
+		&--next {
+			right: 8px;
+		}
+	}
+
+	.eo-carousel-editor__toolbar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		margin-top: 12px;
+		padding: 8px 4px 0;
+		border-top: 1px solid #e0e0e0;
+	}
+
+	.eo-carousel-editor__dots {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	.eo-carousel-editor__dot {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		padding: 0;
+		border: 1px solid #949494;
+		border-radius: 50%;
+		background: #fff;
+		cursor: grab;
+
+		&.is-active {
+			border-color: var(--eo-carousel-editor-color, #007aff);
+			background: var(--eo-carousel-editor-color, #007aff);
+		}
+
+		&--add {
+			cursor: pointer;
+			border-style: dashed;
+			color: #757575;
+
+			&:hover {
+				border-color: var(--eo-carousel-editor-color, #007aff);
+				color: var(--eo-carousel-editor-color, #007aff);
+			}
+		}
+	}
+
+	// Thin insertion markers between (and after the last) dot: they make it
+	// unambiguous exactly where a dragged slide will land, rather than relying
+	// on "drop it onto another dot".
+	.eo-carousel-editor__dot-gap {
+		display: flex;
+		flex: 0 0 auto;
+		align-items: center;
+		justify-content: center;
+		width: 8px;
+		height: 20px;
+
+		&::before {
+			content: "";
+			display: block;
+			width: 2px;
+			height: 14px;
+			border-radius: 1px;
+			background: transparent;
+			transition: background-color 0.15s ease, width 0.15s ease;
+		}
+
+		&.is-dragover::before {
+			width: 3px;
+			background: var(--eo-carousel-editor-color, #007aff);
+		}
+	}
+
+	.eo-carousel-editor__actions {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.eo-carousel-editor__counter {
+		margin-right: 8px;
+		font-size: 12px;
+		color: #757575;
+		white-space: nowrap;
+	}
 }

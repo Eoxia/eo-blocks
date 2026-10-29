@@ -1,0 +1,217 @@
+// Entrance / exit animations (block "Animations" panel, in the Styles tab).
+//
+// Each animation has an explicit "in" (hidden -> visible) and "out"
+// (visible -> hidden) @keyframes pair. `animation-direction: reverse` is
+// intentionally NOT used to play the "out" keyframes backwards: combined
+// with `animation-fill-mode: both` on an animation that is renamed and
+// started in the same tick, some engines mis-resolve the fill state, so the
+// block jumps straight to hidden instead of fading out. assets/js/animations.js
+// always arms the target animation paused first, then only ever flips
+// `animation-play-state` to resume it — the same reliable mechanism for
+// both directions.
+
+$eo-anim-types: fade, scale-up, scale-down, slide-top, slide-right, slide-bottom, slide-left, rotate, bounce, flip;
+
+@keyframes eo-anim-in-fade {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+@keyframes eo-anim-out-fade {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+@keyframes eo-anim-in-scale-up {
+	from { opacity: 0; transform: scale(.85); }
+	to   { opacity: 1; transform: scale(1); }
+}
+@keyframes eo-anim-out-scale-up {
+	from { opacity: 1; transform: scale(1); }
+	to   { opacity: 0; transform: scale(.85); }
+}
+
+@keyframes eo-anim-in-scale-down {
+	from { opacity: 0; transform: scale(1.15); }
+	to   { opacity: 1; transform: scale(1); }
+}
+@keyframes eo-anim-out-scale-down {
+	from { opacity: 1; transform: scale(1); }
+	to   { opacity: 0; transform: scale(1.15); }
+}
+
+@keyframes eo-anim-in-slide-top {
+	from { opacity: 0; transform: translateY(-40px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes eo-anim-out-slide-top {
+	from { opacity: 1; transform: translateY(0); }
+	to   { opacity: 0; transform: translateY(-40px); }
+}
+
+@keyframes eo-anim-in-slide-right {
+	from { opacity: 0; transform: translateX(40px); }
+	to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes eo-anim-out-slide-right {
+	from { opacity: 1; transform: translateX(0); }
+	to   { opacity: 0; transform: translateX(40px); }
+}
+
+@keyframes eo-anim-in-slide-bottom {
+	from { opacity: 0; transform: translateY(40px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes eo-anim-out-slide-bottom {
+	from { opacity: 1; transform: translateY(0); }
+	to   { opacity: 0; transform: translateY(40px); }
+}
+
+@keyframes eo-anim-in-slide-left {
+	from { opacity: 0; transform: translateX(-40px); }
+	to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes eo-anim-out-slide-left {
+	from { opacity: 1; transform: translateX(0); }
+	to   { opacity: 0; transform: translateX(-40px); }
+}
+
+@keyframes eo-anim-in-rotate {
+	from { opacity: 0; transform: rotate(-15deg) scale(.9); }
+	to   { opacity: 1; transform: rotate(0) scale(1); }
+}
+@keyframes eo-anim-out-rotate {
+	from { opacity: 1; transform: rotate(0) scale(1); }
+	to   { opacity: 0; transform: rotate(-15deg) scale(.9); }
+}
+
+@keyframes eo-anim-in-bounce {
+	0%   { opacity: 0; transform: translateY(30px) scale(.9); }
+	60%  { opacity: 1; transform: translateY(-8px) scale(1.02); }
+	80%  { opacity: 1; transform: translateY(3px) scale(1); }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes eo-anim-out-bounce {
+	0%   { opacity: 1; transform: translateY(0) scale(1); }
+	20%  { opacity: 1; transform: translateY(3px) scale(1); }
+	40%  { opacity: 1; transform: translateY(-8px) scale(1.02); }
+	100% { opacity: 0; transform: translateY(30px) scale(.9); }
+}
+
+@keyframes eo-anim-in-flip {
+	from { opacity: 0; transform: perspective(600px) rotateX(-90deg); }
+	to   { opacity: 1; transform: perspective(600px) rotateX(0); }
+}
+@keyframes eo-anim-out-flip {
+	from { opacity: 1; transform: perspective(600px) rotateX(0); }
+	to   { opacity: 0; transform: perspective(600px) rotateX(-90deg); }
+}
+
+// Frontend engine: only sets the shared timing here. `animation-name` and
+// `animation-play-state` are driven by assets/js/animations.js, which always
+// arms the relevant keyframes paused before ever setting them to running.
+[data-eo-anim-in],
+[data-eo-anim-out] {
+	animation-duration: .8s;
+	animation-timing-function: cubic-bezier(.25, .46, .45, .94);
+	animation-fill-mode: both;
+}
+
+[data-eo-anim-in] {
+	opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-eo-anim-in],
+	[data-eo-anim-out] {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+}
+
+// Editor: animation picker (Styles panel + gallery modal).
+.eo-anim-picker-button {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	margin: 10px 0 20px;
+}
+
+.eo-anim-modal .components-modal__content {
+	width: 640px;
+	max-width: 90vw;
+}
+
+.eo-anim-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+	gap: 12px;
+}
+
+.eo-anim-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	padding: 12px;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	cursor: pointer;
+
+	&:hover,
+	&:focus {
+		border-color: var(--wp-admin-theme-color, #007cba);
+	}
+
+	&.is-selected {
+		border-color: var(--wp-admin-theme-color, #007cba);
+		box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #007cba);
+	}
+}
+
+.eo-anim-card__check {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	display: flex;
+	color: #fff;
+	background: var(--wp-admin-theme-color, #007cba);
+	border-radius: 50%;
+}
+
+.eo-anim-card__stage {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 60px;
+	overflow: hidden;
+	background: #f0f0f1;
+	border-radius: 3px;
+	perspective: 600px;
+}
+
+.eo-anim-card__shape {
+	width: 28px;
+	height: 28px;
+	background: var(--wp-admin-theme-color, #007cba);
+	border-radius: 4px;
+	animation-duration: 1.4s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-fill-mode: both;
+}
+
+.eo-anim-card__label {
+	font-size: 12px;
+	text-align: center;
+}
+
+@each $type in $eo-anim-types {
+	.eo-anim-card__shape[data-eo-anim-preview="#{$type}"] {
+		animation-name: eo-anim-in-#{$type};
+	}
+}

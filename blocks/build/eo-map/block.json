@@ -27,11 +27,13 @@
   "style": [
     "file:./style-index.css",
     "leaflet-css",
+    "maplibre-gl-css",
     "dashicons"
   ],
   "render": "file:./render.php",
   "viewScript": [
     "file:./view.js",
-    "leaflet-js"
+    "leaflet-js",
+    "maplibre-gl-leaflet-js"
   ]
 }

@@ -64,6 +64,31 @@ class Eoblocks_Settings {
 				'eoblocks',
 				'eoblocks_settings_section'
 		);
+
+		register_setting('eoblocks_reviews_group', 'eoblocks_reviews_settings', array(
+			'sanitize_callback' => array( $this, 'sanitize_reviews_settings' ),
+		));
+	}
+
+	/**
+	 * Keep the OAuth tokens when the reviews settings form is saved,
+	 * as they are not part of the form fields.
+	 */
+	public function sanitize_reviews_settings( $input ) {
+		if ( ! isset( $_POST['option_page'] ) || 'eoblocks_reviews_group' !== $_POST['option_page'] ) {
+			return $input;
+		}
+
+		$input = is_array( $input ) ? $input : array();
+		$old   = get_option( 'eoblocks_reviews_settings', array() );
+
+		foreach ( array( 'google_oauth_access_token', 'google_oauth_refresh_token', 'google_oauth_expires_at' ) as $key ) {
+			if ( ! isset( $input[ $key ] ) && isset( $old[ $key ] ) ) {
+				$input[ $key ] = $old[ $key ];
+			}
+		}
+
+		return $input;
 	}
 
 	public function dolibarr_url_cb() {

@@ -36,9 +36,13 @@ if ( 'edit' === $action ) {
 				'width'     => '100%',
 				'height'    => '600px',
 				'zoom'      => 12,
+				'minZoom'   => 0,
+				'maxZoom'   => 19,
 				'centerLat' => 43.6107,
 				'centerLng' => 3.8767,
 				'tileStyle' => 'osm',
+				'mapLanguage' => 'local',
+				'mapDesign' => 'positron',
 			),
 			'markers'  => array(),
 		);
@@ -161,9 +165,57 @@ wp_reset_postdata();
 							<option value="carto-light" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'carto-light' ); ?>><?php esc_html_e( 'CartoDB Positron (Clair)', 'eo-blocks' ); ?></option>
 							<option value="carto-dark" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'carto-dark' ); ?>><?php esc_html_e( 'CartoDB Dark Matter (Sombre)', 'eo-blocks' ); ?></option>
 							<option value="opentopo" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'opentopo' ); ?>><?php esc_html_e( 'OpenTopoMap (Relief)', 'eo-blocks' ); ?></option>
+							<option value="openfreemap" <?php selected( $map_to_edit['settings']['tileStyle'] ?? 'osm', 'openfreemap' ); ?>><?php esc_html_e( 'OpenFreeMap (multilingue)', 'eo-blocks' ); ?></option>
 						</select>
 					</div>
 
+					<div class="eo-map-form-group" id="eo-map-design-group" style="margin-bottom: 15px; display: none;">
+						<label for="eo-map-design" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Design de la carte', 'eo-blocks' ); ?></label>
+						<select id="eo-map-design" style="width: 100%;">
+							<option value="positron" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'positron' ); ?>><?php esc_html_e( 'Positron (Clair, épuré)', 'eo-blocks' ); ?></option>
+							<option value="liberty" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'liberty' ); ?>><?php esc_html_e( 'Liberty (Détaillé, coloré)', 'eo-blocks' ); ?></option>
+							<option value="bright" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'bright' ); ?>><?php esc_html_e( 'Bright (Vif, contrasté)', 'eo-blocks' ); ?></option>
+							<option value="dark" <?php selected( $map_to_edit['settings']['mapDesign'] ?? 'positron', 'dark' ); ?>><?php esc_html_e( 'Dark (Sombre, épuré)', 'eo-blocks' ); ?></option>
+						</select>
+						<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666;">
+							<?php esc_html_e( 'Uniquement disponible avec le fond de carte OpenFreeMap.', 'eo-blocks' ); ?>
+						</p>
+					</div>
+
+					<div class="eo-map-form-group" id="eo-map-language-group" style="margin-bottom: 15px; display: none;">
+						<label for="eo-map-language" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Langue des noms de lieux', 'eo-blocks' ); ?></label>
+						<select id="eo-map-language" style="width: 100%;">
+							<option value="local" <?php selected( $map_to_edit['settings']['mapLanguage'] ?? 'local', 'local' ); ?>><?php esc_html_e( 'Langue d\'origine (par pays)', 'eo-blocks' ); ?></option>
+							<option value="fr" <?php selected( $map_to_edit['settings']['mapLanguage'] ?? 'local', 'fr' ); ?>><?php esc_html_e( 'Tout en français', 'eo-blocks' ); ?></option>
+							<option value="en" <?php selected( $map_to_edit['settings']['mapLanguage'] ?? 'local', 'en' ); ?>><?php esc_html_e( 'Tout en anglais', 'eo-blocks' ); ?></option>
+						</select>
+						<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666;">
+							<?php esc_html_e( 'Uniquement disponible avec le fond de carte OpenFreeMap.', 'eo-blocks' ); ?>
+						</p>
+					</div>
+
+					<?php
+						// Zoom range supported by each basemap provider (kept in sync with the
+						// PROVIDER_ZOOM_LIMITS map in assets/js/maps-admin.js).
+						$zoom_bounds_by_style = array(
+							'osm'          => array( 0, 19 ),
+							'carto-light'  => array( 0, 19 ),
+							'carto-dark'   => array( 0, 19 ),
+							'opentopo'     => array( 0, 19 ),
+							'openfreemap'  => array( 0, 20 ),
+						);
+						$current_tile_style = $map_to_edit['settings']['tileStyle'] ?? 'osm';
+						list( $style_min_zoom, $style_max_zoom ) = $zoom_bounds_by_style[ $current_tile_style ] ?? array( 0, 19 );
+
+						$current_zoom = intval( $map_to_edit['settings']['zoom'] ?? 12 );
+						$min_zoom_val = intval( $map_to_edit['settings']['minZoom'] ?? $style_min_zoom );
+						$max_zoom_val = intval( $map_to_edit['settings']['maxZoom'] ?? $style_max_zoom );
+
+						// Keep the stored bounds coherent with the current zoom level and the
+						// provider's own limits before first render (JS re-checks this on load too).
+						$min_zoom_val = max( $style_min_zoom, min( $min_zoom_val, $current_zoom ) );
+						$max_zoom_val = min( $style_max_zoom, max( $max_zoom_val, $current_zoom ) );
+					?>
 					<div style="background: #f8f9fa; border: 1px solid #ccd0d4; padding: 12px; border-radius: 4px;">
 						<h4 style="margin-top: 0; margin-bottom: 8px; font-weight: bold;"><?php esc_html_e( 'Vue par défaut', 'eo-blocks' ); ?></h4>
 						<p style="font-size: 11px; margin: 0 0 10px 0; color: #666;"><?php esc_html_e( 'Ces coordonnées sont synchronisées automatiquement lorsque vous zoomez ou déplacez la carte.', 'eo-blocks' ); ?></p>
@@ -177,9 +229,19 @@ wp_reset_postdata();
 								<input type="text" id="eo-map-center-lng" value="<?php echo esc_attr( $map_to_edit['settings']['centerLng'] ?? '3.8767' ); ?>" readonly style="width: 100%; font-size: 11px; background: #eee;" />
 							</div>
 						</div>
-						<div>
+						<div style="margin-bottom: 8px;">
 							<span style="font-size: 11px; color: #666;"><?php esc_html_e( 'Niveau de Zoom', 'eo-blocks' ); ?></span>
-							<input type="text" id="eo-map-zoom" value="<?php echo esc_attr( $map_to_edit['settings']['zoom'] ?? '12' ); ?>" readonly style="width: 100%; font-size: 11px; background: #eee;" />
+							<input type="text" id="eo-map-zoom" value="<?php echo esc_attr( $current_zoom ); ?>" readonly style="width: 100%; font-size: 11px; background: #eee;" />
+						</div>
+						<div style="display: flex; gap: 10px;">
+							<div style="flex: 1;">
+								<span style="font-size: 11px; color: #666;"><?php esc_html_e( 'Zoom minimal', 'eo-blocks' ); ?> (<span id="eo-map-min-zoom-value"><?php echo esc_html( $min_zoom_val ); ?></span>)</span>
+								<input type="range" id="eo-map-min-zoom" min="<?php echo esc_attr( $style_min_zoom ); ?>" max="<?php echo esc_attr( $style_max_zoom ); ?>" step="1" value="<?php echo esc_attr( $min_zoom_val ); ?>" style="width: 100%;" />
+							</div>
+							<div style="flex: 1;">
+								<span style="font-size: 11px; color: #666;"><?php esc_html_e( 'Zoom maximal', 'eo-blocks' ); ?> (<span id="eo-map-max-zoom-value"><?php echo esc_html( $max_zoom_val ); ?></span>)</span>
+								<input type="range" id="eo-map-max-zoom" min="<?php echo esc_attr( $style_min_zoom ); ?>" max="<?php echo esc_attr( $style_max_zoom ); ?>" step="1" value="<?php echo esc_attr( $max_zoom_val ); ?>" style="width: 100%;" />
+							</div>
 						</div>
 					</div>
 
@@ -236,11 +298,19 @@ wp_reset_postdata();
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
 							<label for="eo-marker-description" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Description', 'eo-blocks' ); ?></label>
 							<textarea id="eo-marker-description" style="width: 100%; height: 60px;" placeholder="<?php esc_attr_e( 'Description courte...', 'eo-blocks' ); ?>"></textarea>
+							<p class="description" style="font-size: 11px; margin: 4px 0 0 0; color: #666; line-height: 1.3;">
+								<?php esc_html_e( 'Supporte les retours à la ligne et le Markdown de base : # pour les titres, **gras**, *italique*, listes avec - ou *.', 'eo-blocks' ); ?>
+							</p>
 						</div>
 
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
 							<label for="eo-marker-url" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Lien URL', 'eo-blocks' ); ?></label>
 							<input type="url" id="eo-marker-url" style="width: 100%;" placeholder="https://..." />
+						</div>
+
+						<div class="eo-map-form-group" style="margin-bottom: 12px;">
+							<label for="eo-marker-link-label" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Texte du lien', 'eo-blocks' ); ?></label>
+							<input type="text" id="eo-marker-link-label" style="width: 100%;" placeholder="<?php esc_attr_e( 'Visiter le lien →', 'eo-blocks' ); ?>" />
 						</div>
 
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
@@ -253,8 +323,38 @@ wp_reset_postdata();
 							<input type="text" id="eo-marker-category" style="width: 100%;" placeholder="<?php esc_attr_e( 'ex: Hôtel, Monument', 'eo-blocks' ); ?>" />
 						</div>
 
-						<!-- Icône personnalisée -->
+						<!-- Type de marqueur -->
 						<div class="eo-map-form-group" style="margin-bottom: 12px;">
+							<label for="eo-marker-type" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Type de marqueur', 'eo-blocks' ); ?></label>
+							<select id="eo-marker-type" style="width: 100%;">
+								<option value="default"><?php esc_html_e( 'Par défaut / Image personnalisée', 'eo-blocks' ); ?></option>
+								<option value="svg_pin"><?php esc_html_e( 'Épingle vectorielle SVG', 'eo-blocks' ); ?></option>
+								<option value="svg_circle"><?php esc_html_e( 'Cercle vectoriel SVG', 'eo-blocks' ); ?></option>
+							</select>
+						</div>
+
+						<!-- Couleur du marqueur (conditionnel) -->
+						<div class="eo-map-form-group" id="eo-marker-color-group" style="margin-bottom: 12px; display: none;">
+							<label for="eo-marker-color" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Couleur du marqueur', 'eo-blocks' ); ?></label>
+							<div style="display: flex; align-items: center; gap: 8px;">
+								<input type="color" id="eo-marker-color" value="#0066FF" style="width: 50px; height: 30px; padding: 0; border: 1px solid #ccd0d4; border-radius: 4px; cursor: pointer;" />
+								<span id="eo-marker-color-value" style="font-family: monospace; font-size: 13px; color: #555;">#0066FF</span>
+							</div>
+						</div>
+
+						<!-- Animation du marqueur -->
+						<div class="eo-map-form-group" style="margin-bottom: 12px;">
+							<label for="eo-marker-animation" style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Animation', 'eo-blocks' ); ?></label>
+							<select id="eo-marker-animation" style="width: 100%;">
+								<option value="bounce"><?php esc_html_e( 'Rebond (À l\'entrée)', 'eo-blocks' ); ?></option>
+								<option value="pulse"><?php esc_html_e( 'Clignotement (Continu)', 'eo-blocks' ); ?></option>
+								<option value="float"><?php esc_html_e( 'Flottement (Continu)', 'eo-blocks' ); ?></option>
+								<option value="none"><?php esc_html_e( 'Aucune', 'eo-blocks' ); ?></option>
+							</select>
+						</div>
+
+						<!-- Icône personnalisée -->
+						<div class="eo-map-form-group" id="eo-marker-custom-icon-group" style="margin-bottom: 12px;">
 							<label style="font-weight: bold; display: block; margin-bottom: 5px;"><?php esc_html_e( 'Icône de marqueur', 'eo-blocks' ); ?></label>
 							<div style="display: flex; align-items: center; gap: 10px;">
 								<div id="eo-marker-icon-preview" style="width: 32px; height: 32px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; background: #fff;">

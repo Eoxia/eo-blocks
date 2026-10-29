@@ -1,0 +1,78 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo-blocks/google-review-card",
+	"version": "1.0.0",
+	"title": "Google Review Cards",
+	"category": "eo-blocks",
+	"icon": "format-aside",
+	"description": "Display Google Reviews in cards (grid or carousel)",
+	"example": {},
+	"attributes": {
+		"useApi": {
+			"type": "boolean",
+			"default": true
+		},
+		"layout": {
+			"type": "string",
+			"default": "grid"
+		},
+		"shape": {
+			"type": "string",
+			"default": "rectangle"
+		},
+		"width": {
+			"type": "string",
+			"default": "100%"
+		},
+		"height": {
+			"type": "string",
+			"default": "auto"
+		},
+		"showPhoto": {
+			"type": "boolean",
+			"default": true
+		},
+		"showName": {
+			"type": "boolean",
+			"default": true
+		},
+		"showStars": {
+			"type": "boolean",
+			"default": true
+		},
+		"showDate": {
+			"type": "boolean",
+			"default": true
+		},
+		"showText": {
+			"type": "boolean",
+			"default": true
+		},
+		"textLimit": {
+			"type": "number",
+			"default": 150
+		},
+		"reviewsCount": {
+			"type": "number",
+			"default": 5
+		}
+	},
+	"supports": {
+		"html": false,
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true
+		}
+	},
+	"textdomain": "eo-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js",
+	"viewStyle": "file:./view.css"
+}
