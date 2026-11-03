@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eo-blocks/key-figure",
+	"version": "1.0.0",
+	"title": "Chiffre clé",
+	"category": "eo-blocks",
+	"icon": "chart-bar",
+	"description": "Affiche un chiffre clé animé au défilement",
+	"keywords": [ "chiffre", "compteur", "counter", "kpi", "nombre" ],
+	"example": {
+		"attributes": {
+			"number": 1250,
+			"suffix": "+",
+			"label": "Clients satisfaits"
+		}
+	},
+	"attributes": {
+		"number": {
+			"type": "number",
+			"default": 100
+		},
+		"decimals": {
+			"type": "number",
+			"default": 0
+		},
+		"separator": {
+			"type": "boolean",
+			"default": true
+		},
+		"prefix": {
+			"type": "string",
+			"default": ""
+		},
+		"suffix": {
+			"type": "string",
+			"default": ""
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"duration": {
+			"type": "number",
+			"default": 2000
+		}
+	},
+	"supports": {
+		"html": false,
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true,
+			"textAlign": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"textdomain": "eo-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

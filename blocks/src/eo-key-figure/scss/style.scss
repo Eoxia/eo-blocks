@@ -1,0 +1,29 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-eo-blocks-key-figure {
+	.eo-key-figure__value {
+		font-size: 2.5em;
+		font-weight: 700;
+		line-height: 1.1;
+	}
+
+	.eo-key-figure__number {
+		display: inline-block;
+		font-variant-numeric: tabular-nums;
+	}
+
+	// Keep the width-locked number aligned with the block text alignment.
+	&.has-text-align-center .eo-key-figure__number {
+		text-align: center;
+	}
+	&.has-text-align-right .eo-key-figure__number {
+		text-align: right;
+	}
+
+	.eo-key-figure__label {
+		margin-top: 0.25em;
+	}
+}
