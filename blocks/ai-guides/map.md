@@ -1,0 +1,1 @@
+Carte OpenStreetMap interactive. "mapId" est l'identifiant d'une carte déjà configurée dans l'administration d'EO Blocks (points, zoom). Sans carte configurée, n'utilisez pas ce bloc : demandez à l'utilisateur de créer la carte d'abord.

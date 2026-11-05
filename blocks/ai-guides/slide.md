@@ -1,0 +1,1 @@
+Une diapositive de eo-blocks/carousel (uniquement dans un carousel). Pas d'attribut : mettez directement les blocs de la diapositive en enfants (par exemple core/image puis core/heading et core/paragraph, ou un core/group pour composer).
