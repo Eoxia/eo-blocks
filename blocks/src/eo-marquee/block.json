@@ -6,8 +6,17 @@
 	"title": "Marquee",
 	"category": "eo-blocks",
 	"icon": "smiley",
-	"description": "Display marquee block",
-	"example": {},
+	"description": "Display a text or a row of logos scrolling horizontally on a single line.",
+	"example": {
+		"innerBlocks": [
+			{
+				"name": "core/paragraph",
+				"attributes": {
+					"content": "Message one ✦ Message two ✦ Message three ✦"
+				}
+			}
+		]
+	},
   	"attributes": {},
 	"supports": {
 		"spacing": {

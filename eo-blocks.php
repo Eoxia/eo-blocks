@@ -41,6 +41,7 @@ require_once EO_BLOCKS_PATH . '/includes/api-eo-maps.php';
 use EoBlocks\Includes\Eoblocks;
 use EoBlocks\Includes\Eoblocks_Summary;
 use EoBlocks\Includes\Eoblocks_Faq_Schema;
+use EoBlocks\Includes\Eoblocks_Ai;
 
 $eoblocks = new Eoblocks();
 
@@ -50,6 +51,10 @@ if ( class_exists( '\EoBlocks\Includes\Eoblocks_Summary' ) ) {
 
 if ( class_exists( '\EoBlocks\Includes\Eoblocks_Faq_Schema' ) ) {
 	new Eoblocks_Faq_Schema();
+}
+
+if ( class_exists( '\EoBlocks\Includes\Eoblocks_Ai' ) ) {
+	new Eoblocks_Ai();
 }
 
 /**
